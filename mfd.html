@@ -69,13 +69,20 @@
     			line-height: 1.5em;
     			margin-top: 37%;
     		}
-    		.mfd {
+    		.mfd_left {
     			position: absolute;
     			left: 0em;
     			top: 0em;
     			width: 800px;
     			height: 800px;
     		}
+			.mfd_right {
+				position: absolute;
+				left: 0em;
+				top: 0em;
+				width: 800px;
+				height: 800px;
+			}
     		.mfd_table {
     			border: 0em;
     			padding: 0em;
@@ -122,10 +129,11 @@
     	<script type="text/javascript">
     	    var mode = 0; // 0 = normal, 1 = profile select
     		var ws = new WebSocket("ws://127.0.0.1:5678/");
+			var mfd_side = "left";
 			ws.onopen = function() {
-				$("#mfd_center_text").append("Connection established.<br />")
+				$("#mfd_center_text").append("Connection established.");
 				setTimeout(function() {
-					$("#mfd_center_text").append("Standing by to load profile.")
+					update_central_display("Standing by to load profile.",true);
 				},250);
 			}
             ws.onmessage = function (event) {
@@ -139,7 +147,18 @@
 					update_osb_display(ep[1],parseInt(ep[2]));
 				}
 				else if(ep[0]=="ctxt") {
-					update_osb_central(ep[3])
+					update_central_display(ep[3])
+				}
+				else if(ep[0]=="side") {
+					if(mfd_side=="left") {
+						// Default case, MFD on left. We now switch it to the right.
+						mfd_side = "right";
+					}
+					else {
+						mfd_side = "left"
+					}
+					$("#mfd_main_container").removeClass();
+					$("#mfd_main_container").addClass("mfd_"+mfd_side)
 				}
 				else {
 					console.log(ep)
@@ -152,9 +171,18 @@
 				$(osb_label).html(t)
 			}
 
-			function update_osb_central(txt) {
-				$("#mfd_center_text").empty();
-				$("#mfd_center_text").html(txt);
+			function update_central_display(txt,a) {
+				if(a==undefined) {
+					a = false;
+				}
+				if (a==true) {
+					$("#mfd_center_text").append("<br />");
+					$("#mfd_center_text").append(txt)
+				}
+				else {
+					$("#mfd_center_text").empty();
+					$("#mfd_center_text").html(txt);
+				}
 			}
 
             function update_osb_display(idx,v) {
@@ -185,10 +213,16 @@
             		}
             	}
             }
+
+			function setup() {
+				$("#mfd_main_container").removeClass();
+				$("#mfd_main_container").addClass("mfd_"+mfd_side)
+				update_central_display("Setup scripts finished...",true)
+			}
     	</script>
     </head>
-    <body>
-    	<div class="mfd">
+    <body onload="setup()">
+    	<div id="mfd_main_container" class="mfd_left">
     		<div class="mfd_table">
     			<div class="mfd_row_u">
     				<div class="osb_corner_off" id="osb_a"></div>
