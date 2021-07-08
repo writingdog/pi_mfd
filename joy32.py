@@ -278,6 +278,7 @@ async def export(websocket,path):
 async def ws_listener(websocket,path):
     while True:
         async for message in websocket:
+            print(message)
             if message == "open_ok":
                 # This is from the MFD client, saying that it is now live.
                 # Which is good?
