@@ -50,10 +50,18 @@ def check_latch(b_idx,l_max,set_unset,special_trigger=False):
                         reload_server() # 304 when triggered reloads the webserver
                 else:
                     is_latched = True
-                    if button_map[button_latch]["s"] == 1:
-                        loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",button_map[button_latch]["o"],1))
+                    if osbmap[template][subpage][button_map[button_latch]["o"]][3] != -1:
+                        hold_value = button_map[button_invmap[osbmap[template][subpage][button_map[button_latch]["o"]][1]]]["s"]
+                        if hold_value == 1:
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",button_map[button_latch]["o"],1))
+                        else:
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",button_map[button_latch]["o"],0))
                     else:
                         loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",button_map[button_latch]["o"],0))
+                    #if button_map[button_latch]["s"] == 1:
+                    #    loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",button_map[button_latch]["o"],1))
+                    #else:
+                    #    loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",button_map[button_latch]["o"],0))
             else:
                 is_latched = True
         else:
