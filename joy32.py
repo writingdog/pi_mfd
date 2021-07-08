@@ -282,7 +282,7 @@ async def ws_listener(websocket,path):
             if message == "open_ok":
                 # This is from the MFD client, saying that it is now live.
                 # Which is good?
-                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("ctxt_a",button_map[e.code]["o"],-1,"Standing by to load profile.")) # Blank the OSB
+                loop.call_soon_threadsafe(q.put_nowait,"ctxt_a,0,0,{}".format("Standing by to load profile.")) # Blank the OSB
         
 async def evhelper(dev):
     async for ev in dev.async_read_loop():
