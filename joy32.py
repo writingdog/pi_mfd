@@ -283,7 +283,8 @@ async def ws_listener(websocket,path):
                 # This is from the MFD client, saying that it is now live.
                 # Which is good?
                 loop.call_soon_threadsafe(q.put_nowait,"ctxt_a,0,0,{}".format("Standing by to load profile.")) # Blank the OSB
-        
+                loop.call_soon_threadsafe(q.put_nowait,"{},{}".format("side",mfd_side))
+
 async def evhelper(dev):
     async for ev in dev.async_read_loop():
         manage_event(ev)
@@ -393,11 +394,14 @@ def sum_buttons():
 def reload_maps():
     global osbmap
     global osbtxt
+    global mfd_side
 
     file_loc = ["pi","mfd_l","mfd_r"] # Possible usernames
 
     for f in file_loc:
         if pathlib.Path("/home/{}/pi_mfd/config.txt".format(f)).is_file() == True:
+            if f == "pi" or f == "mfd_r":
+                mfd_side = "right" # This is a cheat so that the MFD will start on the proper side...
             fpath = "/home/{}/pi_mfd/config.txt".format(f)
     with open(fpath) as f:
         data = f.readlines()
