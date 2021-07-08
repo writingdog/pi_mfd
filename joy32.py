@@ -284,7 +284,7 @@ async def read_ws(in_url,path):
             except websockets_error:
                 return None
 
-async def import(in_url):
+async def process_ws(in_url):
     global r
     ws_task = asyncio.create_task(read_ws(in_url))
 
@@ -564,6 +564,6 @@ start_server = websockets.serve(export,"127.0.0.1",5678)
 dev = InputDevice("/dev/input/event0")
 
 loop.run_until_complete(start_server)
-loop.run_until_complete(import("ws://127.0.0.1:5678"))
+loop.run_until_complete(process_ws("ws://127.0.0.1:5678"))
 loop.run_until_complete(evhelper(dev))
 loop.run_forever()
