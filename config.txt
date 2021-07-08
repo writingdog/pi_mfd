@@ -1,0 +1,175 @@
+# FORMAT
+# - Defines the start of a superconfiguration (will show up in navigation)
+# -- subpage <description>
+# OSB#,Text,[VK# or name of subpage to navigate to],<number of pushes to trigger / -1>,<1 = stay on until pushed again>
+
+-BLANK
+--conf0
+1, ,1
+2, ,2
+3, ,3
+4, ,4
+5, ,5
+6, ,6
+7, ,7
+8, ,8
+9, ,9
+10, ,10
+11, ,11
+12, ,12
+13, ,13
+14, ,14
+15, ,15
+16, ,16
+17, ,17
+18, ,18
+19, ,19
+20, ,20
+21, ,21
+22, ,22
+23, ,23
+24, ,24
+25, ,25
+26, ,26
+27, ,27
+28, ,28
+
+-LABELED
+--conf0 Unmapped profile for<br />generic use<br /><br />All buttons 1:1 translated
+1,1,1
+2,2,2
+3,3,3
+4,4,4
+5,5,5
+6,6,6
+7,7,7
+8,8,8
+9,9,9
+10,10,10
+11,11,11
+12,12,12
+13,13,13
+14,14,14
+15,15,15
+16,16,16
+17,17,17
+18,18,18
+19,19,19
+20,20,20
+21,21,21
+22,22,22
+23,23,23
+24,24,24
+25,25,25
+26,26,26
+27,27,27
+28,28,28
+
+-DCS_F15C
+--conf0 Combat mode switch (left)<br /><br />Radar settings (right)
+4,TGT PREV,3
+5,TGT NEXT,4
+6,RDR ON/OFF,6
+7,RWS/TWS,7
+8,PRF SEL,8
+10,RWR/SPO,10
+13,STORES,conf1
+14,NAV,conf2
+17,FLOOD,17
+18,BORE,18
+19,VS,19
+20,BVR,20
+--conf1 Push buttons twice<br /><br />to confirm jettison action
+13,MAIN,conf0
+14,NAV,conf2
+16,DUMP,31,1,1
+19,ORD,30,1
+20,FUEL,29,1
+--conf2
+1,NAV,1
+4,WPT PREV,3
+5,WPT NEXT,4
+13,STORES,conf1
+14,MAIN,conf0
+16,AP DIS,23
+19,ATT HOLD,27
+20,ALT HOLD,26
+
+-DCS_MIG29_L
+--conf0
+1,EOS,9
+4,TGT PREV,3
+5,TGT NEXT,4
+6,RDR ON/OFF,6
+7,RWS/TWS,7
+8,PRF SEL,8
+10,RWR/SPO,10
+13,STORES,conf1
+14,NAV,conf2
+16,LONG,16
+17,HMD,17
+18,BORE,18
+19,VS,19
+20,BVR,20
+--conf1
+13,MAIN,conf0
+14,NAV,conf2
+16,DUMP,31,1,1
+19,ORD,30,1
+20,FUEL,29,1
+--conf2
+1,NAV,1
+4,WPT PREV,3
+5,WPT NEXT,4
+13,STORES,conf1
+14,MAIN,conf0
+16,AP PWR,23
+17,AP GCAS,28
+18,AP ATT,27
+19,AP ALT,26
+20,AP PATH,25
+
+-DCS_MIG29_R
+--conf0
+6,HUD COL,6
+7,BRT UP,7
+8,BRT DN,8
+10,ILLUM,10
+
+-DCS_F14_L
+--conf0
+1,GUN,1
+2,AIM-9,2
+5,ARM,5,-1,1
+13,SYS,conf1
+20,T/O,800
+16,LAND,801
+19,CRUISE,802
+17,A/G,803
+18,A/A,850
+--conf1
+6,HOOK,6,-1,1
+7,PARK,7,-1,1
+8,ANTISKID,8,-1,1
+10,O2,10,-1,1
+13,MAIN,conf0
+16,HUD DCLT,16,-1,1
+18,VDI NORM,18,-1,1
+19,VSI PWR,19,-1,1
+20,HUD PWR,20,-1,1
+
+-DCS_F14_R
+--conf0
+16,AUTO,16
+17,RNG 25,17
+18,RNG 50,18
+19,RNG 100,19
+20,RNG 200,20
+1,LOCK FOE,800
+2,LOCK ANY,801
+5,UNLOCK,852
+6,VSL LO,850
+7,VSL HI,851
+8,P/PD,853
+9,RWS MODE,802
+10,TWS MODE,803
