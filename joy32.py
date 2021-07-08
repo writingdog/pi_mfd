@@ -363,8 +363,8 @@ def reload_maps():
     file_loc = ["pi","mfd_l","mfd_r"] # Possible usernames
 
     for f in file_loc:
-        if pathlib.Path("/home/{}/Downloads/config.txt".format(f)).is_file() == True:
-            fpath = "/home/{}/Downloads/config.txt".format(f)
+        if pathlib.Path("/home/{}/pi_mfd/config.txt".format(f)).is_file() == True:
+            fpath = "/home/{}/pi_mfd/config.txt".format(f)
     with open(fpath) as f:
         data = f.readlines()
 
@@ -419,8 +419,8 @@ def reload_server():
     file_loc = ["pi","mfd_l","mfd_r"] # Possible usernames
 
     for f in file_loc:
-        if pathlib.Path("/home/{}/Downloads/mfd.html".format(f)).is_file() == True:
-            fpath = "/home/{}/Downloads/mfd.html".format(f)
+        if pathlib.Path("/home/{}/pi_mfd/mfd.html".format(f)).is_file() == True:
+            fpath = "/home/{}/pi_mfd/mfd.html".format(f)
             f_user = f
 
     for b in button_map:
