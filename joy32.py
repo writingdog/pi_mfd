@@ -139,6 +139,12 @@ def manage_event(e):
                         if load_idx >= len(osb_supers):
                             load_idx = 0
                         osb_load()
+                    elif e.code == 705:
+                        loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",button_map[e.code]["o"],-1))
+                        osb_load()
+                    elif e.code == 704:
+                        reload_mode = False
+                        osb_label()
                     elif e.code == 319:
                         for b in button_map:
                             button_map[b]["s"] = 0
@@ -289,6 +295,10 @@ def osb_load():
                 loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"UP"))
             elif b == 706:
                 loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"DN"))
+            elif b == 705:
+                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"L/R"))
+            elif b == 704:
+                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"EXIT"))
             else:
                 loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,""))
     post_str = ""

@@ -131,9 +131,9 @@
     		var ws = new WebSocket("ws://127.0.0.1:5678/");
 			var mfd_side = "left";
 			ws.onopen = function() {
-				$("#mfd_center_text").append("Connection established.");
+				update_central_display("Connection established.<br />",true);
 				setTimeout(function() {
-					update_central_display("Standing by to load profile.",true);
+					update_central_display("Standing by to load profile.<br />",true);
 				},250);
 			}
             ws.onmessage = function (event) {
