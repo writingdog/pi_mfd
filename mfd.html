@@ -151,12 +151,11 @@
 					update_central_display(ep[3])
 				}
 				else if(ep[0]=="side") {
-					if(mfd_side=="left") {
-						// Default case, MFD on left. We now switch it to the right.
-						mfd_side = "right";
+					if(ep[1]=="left") {
+						mfd_side = "left";
 					}
 					else {
-						mfd_side = "left"
+						mfd_side = "right";
 					}
 					$("#mfd_main_container").removeClass();
 					$("#mfd_main_container").addClass("mfd_"+mfd_side)
