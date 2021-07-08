@@ -18,6 +18,7 @@ import pathlib
 from evdev import ecodes, list_devices, AbsInfo, InputDevice
 
 def write_report(report):
+    # This writes the raw data to the virtual USB device
     with open('/dev/hidg0', 'rb+') as fd:
         fd.write(report)
         #fd.write(report.encode())
@@ -272,11 +273,25 @@ async def export(websocket,path):
     while True:
         message = await q.get()
         await websocket.send(message)
-        #return_message = await websocket.recv()
-        #await handle_back(return_message)
-        
-async def handle_back(msg):
-    print(msg)
+
+async def read_ws(in_url,path):
+    global r
+    while True:
+        async with websockets.connect(in_url,close_timeout=0.1) as ws:
+            try:
+                data = await ws.recv()
+                await r.put(("ws",data))
+            except websockets_error:
+                return None
+
+async def import(in_url):
+    global r
+    ws_task = asyncio.create_task(read_ws(in_url))
+
+    while True:
+        source,data = await r.get()
+        if source == "ws":
+            print(data)
 
 async def evhelper(dev):
     async for ev in dev.async_read_loop():
@@ -540,12 +555,15 @@ reload_maps() # Populate osbmap and osbtxt values
 
 #print(osbmap["LABELED"])
 
-q = asyncio.Queue()
+q = asyncio.Queue() # output queue
+r = asyncio.Queue() # input queue
+
 loop = asyncio.get_event_loop()
 
 start_server = websockets.serve(export,"127.0.0.1",5678)
 dev = InputDevice("/dev/input/event0")
 
 loop.run_until_complete(start_server)
+loop.run_until_complete(import("ws://127.0.0.1:5678"))
 loop.run_until_complete(evhelper(dev))
 loop.run_forever()
