@@ -314,6 +314,11 @@ def osb_load():
                 loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"EXIT"))
             else:
                 loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,""))
+    else:
+        if mfd_side == "left":
+            loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[705]["o"],-1,"RIGHT"))
+        else:
+            loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[705]["o"],-1,"LEFT"))
     post_str = ""
     osbmap_supers = []
     for r in osbmap:
