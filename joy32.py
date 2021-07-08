@@ -274,7 +274,7 @@ async def export(websocket,path):
         message = await q.get()
         await websocket.send(message)
 
-async def read_ws(in_url,path):
+async def read_ws(in_url):
     global r
     while True:
         async with websockets.connect(in_url,close_timeout=0.1) as ws:
