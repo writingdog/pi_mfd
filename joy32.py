@@ -272,7 +272,7 @@ async def export(websocket,path):
     while True:
         message = await q.get()
         await websocket.send(message)
-        return_message = await websocket.recv(1024)
+        return_message = await websocket.recv()
         await handle_back(return_message)
         
 async def handle_back(msg):
