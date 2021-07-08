@@ -108,6 +108,7 @@ def manage_event(e):
     global reload_mode
     global load_idx 
     global hat
+    global mfd_side
     if e.type == ecodes.EV_SYN:
         if e.code == ecodes.SYN_MT_REPORT:
             msg = 'time {:<16} +++++++++ {} ++++++++'
@@ -140,7 +141,11 @@ def manage_event(e):
                             load_idx = 0
                         osb_load()
                     elif e.code == 705:
-                        loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",button_map[e.code]["o"],-1))
+                        loop.call_soon_threadsafe(q.put_nowait,"{},{}".format("side",mfd_side))
+                        if mfd_side == "left":
+                            mfd_side = "right"
+                        else:
+                            mfd_side = "left"
                         osb_load()
                     elif e.code == 704:
                         reload_mode = False
@@ -267,7 +272,11 @@ async def export(websocket,path):
     while True:
         message = await q.get()
         await websocket.send(message)
+        await handle_back(websocket.recv())
         
+async def handle_back(msg):
+    print(msg)
+
 async def evhelper(dev):
     async for ev in dev.async_read_loop():
         manage_event(ev)
@@ -296,7 +305,10 @@ def osb_load():
             elif b == 706:
                 loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"DN"))
             elif b == 705:
-                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"L/R"))
+                if mfd_side == "left":
+                    loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"RIGHT"))
+                else:
+                    loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"LEFT"))
             elif b == 704:
                 loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"EXIT"))
             else:
@@ -513,6 +525,7 @@ latch_count = 0
 reload_mode = False
 load_idx = 0
 hat = ["8","8"]
+mfd_side = "left" # Which side to display the MFD on (defaults to left)
 
 osbmap = {} # Formerly stored in joy32_params.py
 osbtxt = {} # Formerly stored in joy32_params.py
