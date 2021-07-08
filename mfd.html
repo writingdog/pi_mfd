@@ -78,7 +78,7 @@
     		}
 			.mfd_right {
 				position: absolute;
-				left: 0em;
+				right: 0em;
 				top: 0em;
 				width: 800px;
 				height: 800px;
@@ -131,11 +131,8 @@
     		var ws = new WebSocket("ws://127.0.0.1:5678/");
 			var mfd_side = "left";
 			ws.onopen = function() {
-				ws.send("Connection open");
+				ws.send("open_ok");
 				update_central_display("Connection established.<br />",true);
-				setTimeout(function() {
-					update_central_display("Standing by to load profile.<br />",true);
-				},250);
 			}
             ws.onmessage = function (event) {
 				var estr = event.data;
@@ -149,6 +146,9 @@
 				}
 				else if(ep[0]=="ctxt") {
 					update_central_display(ep[3])
+				}
+				else if(ep[0]=="ctxt_a") {
+					update_central_display(ep[3],true)
 				}
 				else if(ep[0]=="side") {
 					if(ep[1]=="left") {

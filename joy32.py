@@ -270,29 +270,19 @@ def manage_event(e):
         sum_buttons()
                 
 async def export(websocket,path):
+    asyncio.create_task(ws_listener(websocket,path))
     while True:
         message = await q.get()
         await websocket.send(message)
 
-async def read_ws(in_url):
-    global r
+async def ws_listener(websocket,path):
     while True:
-        async with websockets.connect(in_url,close_timeout=0.1) as ws:
-            try:
-                data = await ws.recv()
-                await r.put(("ws",data))
-            except websockets_error:
-                return None
-
-async def process_ws(in_url):
-    global r
-    ws_task = asyncio.create_task(read_ws(in_url))
-
-    while True:
-        source,data = await r.get()
-        if source == "ws":
-            print(data)
-
+        async for message in websocket:
+            if message == "open_ok":
+                # This is from the MFD client, saying that it is now live.
+                # Which is good?
+                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("ctxt_a",button_map[e.code]["o"],-1,"Standing by to load profile.")) # Blank the OSB
+        
 async def evhelper(dev):
     async for ev in dev.async_read_loop():
         manage_event(ev)
@@ -561,9 +551,11 @@ r = asyncio.Queue() # input queue
 loop = asyncio.get_event_loop()
 
 start_server = websockets.serve(export,"127.0.0.1",5678)
+#import_server = websockets.serve(process_ws,"127.0.0.1",5678)
 dev = InputDevice("/dev/input/event0")
 
 loop.run_until_complete(start_server)
-loop.run_until_complete(process_ws("ws://127.0.0.1:5678"))
+#loop.run_until_complete(import_server)
+#loop.run_until_complete(process_ws())
 loop.run_until_complete(evhelper(dev))
 loop.run_forever()
