@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://www.writing.dog/experiments/mfd.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        <title>WebSocket demo</title>
+        <script src="./scripts/jquery-3.2.1.min.js"></script>
+    	<style type="text/css">
+    		body {
+    			border: 0em;
+    			padding: 0em;
+    			background-color: #000000;
+    			box-sizing: border-box;
+    			font-family: monospace;
+    			font-weight: bold;
+			font-size: 12pt;
+    		}
+    		div {
+    			box-sizing: border-box;
+    		}
+    		span {
+    			box-sizing: border-box;
+    		}
+    		.osb_on,.osb_off,.osb_sel,.osb_corner_off,.osb_corner_on,.osb_corner_sel {
+    			color: #33cc33;
+    			text-align: center;
+    			display: flex;
+    			position: relative;
+    			flex-flow: row nowrap;
+    		}
+    		.osb_on,.osb_off,.osb_sel {
+    			width: 116px;
+    		}
+    		.osb_corner_off,.osb_corner_on,.osb_corner_sel {
+    			width: 110px;
+    		}
+    		.osb_off span, .osb_corner_off span {
+    			border: .1em solid #000000;
+    			color: #33cc33;
+    			background-color: #000000;
+    		}
+    		.osb_on span, .osb_corner_on span {
+    			border: .1em solid #33cc33;
+    			color: #33cc33;
+    			background-color: #000000;
+    		}
+    		.osb_sel span, .osb_corner_sel span {
+    			border: .1em solid #e6ffe6;
+    			background-color: #e6ffe6;
+    			color: #000000;
+    		}
+    		.osb_bottom,.osb_top {
+    			display: block;
+    			width: 80%;
+    			margin-left: 10%;
+    			height: auto;
+    			line-height: auto;
+    			position: absolute;
+    		}
+    		.osb_bottom {
+    			bottom: 33%;
+    		}
+    		.osb_top {
+    			top: 33%;
+    		}
+    		.osb_left,.osb_right {
+    			display: inline-block;
+    			width: 80%;
+    			margin-left: 10%;
+    			height: 1.5em;
+    			line-height: 1.5em;
+    			margin-top: 37%;
+    		}
+    		.mfd {
+    			position: absolute;
+    			left: 0em;
+    			top: 0em;
+    			width: 800px;
+    			height: 800px;
+    		}
+    		.mfd_table {
+    			border: 0em;
+    			padding: 0em;
+    			width: 100%;
+    			height: 100%;
+    			display: flex;
+    			flex-flow: column nowrap;
+    			flex: 1 1 auto;
+    		}
+    		.mfd_row_l,.mfd_row_u {
+    			display: flex;
+    			width: 100%;
+    			flex-flow: row nowrap;
+    			height: 110px;
+    		}
+    		.mfd_row_n {
+    			display: flex;
+    			width: 100%;
+    			flex-flow: row nowrap;    
+    			height: 116px;		
+    		}
+    		.mfd_table tr,.mft_table td {
+    			border: 0em;
+    			padding: 0em;
+    		}
+    		.mfd_center {
+    			flex-flow: column nowrap;
+    			flex: 5 5 auto;
+    		}
+    		.mfd_center_display {
+    			position: absolute;
+    			left: 110px;
+    			top: 110px;
+    			height: 580px;
+    			width: 580px;
+    		}
+			.mfd_center_text {
+				color: #33cc33;
+				margin-top: 80px;
+				margin-left: 80px;
+			}
+    		
+    	</style>
+    	<script type="text/javascript">
+    	    var mode = 0; // 0 = normal, 1 = profile select
+    		var ws = new WebSocket("ws://127.0.0.1:5678/");
+			ws.onopen = function() {
+				$("#mfd_center_text").append("Connection established.<br />")
+				setTimeout(function() {
+					$("#mfd_center_text").append("Standing by to load profile.")
+				},250);
+			}
+            ws.onmessage = function (event) {
+				var estr = event.data;
+				var ep = estr.split(",")
+				if(ep[0]=="osb") {
+					update_osb_display(ep[1],parseInt(ep[2]));
+				}
+				else if(ep[0]=="txt") {
+					update_osb_text(ep[1],ep[3])
+					update_osb_display(ep[1],parseInt(ep[2]));
+				}
+				else if(ep[0]=="ctxt") {
+					update_osb_central(ep[3])
+				}
+				else {
+					console.log(ep)
+				}
+            };
+            
+			function update_osb_text(idx,t) {
+				var osb_label = $("#osb_text_"+idx);
+				$(osb_label).empty()
+				$(osb_label).html(t)
+			}
+
+			function update_osb_central(txt) {
+				$("#mfd_center_text").empty();
+				$("#mfd_center_text").html(txt);
+			}
+
+            function update_osb_display(idx,v) {
+            	var osb = $("#osb_"+idx);
+            	$(osb).removeClass();
+            	if(v==1) {
+            		if(parseInt(idx)==idx) {
+            		    $(osb).addClass("osb_sel")
+            		}
+            		else {
+            		    $(osb).addClass("osb_corner_sel")
+            		}
+            	}
+            	if(v==0) {
+            		if(parseInt(idx)==idx) {
+            		    $(osb).addClass("osb_on")
+            		}
+            		else {
+            		    $(osb).addClass("osb_corner_on")
+            		}
+            	}
+            	else {
+            		if(parseInt(idx)==idx) {
+            		    $(osb).addClass("osb_off")
+            		}
+            		else {
+            		    $(osb).addClass("osb_corner_off")
+            		}
+            	}
+            }
+    	</script>
+    </head>
+    <body>
+    	<div class="mfd">
+    		<div class="mfd_table">
+    			<div class="mfd_row_u">
+    				<div class="osb_corner_off" id="osb_a"></div>
+    				<div class="osb_off" id="osb_1"><span class="osb_top" id="osb_text_1">1</span></div>
+    				<div class="osb_off" id="osb_2"><span class="osb_top" id="osb_text_2">2</span></div>
+    				<div class="osb_off" id="osb_3"><span class="osb_top" id="osb_text_3">3<br>3B</span></div>
+    				<div class="osb_off" id="osb_4"><span class="osb_top" id="osb_text_4">4</span></div>
+    				<div class="osb_off" id="osb_5"><span class="osb_top" id="osb_text_5">5</span></div>
+    				<div class="osb_corner_off" id="osb_b"></div>
+    			</div>
+    			<div class="mfd_row_n">
+    				<div class="osb_off" id="osb_20"><span class="osb_left" id="osb_text_20">20</span></div>
+    				<div class="mfd_center_display" id="mfd_display">
+						<div class="mfd_center_text" id="mfd_center_text">
+							Startup...<br />
+						</div>
+					</div>
+    				<div class="mfd_center"></div>
+    				<div class="osb_off" id="osb_6"><span class="osb_right" id="osb_text_6">6</span></div>
+    			</div>
+    			<div class="mfd_row_n">
+    				<div class="osb_off" id="osb_19"><span class="osb_left" id="osb_text_19">19</span></div>
+    				<div class="mfd_center"></div>
+    				<div class="osb_off" id="osb_7"><span class="osb_right" id="osb_text_7">7</span></div>
+    			</div>
+    			<div class="mfd_row_n">
+    				<div class="osb_off" id="osb_18"><span class="osb_left" id="osb_text_18">18</span></div>
+    				<div class="mfd_center"></div>
+    				<div class="osb_off" id="osb_8"><span class="osb_right" id="osb_text_8">8</span></div>
+    			</div>
+    			<div class="mfd_row_n">
+    				<div class="osb_off" id="osb_17"><span class="osb_left" id="osb_text_17">17</span></div>
+    				<div class="mfd_center"></div>
+    				<div class="osb_off" id="osb_9"><span class="osb_right" id="osb_text_9">9</span></div>
+    			</div>
+    			<div class="mfd_row_n">
+    				<div class="osb_off" id="osb_16"><span class="osb_left" id="osb_text_16">16</span></div>
+    				<div class="mfd_center"></div>
+    				<div class="osb_off" id="osb_10"><span class="osb_right" id="osb_text_10">10</span></div>
+    			</div>
+    			<div class="mfd_row_l">
+    				<div class="osb_corner_off" id="osb_d"></div>
+    				<div class="osb_off" id="osb_15"><span class="osb_bottom" id="osb_text_15">15</span></div>
+    				<div class="osb_off" id="osb_14"><span class="osb_bottom" id="osb_text_14">14</span></div>
+    				<div class="osb_off" id="osb_13"><span class="osb_bottom" id="osb_text_13">13<br>13B</span></div>
+    				<div class="osb_off" id="osb_12"><span class="osb_bottom" id="osb_text_12">12</span></div>
+    				<div class="osb_off" id="osb_11"><span class="osb_bottom" id="osb_text_11">11</span></div>
+    				<div class="osb_corner_off" id="osb_c"></div>
+    			</div>
+    		</div>
+    	
+    	</div>
+    
+</body></html>
