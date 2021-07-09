@@ -1,7 +1,11 @@
 # FORMAT
 # - Defines the start of a superconfiguration (will show up in navigation)
 # -- subpage <description>
-# OSB#,Text,[VK# or name of subpage to navigate to],<number of pushes to trigger / -1>,<1 = stay on until pushed again>
+# OSB#,Text,[VK# or name of subpage to navigate to],<optional params>
+# Optional params:
+# latch=# (how many times button must be pushed to trigger)
+# hold=1 (button will be kept triggered)
+# sequence=[sequence_id|direction] (if set, VK# will be ignored)
 
 -BLANK
 --conf0
@@ -82,9 +86,9 @@
 --conf1 Push buttons twice<br /><br />to confirm jettison action
 13,MAIN,conf0
 14,NAV,conf2
-16,DUMP,31,1,1
-19,ORD,30,1
-20,FUEL,29,1
+16,DUMP,31,latch=1,hold=1
+19,ORD,30,latch=1
+20,FUEL,29,latch=1
 --conf2
 1,NAV,1
 4,WPT PREV,3
@@ -114,9 +118,9 @@
 --conf1
 13,MAIN,conf0
 14,NAV,conf2
-16,DUMP,31,1,1
-19,ORD,30,1
-20,FUEL,29,1
+16,DUMP,31,latch=1,hold=1
+19,ORD,30,latch=1
+20,FUEL,29,latch=1
 --conf2
 1,NAV,1
 4,WPT PREV,3
@@ -139,8 +143,8 @@
 -DCS_F14_L
 --conf0
 1,GUN,1
-2,AIM-9,2
-5,ARM,5,-1,1
+2,AIM-9,latch=2
+5,ARM,5,hold=1
 13,SYS,conf1
 20,T/O,800
 16,LAND,801
@@ -148,15 +152,15 @@
 17,A/G,803
 18,A/A,850
 --conf1
-6,HOOK,6,-1,1
-7,PARK,7,-1,1
-8,ANTISKID,8,-1,1
-10,O2,10,-1,1
+6,HOOK,6,hold=1
+7,PARK,7,hold=1
+8,ANTISKID,8,hold=1
+10,O2,10,hold=1
 13,MAIN,conf0
-16,HUD DCLT,16,-1,1
-18,VDI NORM,18,-1,1
-19,VSI PWR,19,-1,1
-20,HUD PWR,20,-1,1
+16,HUD DCLT,16,hold=1
+18,VDI NORM,18,hold=1
+19,VSI PWR,19,hold=1
+20,HUD PWR,20,hold=1
 
 -DCS_F14_R
 --conf0
@@ -175,6 +179,8 @@
 10,TWS MODE,803
 
 -DCS_F5E_L
+---seq0 800,801,802,803
+---seq1 850,851,852,853
 --conf0
 6,JETTISON,6,2
 10,RPYL,10
@@ -185,10 +191,10 @@
 15,LOBD,15
 16,LPYL,16
 20,ARM,20
-23,JETT_UP,850
-24,JETT_DN,851
-25,ESTR_CCW,800
-26,ESTR_CW,801
+23,JETT_UP,0,sequence=seq0|1
+24,JETT_DN,0,sequence=seq0|-1
+25,ESTR_CCW,0,sequence=seq1|1
+26,ESTR_CW,0,sequence=seq1|1
 27,BOMB_CCW,802
 28,BOMB-CW,803
 

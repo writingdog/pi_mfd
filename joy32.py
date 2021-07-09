@@ -402,6 +402,7 @@ def sum_buttons():
 def reload_maps():
     global osbmap
     global osbtxt
+    global osbseq
     global mfd_side
 
     file_loc = ["pi","mfd_l","mfd_r"] # Possible usernames
@@ -419,42 +420,64 @@ def reload_maps():
 
     osbmap = {}
     osbtxt = {}
+    osbseq = {}
 
     for d in data:
         # Lines can begin either with -, --, or an integer
         d = d.strip()
         if len(d) > 0:
             if d[:1] == "-":
-                if d[:2] == "--":
-                    # Then a subpage is being defined.
+                if d[:3] == "---":
+                    # Then a sequence is being defined
+                    # Sequence looks like ---seq0 1,2,3,4
+                    # So we define a new osbseq variable with "seq" = that array and "idx" = 0
                     line = d.split(" ")
-                    subpage = line[0][2:]
-                    subpage_desc = d[(len(subpage)+3):]
-                    osbtxt[mainpage][subpage] = subpage_desc
-                    osbmap[mainpage][subpage] = {}
+                    sequence_id = line[0][3:]
+                    sequence_vks = []
+                    for s in line[1].split(","):
+                        sequence_vks.append(int(s))
+                    osbseq[mainpage][sequence_id] = {"seq":sequence_vks,"idx":0}
                 else:
-                    mainpage = d[1:]
-                    osbmap[mainpage] = {}
-                    osbtxt[mainpage] = {}
+                    if d[:2] == "--":
+                        # Then a subpage is being defined.
+                        line = d.split(" ")
+                        subpage = line[0][2:]
+                        subpage_desc = d[(len(subpage)+3):]
+                        osbtxt[mainpage][subpage] = subpage_desc
+                        osbmap[mainpage][subpage] = {}
+                    else:
+                        # Then this is a new superpage
+                        mainpage = d[1:]
+                        osbmap[mainpage] = {}
+                        osbtxt[mainpage] = {}
             else:
                 if d[0:1].isdigit() == True:
                     # This means that we are defining a new OSB / VK relationship
-                    is_latch = -1
-                    is_held = -1
+                    is_latch = -1 # Should button be latched before triggering?
+                    is_held = -1 # Should button be held?
+                    seq = -1 # Sequence ID, if any
+                    seq_dir = 0 # Sequence direction, if any
                     vk_val = ""
                     d_vals = d.split(",")
-                    #print(d_vals)
-                    if len(d_vals)>4:
-                        is_held = d_vals[4]
-                    if len(d_vals)>3:
-                        is_latch = d_vals[3]
+                    for i in range(3,len(d_vals)):
+                        '''
+                        Could be:
+                        latch=int
+                        held=1
+                        sequence=str(id)|int(direction)
+                        '''
+                        d_v = d_vals[i].split("=")
+                        if d_v[0] == "latch":
+                            is_latch = int(d_v[1])
+                        elif d_v[0] == "held":
+                            is_held = 1
+                        elif d_v[0] == "sequence":
+                            sequence_vars = d_v[1].split("|")
                     if d_vals[2].isdigit() == True:
                         vk_val = int(d_vals[2])
                     else:
                         vk_val = d_vals[2]
                     osbmap[mainpage][subpage][int(d_vals[0])] = [d_vals[1],vk_val,is_latch,is_held]
-    #print(osbmap)
-    #print(osbtxt)
                     
 
 def reload_server():
@@ -550,9 +573,11 @@ reload_mode = False
 load_idx = 0
 hat = ["8","8"]
 mfd_side = "left" # Which side to display the MFD on (defaults to left)
+debug_mode = False
 
 osbmap = {} # Formerly stored in joy32_params.py
 osbtxt = {} # Formerly stored in joy32_params.py
+osbseq = {} # New, sequence definitions
 
 reload_maps() # Populate osbmap and osbtxt values
 
