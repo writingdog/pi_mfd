@@ -507,8 +507,9 @@ def osb_label():
             print(o_m)
             if virtual_btn["held"] != False:
                 # So in the OSB template, this is specified as sticky. So we need to check the value.
-                print(button_invmap[o_m[1]])
-                print(button_map[button_invmap[o_m[1]]])
+                pass
+                #print(button_invmap[o_m[1]])
+                #print(button_map[button_invmap[o_m[1]]])
             loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",physical_btn,d_v,virtual_btn["text"]))
         else:
             if physical_btn >= 1 and physical_btn <= 20:
