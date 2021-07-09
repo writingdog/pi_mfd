@@ -194,7 +194,7 @@
 23,JETT_UP,0,sequence=seq0|1
 24,JETT_DN,0,sequence=seq0|-1
 25,ESTR_CCW,0,sequence=seq1|1
-26,ESTR_CW,0,sequence=seq1|1
+26,ESTR_CW,0,sequence=seq1|-1
 27,BOMB_CCW,802
 28,BOMB-CW,803
 
