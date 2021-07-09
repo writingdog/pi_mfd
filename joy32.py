@@ -339,7 +339,7 @@ def event_normal(e,submap,physical_btn):
                         if new_idx < 0:
                             new_idx = len(seqvars["seq"])-1
                         osbseq[template][virtual_btn["sequence"]]["idx"] = new_idx
-                        v_k = osbseq[template][virtual_btn["sequence"]][new_idx]
+                        v_k = osbseq[template][virtual_btn["sequence"]]["seq"][new_idx]
                     print(e.value,osbseq[template][virtual_btn["sequence"]])
                 
                 if v_k>=800:
