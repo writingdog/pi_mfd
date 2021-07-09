@@ -376,7 +376,7 @@ def event_normal(e,submap,physical_btn):
                             loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],-1)) # Blank the OSB
 
                     button_map[v_k]["s"] = submit_value # Set the button_map value to be either on or off, depending.
-                    if e.value == 1:
+                    if submit_value == 1:
                         loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",physical_btn,1)) # Highlight the OSB
                     else:
                         loop.call_soon_threadsafe(q.put_nowait,"{},{},-1".format("osb",physical_btn,-1)) # Blank the OSB
