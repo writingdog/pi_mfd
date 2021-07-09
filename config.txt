@@ -179,7 +179,7 @@
 10,TWS MODE,803
 
 -DCS_F5E_L
----seq0 800,801,802,803
+---seq0 800,801,802
 ---seq1 850,851,852,853
 --conf0
 6,JETTISON,6,2
@@ -195,8 +195,8 @@
 24,JETT_DN,0,sequence=seq0|-1
 25,ESTR_CCW,0,sequence=seq1|1
 26,ESTR_CW,0,sequence=seq1|-1
-27,BOMB_CCW,802
-28,BOMB-CW,803
+27,BOMB_CCW,803
+28,BOMB-CW,804
 
 -DCS_F5E_R
 --conf0
