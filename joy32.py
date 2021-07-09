@@ -363,6 +363,7 @@ def event_normal(e,submap,physical_btn):
                                 submit_value = 1
                             else:
                                 submit_value = 0
+                        print("Special handling for OSB ",e.value,submit_value)
                     for c in virtual_btn["coset"]:
                         print("COSET: ",c,submit_value)
                         if c >= 800:
