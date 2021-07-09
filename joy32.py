@@ -603,7 +603,7 @@ def reload_maps():
                             sequence_vars = d_v[1].split("|")
                             seq = sequence_vars[0]
                             seq_dir = int(sequence_vars[1])
-                        elif d_v[0] == "seq":
+                        elif d_v[0] == "set":
                             coset.append(int(d_v[1]))
                     if d_vals[2].isdigit() == True:
                         vk_val = int(d_vals[2])
@@ -621,7 +621,7 @@ def reload_maps():
                         "coset":coset
                     }
                     # [d_vals[1],vk_val,is_latch,is_held]
-        print(osbmap)
+    print(osbmap)
 
 def reload_server():
     global button_map
