@@ -364,6 +364,7 @@ def event_normal(e,submap,physical_btn):
                             else:
                                 submit_value = 0
                         for c in virtual_btn["coset"]:
+                            print("COSET: ",c,submit_value)
                             if c >= 800:
                                 do_hats(c,submit_value)
                             else:
@@ -621,7 +622,7 @@ def reload_maps():
                         "coset":coset
                     }
                     # [d_vals[1],vk_val,is_latch,is_held]
-    print(osbmap)
+    #print(osbmap)
 
 def reload_server():
     global button_map
