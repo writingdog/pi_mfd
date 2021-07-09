@@ -305,6 +305,18 @@ def event_normal(e,submap,physical_btn):
                             else:
                                 submit_value = 1
                         button_map[v_k]["s"] = submit_value
+                for c in virtual_btn["coset"]:
+                    if c >= 800:
+                        do_hats(c,submit_value)
+                    else:
+                        button_map[button_invmap[c]]["s"] = submit_value
+                    if e.value == 1:
+                        loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],1)) # Highlight the OSB
+                    else:
+                        if is_latched == True:
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],0)) # Latch the OSB
+                        else:
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],-1)) # Blank the OSB
             else:
                 # So this button has no latch value; treat it normally.
                 check_latch("",-1,e.value)
@@ -319,7 +331,7 @@ def event_normal(e,submap,physical_btn):
                             do_hats(s,0)
                         else:
                             button_map[s]["s"] = 0
-                    if e.value == 0:
+                    if e.value == 1:
                         # Need to move the pointer
                         new_idx = seqvars["idx"] + int(seqdir)
                         if new_idx >= len(seqvars["seq"]):
@@ -327,9 +339,7 @@ def event_normal(e,submap,physical_btn):
                         if new_idx < 0:
                             new_idx = len(seqvars["seq"])-1
                         osbseq[template][virtual_btn["sequence"]]["idx"] = new_idx
-                    else:
-                        # Choose the right button to set
-                        v_k = seqvars["seq"][seqvars["idx"]]
+                        v_k = osbseq[template][virtual_btn["sequence"]][new_idx]
                     print(e.value,osbseq[template][virtual_btn["sequence"]])
                 
                 if v_k>=800:
@@ -353,6 +363,16 @@ def event_normal(e,submap,physical_btn):
                                 submit_value = 1
                             else:
                                 submit_value = 0
+                        for c in virtual_btn["coset"]:
+                            if c >= 800:
+                                do_hats(c,submit_value)
+                            else:
+                                button_map[button_invmap[c]]["s"] = submit_value
+                            if e.value == 1:
+                                loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],1)) # Highlight the OSB
+                            else:
+                                loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],-1)) # Blank the OSB
+
                     button_map[v_k]["s"] = submit_value # Set the button_map value to be either on or off, depending.
                     if e.value == 1:
                         loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",physical_btn,1)) # Highlight the OSB
@@ -566,6 +586,7 @@ def reload_maps():
                     vk_val = ""
                     is_page = False # Does this include a switch to a new page?
                     d_vals = d.split(",")
+                    coset = []
                     for i in range(3,len(d_vals)):
                         '''
                         Could be:
@@ -582,6 +603,8 @@ def reload_maps():
                             sequence_vars = d_v[1].split("|")
                             seq = sequence_vars[0]
                             seq_dir = int(sequence_vars[1])
+                        elif d_v[0] == "seq":
+                            coset.append(int(d_v[1]))
                     if d_vals[2].isdigit() == True:
                         vk_val = int(d_vals[2])
                     else:
@@ -594,7 +617,8 @@ def reload_maps():
                         "latch":is_latch,
                         "held":is_held,
                         "sequence":seq,
-                        "direction":seq_dir
+                        "direction":seq_dir,
+                        "coset":coset
                     }
                     # [d_vals[1],vk_val,is_latch,is_held]
 

@@ -190,7 +190,7 @@
 14,LIBD,14
 15,LOBD,15
 16,LPYL,16
-20,ARM,20
+20,ARM,20,set=800,set=850
 23,JETT_UP,0,sequence=seq0|1
 24,JETT_DN,0,sequence=seq0|-1
 25,ESTR_CCW,0,sequence=seq1|1
