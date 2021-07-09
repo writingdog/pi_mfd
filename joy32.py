@@ -621,6 +621,7 @@ def reload_maps():
                         "coset":coset
                     }
                     # [d_vals[1],vk_val,is_latch,is_held]
+        print(osbmap["DCS_F5E_L"])
 
 def reload_server():
     global button_map
