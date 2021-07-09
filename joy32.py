@@ -363,16 +363,16 @@ def event_normal(e,submap,physical_btn):
                                 submit_value = 1
                             else:
                                 submit_value = 0
-                        for c in virtual_btn["coset"]:
-                            print("COSET: ",c,submit_value)
-                            if c >= 800:
-                                do_hats(c,submit_value)
-                            else:
-                                button_map[button_invmap[c]]["s"] = submit_value
-                            if e.value == 1:
-                                loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],1)) # Highlight the OSB
-                            else:
-                                loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],-1)) # Blank the OSB
+                    for c in virtual_btn["coset"]:
+                        print("COSET: ",c,submit_value)
+                        if c >= 800:
+                            do_hats(c,submit_value)
+                        else:
+                            button_map[button_invmap[c]]["s"] = submit_value
+                        if e.value == 1:
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],1)) # Highlight the OSB
+                        else:
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],-1)) # Blank the OSB
 
                     button_map[v_k]["s"] = submit_value # Set the button_map value to be either on or off, depending.
                     if e.value == 1:
