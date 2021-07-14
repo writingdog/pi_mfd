@@ -331,7 +331,7 @@ def event_normal(e,submap,physical_btn):
                     if seqvars["unset"] != False:
                         # So this sequence is supposed to unset an OSB when triggered.
                         button_map[button_invmap[seqvars["unset"]]]["s"] = 0
-                        loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",seqvars["unset"],-1)) # Blank the OSB for the unset value
+                        loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",seqvars["unset"],-1)) # Blank the OSB for the unset value
                     for s in seqvars["seq"]:
                         s = int(s)
                         if s >= 800:
