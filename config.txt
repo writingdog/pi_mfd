@@ -190,7 +190,7 @@
 14,L IBD,14,hold=0,toggle=7
 15,L OBD,15,hold=0,toggle=8
 16,L WING,16,hold=1,toggle=9
-20,ARM,20,set=800,set=850
+20,ARM,20,hold=1,toggle=17,set=800,set=850
 23,JETT_UP,0,sequence=seq0|1
 24,JETT_DN,0,sequence=seq0|-1
 25,ESTR_CCW,0,sequence=seq1|1
