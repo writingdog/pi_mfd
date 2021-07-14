@@ -371,10 +371,10 @@ def event_normal(e,submap,physical_btn):
                             # Then we need to set its INVERSE state to "ON"
                             if submit_value == 0:
                                 # Button is being released, so inverse should be ON
-                                button_map[button_invmap[virtual_btn["toggle"]]] = 1
+                                button_map[button_invmap[virtual_btn["toggle"]]]["s"] = 1
                             else:
                                 # Button is being held, so inverse should be OFF
-                                button_map[button_invmap[virtual_btn["toggle"]]] = 0
+                                button_map[button_invmap[virtual_btn["toggle"]]]["s"] = 0
                         print("Special handling for OSB ",e.value,submit_value)
                     for c in virtual_btn["coset"]:
                         print("COSET: ",c,submit_value)
