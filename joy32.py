@@ -521,7 +521,7 @@ def osb_label(read_state=False):
             print(o_m)
             if virtual_btn["held"] != False and read_state==True:
                 # Special case for when reloading from scratch.
-                if virtual_btn["held"] == 1 and virtual_btn["start_on"]==True:
+                if virtual_btn["start_on"]==True:
                     # So this is a button that should start ON...
                     d_v = 1 # Button should start held, so specify OSB display as HELD
                     button_map[button_invmap[virtual_btn["vk"]]]["s"] = 1 # Set the virtual button to ON
@@ -529,6 +529,8 @@ def osb_label(read_state=False):
                     # Two possibilities here. First, check to see if this is a toggle.
                     if virtual_btn["toggle"] != False:
                         # So this is a toggle. If so, then we need to set the OTHER state to ON
+                        d_v = 0 # Just to make sure, we set the OSB display to blank
+                        button_map[button_invmap[virtual_btn["vk"]]]["s"] = 0
                         button_map[button_invmap[virtual_btn["toggle"]]]["s"] = 1
                     else:
                         # It's not a toggle, which just means this is a HELD switch that starts OFF
@@ -628,7 +630,7 @@ def reload_maps():
                         if d_v[0] == "latch":
                             is_latch = int(d_v[1])
                         elif d_v[0] == "hold":
-                            is_held = int(d_v[1])
+                            is_held = True
                             if int(d_v[1]) == 1:
                                 start_on = True
                         elif d_v[0] == "sequence":
@@ -658,7 +660,7 @@ def reload_maps():
                         "toggle":toggle
                     }
                     # [d_vals[1],vk_val,is_latch,is_held]
-    #print(osbmap["DCS_F5E_L"])
+    print(osbmap["DCS_F5E_L"])
 
 def reload_server():
     global button_map
