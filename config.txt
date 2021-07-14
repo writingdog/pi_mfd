@@ -4,7 +4,7 @@
 # OSB#,Text,[VK# or name of subpage to navigate to],<optional params>
 # Optional params:
 # latch=# (how many times button must be pushed to trigger)
-# hold=1 (button will be kept triggered)
+# hold=1/0 (button will be kept triggered; if "1", will be started as ON)
 # sequence=[sequence_id|direction] (if set, VK# will be ignored)
 
 -BLANK
@@ -118,7 +118,7 @@
 --conf1
 13,MAIN,conf0
 14,NAV,conf2
-16,DUMP,31,latch=1,hold=1
+16,DUMP,31,latch=1,hold=0
 19,ORD,30,latch=1
 20,FUEL,29,latch=1
 --conf2
@@ -152,12 +152,12 @@
 17,A/G,803
 18,A/A,850
 --conf1
-6,HOOK,6,hold=1
-7,PARK,7,hold=1
+6,HOOK,6,hold=0
+7,PARK,7,hold=0
 8,ANTISKID,8,hold=1
 10,O2,10,hold=1
 13,MAIN,conf0
-16,HUD DCLT,16,hold=1
+16,HUD DCLT,16,hold=0
 18,VDI NORM,18,hold=1
 19,VSI PWR,19,hold=1
 20,HUD PWR,20,hold=1
@@ -183,13 +183,13 @@
 ---seq1 850,851,852,853
 --conf0
 6,JETTISON,6,2
-10,RPYL,10
-11,ROBD,11
-12,RIBD,12
-13,CENT,13
-14,LIBD,14
-15,LOBD,15
-16,LPYL,16
+10,RPYL,10,hold=1,toggle=1
+11,ROBD,11,hold=0,toggle=2
+12,RIBD,12,hold=0,toggle=3
+13,CENT,13,hold=0,toggle=4
+14,LIBD,14,hold=0,toggle=7
+15,LOBD,15,hold=0,toggle=8
+16,LPYL,16,hold=1,toggle=9
 20,ARM,20,set=800,set=850
 23,JETT_UP,0,sequence=seq0|1
 24,JETT_DN,0,sequence=seq0|-1

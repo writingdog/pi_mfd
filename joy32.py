@@ -244,7 +244,7 @@ def event_reload(e):
                     button_map[b]["s"] = 0
                 subpage = "conf0"
                 template = osb_supers[load_idx]
-                osb_label()
+                osb_label(True) # call osb_label with a mode switch to read in DEFAULT button values
 
 def event_normal(e,submap,physical_btn):
     # Normal event handler (i.e. button push/release when not in any special mode)
@@ -366,6 +366,15 @@ def event_normal(e,submap,physical_btn):
                                 submit_value = 1
                             else:
                                 submit_value = 0
+                        if virtual_btn["toggle"] != False:
+                            # So this is a special kind of HELD button where, if it's OFF...
+                            # Then we need to set its INVERSE state to "ON"
+                            if submit_value == 0:
+                                # Button is being released, so inverse should be ON
+                                button_map[button_invmap[virtual_btn["toggle"]]] = 1
+                            else:
+                                # Button is being held, so inverse should be OFF
+                                button_map[button_invmap[virtual_btn["toggle"]]] = 0
                         print("Special handling for OSB ",e.value,submit_value)
                     for c in virtual_btn["coset"]:
                         print("COSET: ",c,submit_value)
@@ -477,7 +486,9 @@ def osb_load():
     loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("ctxt",-1,-1,post_str))
 
 
-def osb_label():
+def osb_label(read_state=False):
+
+    # read_state, if TRUE, should set button values from default in config.txt
     global osbmap
     global osbtxt
     global template
@@ -509,10 +520,19 @@ def osb_label():
             print("O_Translate: {}".format(physical_btn))
             print(o_m)
             if virtual_btn["held"] != False:
-                # So in the OSB template, this is specified as sticky. So we need to check the value.
-                pass
-                #print(button_invmap[o_m[1]])
-                #print(button_map[button_invmap[o_m[1]]])
+                if virtual_btn["held"] == 1:
+                    d_v = 1 # Button should start held, so specify OSB display as HELD
+                    button_map[button_invmap[virtual_btn["vk"]]]["s"] = 1 # Set the virtual button to ON
+                else:
+                    # Two possibilities here. First, check to see if this is a toggle.
+                    if virtual_btn["toggle"] != False:
+                        # So this is a toggle. If so, then we need to set the OTHER state to ON
+                        button_map[button_invmap[virtual_btn["toggle"]]]["s"] = 1
+                    else:
+                        # It's not a toggle, which just means this is a HELD switch that starts OFF
+                        # (For example, the toggle for jettisoning fuel or something)
+                        # We don't need to do anything else
+                        pass
             loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",physical_btn,d_v,virtual_btn["text"]))
         else:
             if physical_btn >= 1 and physical_btn <= 20:
@@ -593,6 +613,8 @@ def reload_maps():
                     is_page = False # Does this include a switch to a new page?
                     d_vals = d.split(",")
                     coset = []
+                    toggle = False # If an integer, button will toggle between two held ON states
+                    start_on = False # If a held button should start as ON
                     for i in range(3,len(d_vals)):
                         '''
                         Could be:
@@ -605,12 +627,17 @@ def reload_maps():
                             is_latch = int(d_v[1])
                         elif d_v[0] == "hold":
                             is_held = True
+                            if d_v[1] == "1":
+                                start_on = True
                         elif d_v[0] == "sequence":
                             sequence_vars = d_v[1].split("|")
                             seq = sequence_vars[0]
                             seq_dir = int(sequence_vars[1])
                         elif d_v[0] == "set":
                             coset.append(int(d_v[1]))
+                        elif d_v[0] == "toggle":
+                            toggle = int(d_v[1])
+
                     if d_vals[2].isdigit() == True:
                         vk_val = int(d_vals[2])
                     else:
@@ -622,9 +649,11 @@ def reload_maps():
                         "vk":vk_val,
                         "latch":is_latch,
                         "held":is_held,
+                        "start_on":start_on,
                         "sequence":seq,
                         "direction":seq_dir,
-                        "coset":coset
+                        "coset":coset,
+                        "toggle":toggle
                     }
                     # [d_vals[1],vk_val,is_latch,is_held]
     #print(osbmap)
