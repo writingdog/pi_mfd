@@ -519,8 +519,10 @@ def osb_label(read_state=False):
             o_m = osbmap[template][subpage][physical_btn]
             print("O_Translate: {}".format(physical_btn))
             print(o_m)
-            if virtual_btn["held"] != False:
-                if virtual_btn["held"] == 1:
+            if virtual_btn["held"] != False and read_state==True:
+                # Special case for when reloading from scratch.
+                if virtual_btn["held"] == 1 and virtual_btn["start_on"]==True:
+                    # So this is a button that should start ON...
                     d_v = 1 # Button should start held, so specify OSB display as HELD
                     button_map[button_invmap[virtual_btn["vk"]]]["s"] = 1 # Set the virtual button to ON
                 else:
@@ -626,7 +628,7 @@ def reload_maps():
                         if d_v[0] == "latch":
                             is_latch = int(d_v[1])
                         elif d_v[0] == "hold":
-                            is_held = True
+                            is_held = int(d_v[1])
                             if int(d_v[1]) == 1:
                                 start_on = True
                         elif d_v[0] == "sequence":
@@ -656,7 +658,7 @@ def reload_maps():
                         "toggle":toggle
                     }
                     # [d_vals[1],vk_val,is_latch,is_held]
-    #print(osbmap)
+    #print(osbmap["DCS_F5E_L"])
 
 def reload_server():
     global button_map
