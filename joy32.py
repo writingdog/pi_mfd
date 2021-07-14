@@ -627,7 +627,7 @@ def reload_maps():
                             is_latch = int(d_v[1])
                         elif d_v[0] == "hold":
                             is_held = True
-                            if d_v[1] == "1":
+                            if int(d_v[1]) == 1:
                                 start_on = True
                         elif d_v[0] == "sequence":
                             sequence_vars = d_v[1].split("|")
