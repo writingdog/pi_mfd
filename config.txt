@@ -183,13 +183,13 @@
 ---seq1 850,851,852,853
 --conf0
 6,JETTISON,6,2
-10,RPYL,10,hold=1,toggle=1
-11,ROBD,11,hold=0,toggle=2
-12,RIBD,12,hold=0,toggle=3
+10,R WING,10,hold=1,toggle=1
+11,R OBD,11,hold=0,toggle=2
+12,R IBD,12,hold=0,toggle=3
 13,CENT,13,hold=0,toggle=4
-14,LIBD,14,hold=0,toggle=7
-15,LOBD,15,hold=0,toggle=8
-16,LPYL,16,hold=1,toggle=9
+14,L IBD,14,hold=0,toggle=7
+15,L OBD,15,hold=0,toggle=8
+16,L WING,16,hold=1,toggle=9
 20,ARM,20,set=800,set=850
 23,JETT_UP,0,sequence=seq0|1
 24,JETT_DN,0,sequence=seq0|-1

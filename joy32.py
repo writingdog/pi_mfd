@@ -529,7 +529,7 @@ def osb_label(read_state=False):
                     # Two possibilities here. First, check to see if this is a toggle.
                     if virtual_btn["toggle"] != False:
                         # So this is a toggle. If so, then we need to set the OTHER state to ON
-                        d_v = 0 # Just to make sure, we set the OSB display to blank
+                        d_v = -1 # Just to make sure, we set the OSB display to blank
                         button_map[button_invmap[virtual_btn["vk"]]]["s"] = 0
                         button_map[button_invmap[virtual_btn["toggle"]]]["s"] = 1
                     else:
@@ -660,7 +660,7 @@ def reload_maps():
                         "toggle":toggle
                     }
                     # [d_vals[1],vk_val,is_latch,is_held]
-    print(osbmap["DCS_F5E_L"])
+    #print(osbmap["DCS_F5E_L"])
 
 def reload_server():
     global button_map
