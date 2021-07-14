@@ -328,6 +328,10 @@ def event_normal(e,submap,physical_btn):
                     seqvars = osbseq[template][virtual_btn["sequence"]]
                     seqdir = virtual_btn["direction"]
                     # Unset ALL values in the sequence so that we can set ONE new value
+                    if seqvars["unset"] != False:
+                        # So this sequence is supposed to unset an OSB when triggered.
+                        button_map[button_invmap[seqvars["unset"]]]["s"] = 0
+                        loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[seqvars["unset"]],-1)) # Blank the OSB for the unset value
                     for s in seqvars["seq"]:
                         s = int(s)
                         if s >= 800:
@@ -591,7 +595,12 @@ def reload_maps():
                     sequence_vks = []
                     for s in line[1].split(","):
                         sequence_vks.append(int(s))
-                    osbseq[mainpage][sequence_id] = {"seq":sequence_vks,"idx":0}
+                    if len(line)>2:
+                        us_v = line[2].split("=")
+                        unset = int(us_v[1])
+                    else:
+                        unset = False
+                    osbseq[mainpage][sequence_id] = {"seq":sequence_vks,"idx":0,"unset":unset}
                 else:
                     if d[:2] == "--":
                         # Then a subpage is being defined.

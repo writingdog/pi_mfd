@@ -179,8 +179,8 @@
 10,TWS MODE,803
 
 -DCS_F5E_L
----seq0 800,801,802
----seq1 850,851,852,853
+---seq0 800,801,802 unset=20
+---seq1 850,851,852,853 unset=20
 --conf0
 6,JETTISON,6,2
 10,R WING,10,hold=1,toggle=1
