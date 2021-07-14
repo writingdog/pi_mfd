@@ -19,8 +19,11 @@ from evdev import ecodes, list_devices, AbsInfo, InputDevice, events
 
 def write_report(report):
     # This writes the raw data to the virtual USB device
-    with open('/dev/hidg0', 'rb+') as fd:
-        fd.write(report)
+    try:
+        with open('/dev/hidg0', 'rb+') as fd:
+            fd.write(report)
+    except:
+        print("Not able to write event.")
         #fd.write(report.encode())
         
 def clean_up():
