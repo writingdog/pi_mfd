@@ -349,7 +349,7 @@ def event_normal(e,submap,physical_btn):
                     # Special handling for the rocker switches
                     do_hats(v_k,e.value)
                 else:
-                    if virtual_btn["held"] == True:
+                    if virtual_btn["held"] != False:
                         # So this button is normally supposed to be held in.
                         # Case current:new
                         # held:push         0
