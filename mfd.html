@@ -124,6 +124,16 @@
 				margin-top: 80px;
 				margin-left: 80px;
 			}
+			.error_message {
+				width: 440px;
+				display: inline-block;
+				color: #ffffff;
+				font-weight: 100;
+				border: .1em solid #ffffff;
+				background-color: #e60000;
+				padding-left: .5em;
+				padding-right: .5em;
+			}
     		
     	</style>
     	<script type="text/javascript">
@@ -150,6 +160,9 @@
 				else if(ep[0]=="ctxt_a") {
 					update_central_display(ep[3],true)
 				}
+				else if(ep[0]=="ctxt_e") {
+					update_central_display(ep[3],true,true) // Specify it should be displayed as an error.
+				}
 				else if(ep[0]=="side") {
 					if(ep[1]=="right") {
 						mfd_side = "right";
@@ -172,9 +185,12 @@
 				$(osb_label).html(t)
 			}
 
-			function update_central_display(txt,a) {
+			function update_central_display(txt,a,err) {
 				if(a==undefined) {
 					a = false;
+				}
+				if(err==undefined) {
+					err = false;
 				}
 				if (a==true) {
 					$("#mfd_center_text").append("<br />");
@@ -182,7 +198,13 @@
 				}
 				else {
 					$("#mfd_center_text").empty();
-					$("#mfd_center_text").html(txt);
+					if(err==true) {
+						var msg = $("<span />",{"class":"error_message","text":txt});
+						$("#mfd_center_text").append(msg)
+					}
+					else {
+						$("#mfd_center_text").html(txt);
+					}
 				}
 			}
 

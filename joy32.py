@@ -24,6 +24,7 @@ def write_report(report):
             fd.write(report)
     except:
         print("Not able to write event.")
+        loop.call_soon_threadsafe(q.put_nowait,"ctxt_a,0,0,{}".format("Error: couldn't send last message to the virtual device."))
         #fd.write(report.encode())
         
 def clean_up():
@@ -153,6 +154,17 @@ def manage_event(e):
             # Status message, not a button press, ignore
             pass
         else:
+            
+            if e.code in button_status:
+                button_status[e.code]["s"] = e.value # so the button_status map should always store whether this button is currently ON or OFF
+                button_status[e.code]["last"] = button_status[e.code]["time"]
+                button_status[e.code]["time"] = e.timestamp()
+            else:
+                button_status[e.code] = {
+                    "s":e.value,
+                    "last":e.timestamp(),
+                    "time":e.timestamp()
+                }
             # Handling button press or release
             if reload_mode == True:
                 event_reload(e) # Special handling for this case
@@ -285,14 +297,18 @@ def event_normal(e,submap,physical_btn):
                     if is_latched == True:
                         # Button is currently latched
                         if virtual_btn["held"] != False:
-                            # This switch should be left in unless released.
+                            # "Held" switches should be left in until they are released.
                             print("Special handling for OSB OUT {}".format(e.code))
                             if button_map[v_k]["s"] == 1:
-                                # Currently set to 1; but button has been released, so now unset
+                                # Currently set to 1. Button has been released, but this means that the button was previously set ACTIVE
+                                # So in this case, we don't want to release the hold on the button.
+                                # This is just a special case, because the virtual button is set "on" when we first push it
+                                # so we don't want to inadvertently release it when we let the button go
                                 print("Button is HELD")
                                 submit_value = 1 # So specify that the button should be thought of as held...
                                 loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",physical_btn))
                             else:
+                                # Currently set to 0. Which means that we should not do anything else special here.
                                 submit_value = 0 # So specify that the button should be thought of as released
                         button_map[v_k]["s"] = submit_value
                 else:
@@ -303,7 +319,7 @@ def event_normal(e,submap,physical_btn):
                             # This switch should be left in unless released.
                             print("Special handling for OSB IN {}".format(e.code))
                             if button_map[v_k]["s"] == 1:
-                                # Currently set to 1; but button has been released, so now unset
+                                # Currently set to 1; but button has been released, so now unset it.
                                 submit_value = 0
                             else:
                                 submit_value = 1
@@ -759,6 +775,7 @@ button_map = {
 # 29-32 Virtual buttons
 
 button_invmap = {0:0,1:304,2:305,3:306,4:307,5:308,6:309,7:310,8:311,9:312,10:313,11:314,12:315,13:316,14:317,15:318,16:319,17:704,18:705,19:706,20:707,21:714,22:715,23:708,24:709,25:710,26:711,27:712,28:713,29:716,30:717,31:718,32:719,800:800,801:801,802:802,803:803,804:804,805:805,806:806,807:807,850:850,851:851,852:852,853:853,854:854,855:855,856:856,857:857}
+button_status = {} # Just stores whether the physical button is pressed or released.
 
 for b in button_map:
     button_map[b]["i"] = int.from_bytes(button_map[b]["b"],"big")
