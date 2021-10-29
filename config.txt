@@ -164,22 +164,29 @@
 -DCS_F14_L
 --conf0
 1,GUN,1
-2,AIM-9,latch=2
+2,AIM-9,2,latch=2
+3,SYS,conf1
 5,ARM,5,hold=1
-13,SYS,conf1
+6,HUD DCLT,16,hold=0
+7,ILS (HUD),9,hold=0
+8,VDI NORM,18,hold=1
+9,ILS (VDI),11,hold=0
+15,TACAN,851
+14,DEST,852
+13,AWL/PCD,853
+12,VEC,12
+11,MAN,13
 20,T/O,800
 16,LAND,801
 19,CRUISE,802
 17,A/G,803
 18,A/A,850
 --conf1
+3,MAIN,conf0
 6,HOOK,6,hold=0
 7,PARK,7,hold=0
 8,ANTISKID,8,hold=1
 10,O2,10,hold=1
-13,MAIN,conf0
-16,HUD DCLT,16,hold=0
-18,VDI NORM,18,hold=1
 19,VSI PWR,19,hold=1
 20,HUD PWR,20,hold=1
 
