@@ -6,6 +6,8 @@
 # latch=# (how many times button must be pushed to trigger)
 # hold=1/0 (button will be kept triggered; if "1", will be started as ON)
 # sequence=[sequence_id|direction] (if set, VK# will be ignored)
+# delay=milliseconds
+# long=[VK# or name of subpage to navigate to]
 
 -BLANK
 --conf0
@@ -252,28 +254,28 @@
 2,[T2],2
 3,[T3],3
 4,[T4],4
-5,[T5]<br />►,5
+5,[T5]<br />►,conf4,delay=500,long=5
 6,[R1],6
 7,[R2],7
 8,[R3],8
 9,[R4],9
-10,▼[R5],10
+10,▼[R5],conf1,delay=500,long=10
 11,[B5],11
 12,[B4],12
 13,[B3],13
 14,[B2],14
 15,[B1],15
-16,[L5]▼,16
+16,[L5]▼,conf2,delay=500,long=16
 17,[L4],17
 18,[L3],18
 19,[L2],19
 20,[L1],20
-21,<,conf4
-23,>,conf4
-22,/\,conf2
-27,\/,conf2
-24,/\,conf1
-25,\/,conf1
+21,<,29
+23,>,31
+22,/\,30
+27,\/,27
+24,/\,24
+25,\/,25
 26,26,26
 28,28,28
 --conf1 AH64 Profile<br /><br />Top buttons: NORMAL<br />Left buttons: NORMAL<br />Right buttons: SHIFTED
@@ -281,8 +283,8 @@
 2,[T2],2
 3,[T3],3
 4,[T4],4
-5,[T5]<br />►,5
-6,▲[2],7
+5,[T5]<br />►,conf5,delay=500,long=5
+6,▲[2],conf0,delay=500,long=6
 7,[R3],8
 8,[R4],9
 9,[R5],10
@@ -292,17 +294,17 @@
 13,[B3],13
 14,[B2],14
 15,[B1],15
-16,[L5]▼,16
+16,[L5]▼,conf3,delay=500,long=16
 17,[L4],17
 18,[L3],18
 19,[L2],19
 20,[L1],20
-21,<,conf4
-23,>,conf4
-22,/\,conf3
-27,\/,conf3
-24,/\,conf0
-25,\/,conf0
+21,<,29
+23,>,31
+22,/\,30
+27,\/,27
+24,/\,24
+25,\/,25
 26,26,26
 28,28,28
 --conf2 AH64 Profile<br /><br />Top buttons: NORMAL<br />Left buttons: SHIFTED<br />Right buttons: NORMAL
@@ -310,12 +312,12 @@
 2,[T2],2
 3,[T3],3
 4,[T4],4
-5,[T5]<br />►,5
+5,[T5]<br />►,conf5,delay=500,long=5
 6,[R1],6
 7,[R2],7
 8,[R3],8
 9,[R4],9
-10,▼[R5],10
+10,▼[R5],conf3,delay=500,long=10
 11,[B5],11
 12,[B4],12
 13,[B3],13
@@ -325,13 +327,13 @@
 17,[L5],16
 18,[L4],17
 19,[L3],18
-20,[L2]▲,19
-21,<,conf6
-23,>,conf6
-22,/\,conf0
-27,\/,conf0
-24,/\,conf3
-25,\/,conf3
+20,[L2]▲,conf0,delay=500,long=19
+21,<,29
+23,>,31
+22,/\,30
+27,\/,27
+24,/\,24
+25,\/,25
 26,26,26
 28,28,28
 --conf3 AH64 Profile<br /><br />Top buttons: NORMAL<br />Left buttons: SHIFTED<br />Right buttons: SHIFTED
@@ -339,8 +341,8 @@
 2,[T2],2
 3,[T3],3
 4,[T4],4
-5,[T5]<br />►,5
-6,▲[2],7
+5,[T5]<br />►,conf7,delay=500,long=5
+6,▲[2],conf2,delay=500,long=7
 7,[R3],8
 8,[R4],9
 9,[R5],10
@@ -354,17 +356,17 @@
 17,[L5],16
 18,[L4],17
 19,[L3],18
-20,[L2]▲,19
-21,<,conf7
-23,>,conf7
-22,/\,conf1
-27,\/,conf1
-24,/\,conf2
-25,\/,conf2
+20,[L2]▲,conf1,delay=500,long=19
+21,<,29
+23,>,31
+22,/\,30
+27,\/,27
+24,/\,24
+25,\/,25
 26,26,26
 28,28,28
 --conf4 AH64 Profile<br /><br />Top buttons: SHIFTED<br />Left buttons: NORMAL<br />Right buttons: NORMAL
-1,[T2]<br />◄,2
+1,[T2]<br />◄,conf0,delay=500,long=2
 2,[T3],3
 3,[T4],4
 4,[T5],5
@@ -373,32 +375,32 @@
 7,[R2],7
 8,[R3],8
 9,[R4],9
-10,▼[R5],10
+10,▼[R5],conf5,delay=500,long=10
 11,[B5],11
 12,[B4],12
 13,[B3],13
 14,[B2],14
 15,[B1],15
-16,[L5]▼,16
+16,[L5]▼,conf6,delay=500,long=16
 17,[L4],17
 18,[L3],18
 19,[L2],19
 20,[L1],20
-21,<,conf0
-23,>,conf0
-22,/\,conf6
-27,\/,conf6
-24,/\,conf5
-25,\/,conf5
+21,<,29
+23,>,31
+22,/\,30
+27,\/,27
+24,/\,24
+25,\/,25
 26,26,26
 28,28,28
 --conf5 AH64 Profile<br /><br />Top buttons: SHIFTED<br />Left buttons: NORMAL<br />Right buttons: SHIFTED
-1,[T2]<br />◄,2
+1,[T2]<br />◄,conf1,delay=500,long=2
 2,[T3],3
 3,[T4],4
 4,[T5],5
 5,[T6],23
-6,▲[2],7
+6,▲[R2],conf4,delay=500,long=7
 7,[R3],8
 8,[R4],9
 9,[R5],10
@@ -408,21 +410,21 @@
 13,[B3],13
 14,[B2],14
 15,[B1],15
-16,[L5]▼,16
+16,[L5]▼,conf7,delay=500,long=16
 17,[L4],17
 18,[L3],18
 19,[L2],19
 20,[L1],20
-21,<,conf1
-23,>,conf1
-22,/\,conf1
-27,\/,conf1
-24,/\,conf4
-25,\/,conf4
+21,<,29
+23,>,31
+22,/\,30
+27,\/,27
+24,/\,24
+25,\/,25
 26,26,26
 28,28,28
 --conf6 AH64 Profile<br /><br />Top buttons: SHIFTED<br />Left buttons: SHIFTED<br />Right buttons: NORMAL
-1,[T2]<br />◄,2
+1,[T2]<br />◄,conf2,delay=500,long=2
 2,[T3],3
 3,[T4],4
 4,[T5],5
@@ -431,7 +433,7 @@
 7,[R2],7
 8,[R3],8
 9,[R4],9
-10,▼[R5],10
+10,▼[R5],conf7,delay=500,long=10
 11,[B5],11
 12,[B4],12
 13,[B3],13
@@ -441,22 +443,22 @@
 17,[L5],16
 18,[L4],17
 19,[L3],18
-20,[L2]▲,19
-21,<,conf2
-23,>,conf2
-22,/\,conf4
-27,\/,conf4
-24,/\,conf7
-25,\/,conf7
+20,[L2]▲,conf4,delay=500,long=19
+21,<,29
+23,>,31
+22,/\,30
+27,\/,27
+24,/\,24
+25,\/,25
 26,26,26
 28,28,28
 --conf7 AH64 Profile<br /><br />Top buttons: SHIFTED<br />Left buttons: SHIFTED<br />Right buttons: SHIFTED
-1,[T2]<br />◄,2
+1,[T2]<br />◄,conf3,delay=500,long=2
 2,[T3],3
 3,[T4],4
 4,[T5],5
 5,[T6],23
-6,▲[2],7
+6,▲[2],conf6,delay=500,long=7
 7,[R3],8
 8,[R4],9
 9,[R5],10
@@ -470,12 +472,12 @@
 17,[L5],16
 18,[L4],17
 19,[L3],18
-20,[L2]▲,19
-21,<,conf3
-23,>,conf3
-22,/\,conf5
-27,\/,conf5
-24,/\,conf6
-25,\/,conf6
+20,[L2]▲,conf5,delay=500,long=19
+21,<,29
+23,>,31
+22,/\,30
+27,\/,27
+24,/\,24
+25,\/,25
 26,26,26
 28,28,28

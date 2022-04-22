@@ -234,7 +234,7 @@ def event_reload(e):
             if e.code == 707:
                 load_idx = load_idx - 1
                 if load_idx < 0:
-                    load_idx = 0
+                    load_idx = len(osb_supers)-1
                 osb_load()
             elif e.code == 706:
                 load_idx = load_idx + 1
@@ -258,7 +258,7 @@ def event_reload(e):
                 template = osb_supers[load_idx]
                 osb_label(True) # call osb_label with a mode switch to read in DEFAULT button values
 
-def event_normal(e,submap,physical_btn):
+def event_normal(e,submap,physical_btn,force_trigger=False):
     # Normal event handler (i.e. button push/release when not in any special mode)
     global button_map
     global loop
@@ -273,22 +273,111 @@ def event_normal(e,submap,physical_btn):
     global hat
     global mfd_side
 
+    force_delay = False
+    process_remaining = True
+
     submap = osbmap[template][subpage]
     if physical_btn in submap:
         virtual_btn = submap[physical_btn]
-        if virtual_btn["page"] != False:
+        if virtual_btn["delay"] != False:
+            if force_trigger == False or e.value == 0:
+                # This action was delayed, and we haven't timed out on it yet.
+                # But always trigger when the button is released.
+                force_delay = True
+        if virtual_btn["page"] != False or virtual_btn["long_page"] != False:
             # Special handling for when we are triggering a mode switch.
-            if e.value == 1:
-                # Do nothing when the button is PUSHED except light the OSB
-                loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",physical_btn))
-                pass
+            # This can be true if either the default action OR the long-hold action is a page switch
+            # We add in the delay factor here in case we only trigger the page switch on a long hold
+            if force_trigger == False:
+                # So this was called NOT from a delay
+                print("Called without force_trigger")
+                if virtual_btn["page"] == True:
+                    print("Virtual button is a page switcher")
+                    # The default action is a mode switch
+                    if e.value == 1:
+                        print("Virtual button is a page switcher, triggering ON")
+                        # Do nothing when the button is PUSHED except light the OSB
+                        process_remaining = False
+                        if virtual_btn["delay"] != False:
+                            print("Virtual button has a delay, so halting remaining")
+                            loop.call_later(float(virtual_btn["delay"])/1000,event_delayed,e,submap,physical_btn)
+                        else:
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",physical_btn))
+                        pass
+                    else:
+                        # So button is now released... change the new subpage
+                        print("Virtual button was released")
+                        if virtual_btn["delay"] != False:
+                            # So button has a delay.
+                            print("Virtual button has a delay set")
+                            if virtual_btn["long_page"] == False:
+                                # So this is a conventional button press.
+                                v_k_l = button_invmap[virtual_btn["long"]]
+                                if button_map[v_k_l]["s"] == 1:
+                                    # The button is currently held in, and it's being released...
+                                    print("Virtual button alternate is held IN, so we need to keep processing")
+                                    pass
+                                else:
+                                    process_remaining = False
+                                    loop.call_soon_threadsafe(q.put_nowait,"{},{},-1".format("osb",physical_btn))
+                                    subpage = virtual_btn["vk"]
+                                    osb_label()
+                        else:
+                            process_remaining = False # Do no more process handling
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},-1".format("osb",physical_btn))
+                            subpage = virtual_btn["vk"]
+                            osb_label()
             else:
-                # So button is now released... change the new subpage
-                loop.call_soon_threadsafe(q.put_nowait,"{},{},-1".format("osb",physical_btn))
-                subpage = virtual_btn["vk"]
-                osb_label()
+                # So this was called FROM a delay
+                print("Called from a force trigger")
+                if virtual_btn["page"] == True:
+                    # The default action is a mode switch
+                    if e.value == 1:
+                        # Do nothing when the button is PUSHED except light the OSB
+                        loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",physical_btn))
+                        if virtual_btn["delay"] != False:
+                            print("EXECUTING DELAY")
+                            #process_remaining = False
+                        pass
+                    else:
+                        # So button is now released... change the new subpage
+                        process_remaining = False # Do no more process handling
+                        loop.call_soon_threadsafe(q.put_nowait,"{},{},-1".format("osb",physical_btn))
+                        subpage = virtual_btn["vk"]
+                        osb_label()
+                else:
+                    if virtual_btn["long_page"] == True:
+                        # The long hold is a mode switch.
+                        process_remaining = False # So do nothing after handling the mode switch.
+                        if e.value == 1:
+                            # Do nothing when the button is PUSHED except light the OSB
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",physical_btn))
+                            pass
+                        else:
+                            # So button is now released... change the new subpage
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},-1".format("osb",physical_btn))
+                            subpage = virtual_btn["long"]
+                            osb_label()
+        if process_remaining == False:
+            # Halt execution if we tripped something above
+            pass
         else:
-            v_k = button_invmap[virtual_btn["vk"]] # Get the actual USB event ID back
+            if force_trigger == True:
+                # So this was called again, with a force delay. That means we need to pull the LONG vk, not the normal vk
+                v_k = button_invmap[virtual_btn["long"]] # Get the alternate USB event ID back
+                if virtual_btn["page"] == True:
+                    v_k_l = button_invmap[virtual_btn["long"]] # Get the alternate USB event back
+                else:
+                    v_k_l = button_invmap[virtual_btn["vk"]] # Get the alternate USB event back
+            else:
+                if virtual_btn["page"] == True:
+                    # This should only be true if it wasn't caught earlier when we check for page-switch events.
+                    # So again the v_k should be the LONG hold value
+                    v_k = button_invmap[virtual_btn["long"]] # Get the actual USB event ID back
+                    v_k_l = button_invmap[virtual_btn["long"]]
+                else:
+                    v_k = button_invmap[virtual_btn["vk"]] # Get the actual USB event ID back
+                    v_k_l = button_invmap[virtual_btn["vk"]]
             submit_value = e.value # Whether button is in or out
             if virtual_btn["latch"] != False:
                 # So this button has a latch value that is other than -1, i.e. it has to be pushed multiple times
@@ -363,7 +452,7 @@ def event_normal(e,submap,physical_btn):
                             new_idx = len(seqvars["seq"])-1
                         osbseq[template][virtual_btn["sequence"]]["idx"] = new_idx
                         v_k = osbseq[template][virtual_btn["sequence"]]["seq"][new_idx]
-                    print(e.value,osbseq[template][virtual_btn["sequence"]])
+                    #print(e.value,osbseq[template][virtual_btn["sequence"]])
                 
                 if v_k>=800:
                     # Special handling for the rocker switches
@@ -406,14 +495,49 @@ def event_normal(e,submap,physical_btn):
                             loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],1)) # Highlight the OSB
                         else:
                             loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],-1)) # Blank the OSB
-
-                    button_map[v_k]["s"] = submit_value # Set the button_map value to be either on or off, depending.
-                    if submit_value == 1:
-                        loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",physical_btn,1)) # Highlight the OSB
+                    if force_delay != False:
+                        #button_map[v_k]["s"] = submit_value # Set the button_map value to be either on or off, depending.
+                        if submit_value == 1:
+                            loop.call_later(float(virtual_btn["delay"])/1000,event_delayed,e,submap,physical_btn)
+                        else:
+                            # Always blank the OSB on release even if there's a delay
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},-1".format("osb",physical_btn,-1)) # Blank the OSB
+                            # Always set the button_map value off even if there's a delay
+                            button_map[v_k]["s"] = submit_value
+                            button_map[v_k_l]["s"] = submit_value
                     else:
-                        loop.call_soon_threadsafe(q.put_nowait,"{},{},-1".format("osb",physical_btn,-1)) # Blank the OSB
+                        button_map[v_k]["s"] = submit_value # Set the button_map value to be either on or off, depending.
+                        if submit_value == 1:
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",physical_btn,1)) # Highlight the OSB
+                        else:
+                            button_map[v_k_l]["s"] = submit_value # Unset the alternate LONG HOLD value
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},-1".format("osb",physical_btn,-1)) # Blank the OSB
     else:
         check_latch("",-1,e.value)
+
+def event_delayed(e,submap,physical_btn):
+    global button_map
+    global loop
+    global q
+    global button_latch
+    global latch_count
+    global osbmap
+    global template
+    global subpage
+    global reload_mode
+    global load_idx 
+    global hat
+    global mfd_side
+
+    print("Delayed events")
+    print(e)
+
+    if button_status[e.code]["s"] == 1:
+        # We only trigger this if the button is still held in at the time
+        event_normal(e,submap,physical_btn,True)
+        #button_map[v_k]["s"] = 1
+        #loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",physical_btn,1)) # Highlight the OSB
+    sum_buttons()
 
 def do_hats(key,set_unset):
     global hat
@@ -537,8 +661,8 @@ def osb_label(read_state=False):
                     # So the button is currently ON, and should be displayed as ON
                     d_v = 1
             o_m = osbmap[template][subpage][physical_btn]
-            print("O_Translate: {}".format(physical_btn))
-            print(o_m)
+            #print("O_Translate: {}".format(physical_btn))
+            #print(o_m)
             if virtual_btn["held"] != False and read_state==True:
                 # Special case for when reloading from scratch.
                 if virtual_btn["start_on"]==True:
@@ -644,6 +768,16 @@ def reload_maps():
                     coset = []
                     toggle = False # If an integer, button will toggle between two held ON states
                     start_on = False # If a held button should start as ON
+                    delay = False
+
+                    if d_vals[2].isdigit() == True:
+                        vk_val = int(d_vals[2])
+                    else:
+                        vk_val = d_vals[2]
+                        is_page = True
+
+                    long_is_page = False
+                    long_hold = vk_val
                     for i in range(3,len(d_vals)):
                         '''
                         Could be:
@@ -666,12 +800,14 @@ def reload_maps():
                             coset.append(int(d_v[1]))
                         elif d_v[0] == "toggle":
                             toggle = int(d_v[1])
-
-                    if d_vals[2].isdigit() == True:
-                        vk_val = int(d_vals[2])
-                    else:
-                        vk_val = d_vals[2]
-                        is_page = True
+                        elif d_v[0] == "delay":
+                            delay = int(d_v[1])
+                        elif d_v[0] == "long":
+                            if d_v[1].isdigit() == True:
+                                long_hold = int(d_v[1])
+                            else:
+                                long_hold = d_v[1]
+                                long_is_page = True
                     osbmap[mainpage][subpage][int(d_vals[0])] = {
                         "text":d_vals[1],
                         "page":is_page,
@@ -682,7 +818,10 @@ def reload_maps():
                         "sequence":seq,
                         "direction":seq_dir,
                         "coset":coset,
-                        "toggle":toggle
+                        "toggle":toggle,
+                        "delay":delay,
+                        "long":long_hold,
+                        "long_page":long_is_page
                     }
                     # [d_vals[1],vk_val,is_latch,is_held]
     #print(osbmap["DCS_F5E_L"])
