@@ -284,7 +284,7 @@
 3,[T3],3
 4,[T4],4
 5,[T5]<br />►,conf5,delay=500,long=5
-6,▲[2],conf0,delay=500,long=6
+6,▲[R2],conf0,delay=500,long=7
 7,[R3],8
 8,[R4],9
 9,[R5],10
