@@ -833,14 +833,16 @@ def reload_maps():
     #print(osbmap["DCS_F5E_L"])
 
 def reload_all():
+    global loop
 
     file_loc = ["pi","mfd_l","mfd_r"] # Possible usernames
     for f in file_loc:
         if pathlib.Path("/home/{}/pi_mfd/mfd.html".format(f)).is_file() == True:
             fpath = "/home/{}/pi_mfd/mfd.html".format(f)
             f_user = f
-    os.system("lxterminal -e 'bash -c \"bash /home/{}/Desktop/startup.sh;bash\"'".format(f_user))
     loop.stop()
+    os.system("lxterminal -e 'bash -c \"bash /home/{}/Desktop/startup.sh;bash\"'".format(f_user))
+
     #subprocess.Popen(["lxterminal","-e","bash -c /home/{}/Desktop/startup.sh".format(f_user)],stdout=subprocess.PIPE)
 
 def reload_server():
