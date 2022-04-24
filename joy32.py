@@ -840,6 +840,7 @@ def reload_all():
             fpath = "/home/{}/pi_mfd/mfd.html".format(f)
             f_user = f
     os.system("lxterminal -e 'bash -c \"bash /home/{}/Desktop/startup.sh;bash\"'".format(f_user))
+    sys.exit()
     #subprocess.Popen(["lxterminal","-e","bash -c /home/{}/Desktop/startup.sh".format(f_user)],stdout=subprocess.PIPE)
 
 def reload_server():
