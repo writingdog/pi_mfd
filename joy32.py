@@ -839,7 +839,7 @@ def reload_all():
         if pathlib.Path("/home/{}/pi_mfd/mfd.html".format(f)).is_file() == True:
             fpath = "/home/{}/pi_mfd/mfd.html".format(f)
             f_user = f
-    os.system("lxterminal -e 'bash -c \"bash /home{}/Desktop/startup.sh;bash\"'".format(f_user))
+    os.system("lxterminal -e 'bash -c \"bash /home/{}/Desktop/startup.sh;bash\"'".format(f_user))
     #subprocess.Popen(["lxterminal","-e","bash -c /home/{}/Desktop/startup.sh".format(f_user)],stdout=subprocess.PIPE)
 
 def reload_server():
