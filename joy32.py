@@ -834,16 +834,14 @@ def reload_maps():
 
 def reload_all():
     global loop
-
     file_loc = ["pi","mfd_l","mfd_r"] # Possible usernames
     for f in file_loc:
         if pathlib.Path("/home/{}/pi_mfd/mfd.html".format(f)).is_file() == True:
             fpath = "/home/{}/pi_mfd/mfd.html".format(f)
             f_user = f
-    loop.stop()
-    os.system("lxterminal -e 'bash -c \"bash /home/{}/Desktop/startup.sh;bash\"'".format(f_user))
-
-    #subprocess.Popen(["lxterminal","-e","bash -c /home/{}/Desktop/startup.sh".format(f_user)],stdout=subprocess.PIPE)
+    subprocess.Popen(["sudo","-u","{}".format(f_user),"/home/{}/Desktop/startup.sh".format(f_user),"--kiosk",fpath])
+    #os.system("lxterminal -e 'bash -c \"bash /home/{}/Desktop/startup.sh;bash\"'".format(f_user))
+    #os.system("lxterminal -e 'bash -c \"bash /home/{}/Desktop/startup.sh;bash\"'".format(f_user))
 
 def reload_server():
     global button_map
