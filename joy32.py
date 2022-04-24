@@ -833,7 +833,7 @@ def reload_maps():
     #print(osbmap["DCS_F5E_L"])
 
 def reload_all():
-    subprocess.Popen(["sudo","bash","~/Desktop/startup.sh"])
+    subprocess.Popen(["sudo","~/Desktop/startup.sh"])
 
 def reload_server():
     global button_map
