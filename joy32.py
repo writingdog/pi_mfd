@@ -61,6 +61,8 @@ def check_latch(b_idx,l_max,set_unset,special_trigger=False):
                         osb_label() # 712 when triggered redraws all labels
                     elif b_idx == 304:
                         reload_server() # 304 when triggered reloads the webserver
+                    elif b_idx == 306:
+                        reload_all() # 306 (OSB3) when triggered kills everything and restarts it
                 else:
                     is_latched = True
                     if virtual_btn["held"] != False:
@@ -191,6 +193,10 @@ def manage_event(e):
                             # 304 is OSB1
                             special_handling = True
                             check_latch(304,2,e.value,True)
+                        elif e.code == 306:
+                            # 306 is OSB3, used to trigger restart
+                            special_handling = True
+                            check_latch(306,2,e.value,True)
                         print("LATCH: ",button_latch,latch_count,button_map[711]["s"])
                     if special_handling == False:
                         # So we are not triggering any potential control modes here
@@ -825,6 +831,9 @@ def reload_maps():
                     }
                     # [d_vals[1],vk_val,is_latch,is_held]
     #print(osbmap["DCS_F5E_L"])
+
+def reload_all():
+    subprocess.Popen(["sudo","bash","~/Desktop/startup.sh"])
 
 def reload_server():
     global button_map
