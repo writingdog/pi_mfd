@@ -833,7 +833,13 @@ def reload_maps():
     #print(osbmap["DCS_F5E_L"])
 
 def reload_all():
-    subprocess.Popen(["sudo","~/Desktop/startup.sh"])
+
+    file_loc = ["pi","mfd_l","mfd_r"] # Possible usernames
+    for f in file_loc:
+        if pathlib.Path("/home/{}/pi_mfd/mfd.html".format(f)).is_file() == True:
+            fpath = "/home/{}/pi_mfd/mfd.html".format(f)
+            f_user = f
+    subprocess.Popen(["sudo","/home/{}/Desktop/startup.sh".format(f)])
 
 def reload_server():
     global button_map
