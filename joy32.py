@@ -520,7 +520,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                                 else:
                                     loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",c,-1)) # Blank the OSB
                     for c in virtual_btn["counset"]:
-                        print("TRIGGERED COUNSET: ",c,button_invmap[c],submit_value)
+                        print("TRIGGERED COUNSET: ",c,button_invmap[c],v_k,submit_value)
                         if c!=v_k:
                             # So don't trigger this if there is for some reason a coset value that is the same as this key
                             if c >= 800:
