@@ -506,7 +506,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                                 button_map[button_invmap[virtual_btn["toggle"]]]["s"] = 0
                         print("Special handling for OSB ",e.value,submit_value)
                     for c in virtual_btn["coset"]:
-                        print("COSET: ",c,submit_value)
+                        print("COSET: ",c,button_invmap[c],v_k,button_map[v_k]["o"],submit_value)
                         if c!=button_map[v_k]["o"]:
                             # So don't trigger this if there is for some reason a coset value that is the same as this key
                             if c >= 800:
