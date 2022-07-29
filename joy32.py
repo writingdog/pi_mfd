@@ -478,6 +478,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                     # Special handling for the rocker switches
                     do_hats(v_k,e.value)
                 else:
+                    toggle_special_case = -1 # This is to catch a problem in coset/unset cases
                     if virtual_btn["held"] != False:
                         # So this button is normally supposed to be held in.
                         # Case current:new
@@ -500,6 +501,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                             # Then we need to set its INVERSE state to "ON"
                             if submit_value == 0:
                                 # Button is being released, so inverse should be ON
+                                toggle_special_case = button_map[button_invmap[virtual_btn["toggle"]]]["o"]
                                 button_map[button_invmap[virtual_btn["toggle"]]]["s"] = 1
                             else:
                                 # Button is being held, so inverse should be OFF
@@ -507,7 +509,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                         print("Special handling for OSB ",e.value,submit_value)
                     for c in virtual_btn["coset"]:
                         print("COSET: ",c,button_invmap[c],v_k,button_map[v_k]["o"],submit_value)
-                        if c!=button_map[v_k]["o"]:
+                        if c!=button_map[v_k]["o"] and c!=toggle_special_case:
                             # So don't trigger this if there is for some reason a coset value that is the same as this key
                             if c >= 800:
                                 do_hats(c,submit_value)
@@ -521,7 +523,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                                     loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",c,-1)) # Blank the OSB
                     for c in virtual_btn["counset"]:
                         print("TRIGGERED COUNSET: ",c,button_invmap[c],v_k,button_map[v_k]["o"],submit_value)
-                        if c!=button_map[v_k]["o"]:
+                        if c!=button_map[v_k]["o"] and c!=toggle_special_case:
                             # So don't trigger this if there is for some reason a coset value that is the same as this key
                             if c >= 800:
                                 do_hats(c,submit_value)
