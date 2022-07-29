@@ -521,7 +521,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                             button_map[button_invmap[c]]["s"] = 0 # New behavior. Always set this to OFF
                         if c <= 20:
                             # That is, if C is a value low enough to have an attached OSB
-                            loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",c,0)) # Blank the OSB
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",c,-1)) # Blank the OSB
                     if force_delay != False:
                         #button_map[v_k]["s"] = submit_value # Set the button_map value to be either on or off, depending.
                         if submit_value == 1:
