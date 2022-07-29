@@ -424,19 +424,23 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                         do_hats(c,submit_value)
                     else:
                         button_map[button_invmap[c]]["s"] = 1
-                    if e.value == 1:
-                        loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],1)) # Highlight the OSB
-                    else:
-                        if is_latched == True:
-                            loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],0)) # Latch the OSB
+                    if c <=20:
+                        # That is, if C is a value low enough to have an attached OSB
+                        if e.value == 1:
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",c,1)) # Highlight the OSB
                         else:
-                            loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],-1)) # Blank the OSB
+                            if is_latched == True:
+                                loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",c,0)) # Latch the OSB
+                            else:
+                                loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",c,-1)) # Blank the OSB
                 for c in virtual_btn["counset"]:
                     if c >= 800:
                         do_hats(c,submit_value)
                     else:
                         button_map[button_invmap[c]]["s"] = 0
-                    loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",button_invmap[c],-1)) # Highlight the OSB
+                    if c <= 20:
+                        # That is, if C is a value low enough to have an attached OSB
+                        loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",c,-1)) # Highlight the OSB
             else:
                 # So this button has no latch value; treat it normally.
                 check_latch("",-1,e.value)
@@ -503,17 +507,21 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                             do_hats(c,submit_value)
                         else:
                             button_map[button_invmap[c]]["s"] = 1 # New behavior. Always set this to OFF
-                        if e.value == 1:
-                            loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",button_invmap[c],1)) # Highlight the OSB
-                        else:
-                            loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",button_invmap[c],-1)) # Blank the OSB
+                        if c <= 20:
+                            # That is, if C is a value low enough to have an attached OSB
+                            if e.value == 1:
+                                loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",c,1)) # Highlight the OSB
+                            else:
+                                loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",c,-1)) # Blank the OSB
                     for c in virtual_btn["counset"]:
                         print("TRIGGERED COUNSET: ",c,button_invmap[c],submit_value)
                         if c >= 800:
                             do_hats(c,submit_value)
                         else:
                             button_map[button_invmap[c]]["s"] = 0 # New behavior. Always set this to OFF
-                        loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",button_invmap[c],0)) # Blank the OSB
+                        if c <= 20:
+                            # That is, if C is a value low enough to have an attached OSB
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",c,0)) # Blank the OSB
                     if force_delay != False:
                         #button_map[v_k]["s"] = submit_value # Set the button_map value to be either on or off, depending.
                         if submit_value == 1:
