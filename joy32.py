@@ -420,7 +420,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                                 submit_value = 1
                         button_map[v_k]["s"] = submit_value
                 for c in virtual_btn["coset"]:
-                    if c!=v_k:
+                    if c!=button_map[v_k]["o"]:
                         # So don't trigger this if there is for some reason a coset value that is the same as this key                    
                         if c >= 800:
                             do_hats(c,submit_value)
@@ -436,7 +436,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                                 else:
                                     loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",c,-1)) # Blank the OSB
                 for c in virtual_btn["counset"]:
-                    if c!=v_k:
+                    if c!=button_map[v_k]["o"]:
                          # So don't trigger this if there is for some reason a coset value that is the same as this key
                         if c >= 800:
                             do_hats(c,submit_value)
@@ -507,7 +507,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                         print("Special handling for OSB ",e.value,submit_value)
                     for c in virtual_btn["coset"]:
                         print("COSET: ",c,submit_value)
-                        if c!=v_k:
+                        if c!=button_map[v_k]["o"]:
                             # So don't trigger this if there is for some reason a coset value that is the same as this key
                             if c >= 800:
                                 do_hats(c,submit_value)
@@ -521,7 +521,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                                     loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",c,-1)) # Blank the OSB
                     for c in virtual_btn["counset"]:
                         print("TRIGGERED COUNSET: ",c,button_invmap[c],v_k,submit_value)
-                        if c!=v_k:
+                        if c!=button_map[v_k]["o"]:
                             # So don't trigger this if there is for some reason a coset value that is the same as this key
                             if c >= 800:
                                 do_hats(c,submit_value)
