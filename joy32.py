@@ -508,7 +508,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                         else:
                             loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",button_invmap[c],-1)) # Blank the OSB
                     for c in virtual_btn["counset"]:
-                        print("TRIGGERED COUNSET: ",c,submit_value)
+                        print("TRIGGERED COUNSET: ",c,button_invmap[c],submit_value)
                         if c >= 800:
                             do_hats(c,submit_value)
                         else:
