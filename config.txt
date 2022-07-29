@@ -697,3 +697,16 @@
 26,26,26
 27,27,27
 28,28,28
+
+-DCS_F1CE_Right
+---seq0 800,801,802 unset=20
+---seq1 850,851,852,853 unset=20
+--conf0
+20,EXT.G,20,hold=0,toggle=28,set=19,set=18,set=17,set=6,set=7,set=8,set=9
+19,M.G.FUS,19,hold=0,toggle=27,set=20,set=18,set=17,set=6,set=7,set=8,set=9
+18,CAN.A,18,hold=0,toggle=26,set=19,set=20,set=17,set=6,set=7,set=8,set=9
+17,BOMB|VOIL,17,hold=0,toggle=25,set=19,set=18,set=20,set=6,set=7,set=8,set=9
+6,EXT.D,6,hold=0,toggle=21,set=19,set=18,set=17,set=20,set=7,set=8,set=9
+7,M.D.,7,hold=0,toggle=22,set=19,set=18,set=17,set=6,set=20,set=8,set=9
+8,CAN.S|ROQ,8,hold=0,toggle=23,set=19,set=18,set=17,set=6,set=7,set=20,set=9
+9,BOMB|FUS,9,hold=0,toggle=24,set=19,set=18,set=17,set=6,set=7,set=8,set=20
