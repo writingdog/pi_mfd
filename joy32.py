@@ -827,7 +827,7 @@ def reload_maps():
                             seq_dir = int(sequence_vars[1])
                         elif d_v[0] == "set":
                             if(int(d_v[1])) < 0:
-                                counset.append(-1*(int(d_V[1])))
+                                counset.append(-1*(int(d_v[1])))
                             else:
                                 coset.append(int(d_v[1]))
                         elif d_v[0] == "toggle":
