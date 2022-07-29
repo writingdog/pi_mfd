@@ -423,12 +423,24 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                     if c >= 800:
                         do_hats(c,submit_value)
                     else:
-                        button_map[button_invmap[c]]["s"] = submit_value
+                        button_map[button_invmap[c]]["s"] = 1
                     if e.value == 1:
                         loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],1)) # Highlight the OSB
                     else:
                         if is_latched == True:
                             loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],0)) # Latch the OSB
+                        else:
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],-1)) # Blank the OSB
+                for c in virtual_btn["counset"]:
+                    if c >= 800:
+                        do_hats(c,submit_value)
+                    else:
+                        button_map[button_invmap[c]]["s"] = 0
+                    if e.value == 1:
+                        loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],-1)) # Highlight the OSB
+                    else:
+                        if is_latched == True:
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],-1)) # Latch the OSB
                         else:
                             loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],-1)) # Blank the OSB
             else:
@@ -496,9 +508,19 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                         if c >= 800:
                             do_hats(c,submit_value)
                         else:
-                            button_map[button_invmap[c]]["s"] = submit_value
+                            button_map[button_invmap[c]]["s"] = 1 # New behavior. Always set this to OFF
                         if e.value == 1:
                             loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],1)) # Highlight the OSB
+                        else:
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],-1)) # Blank the OSB
+                    for c in virtual_btn["counset"]:
+                        print("COUNSET: ",c,submit_value)
+                        if c >= 800:
+                            do_hats(c,submit_value)
+                        else:
+                            button_map[button_invmap[c]]["s"] = 0 # New behavior. Always set this to OFF
+                        if e.value == 1:
+                            loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],-1)) # Highlight the OSB
                         else:
                             loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",button_invmap[c],-1)) # Blank the OSB
                     if force_delay != False:
@@ -771,7 +793,8 @@ def reload_maps():
                     vk_val = ""
                     is_page = False # Does this include a switch to a new page?
                     d_vals = d.split(",")
-                    coset = []
+                    coset = [] # Values to be set alongside this trigger
+                    counset = [] # Values to be UNSET alongside this trigger
                     toggle = False # If an integer, button will toggle between two held ON states
                     start_on = False # If a held button should start as ON
                     delay = False
@@ -803,7 +826,10 @@ def reload_maps():
                             seq = sequence_vars[0]
                             seq_dir = int(sequence_vars[1])
                         elif d_v[0] == "set":
-                            coset.append(int(d_v[1]))
+                            if(int(d_v[1])) < 0:
+                                counset.append(-1*(int(d_V[1])))
+                            else:
+                                coset.append(int(d_v[1]))
                         elif d_v[0] == "toggle":
                             toggle = int(d_v[1])
                         elif d_v[0] == "delay":
@@ -824,6 +850,7 @@ def reload_maps():
                         "sequence":seq,
                         "direction":seq_dir,
                         "coset":coset,
+                        "counset":counset,
                         "toggle":toggle,
                         "delay":delay,
                         "long":long_hold,
