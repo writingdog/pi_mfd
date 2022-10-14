@@ -138,7 +138,7 @@
     	</style>
     	<script type="text/javascript">
     	    var mode = 0; // 0 = normal, 1 = profile select
-    		var ws = new WebSocket("ws://127.0.0.1:5678/");
+    		var ws = new WebSocket("ws://192.168.2.25:5678/");
 			var mfd_side = "left";
 			ws.onopen = function() {
 				ws.send("open_ok");

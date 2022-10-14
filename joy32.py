@@ -22,6 +22,7 @@ remote_ip = ""
 try:
     with open("../mfd.txt") as f:
         data = f.readlines()
+        print(data)
         for d in data:
             remote_ip = d.strip()
 except:
