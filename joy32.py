@@ -27,6 +27,8 @@ try:
 except:
     remote_ip = "127.0.0.1"
 
+print(remote_ip)
+
 def write_report(report):
     # This writes the raw data to the virtual USB device
     try:
