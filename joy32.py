@@ -21,7 +21,7 @@ remote_ip = "127.0.0.1"
 
 try:
     with open("~/mfd.txt") as f:
-        data = f.readline()
+        data = f.readlines()
         for d in data:
             remote_ip = d.strip()
 except:
