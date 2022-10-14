@@ -17,6 +17,16 @@ import websockets
 import pathlib
 from evdev import ecodes, list_devices, AbsInfo, InputDevice, events
 
+remote_ip = "127.0.0.1"
+
+try:
+    with open("~/mfd.txt") as f:
+        data = f.readline()
+        for d in data:
+            remote_ip = d.strip()
+except:
+    remote_ip = "127.0.0.1"
+
 def write_report(report):
     # This writes the raw data to the virtual USB device
     try:
@@ -996,7 +1006,7 @@ r = asyncio.Queue() # input queue
 
 loop = asyncio.get_event_loop()
 
-start_server = websockets.serve(export,"127.0.0.1",5678)
+start_server = websockets.serve(export,remote_ip,5678)
 #import_server = websockets.serve(process_ws,"127.0.0.1",5678)
 dev = InputDevice("/dev/input/event0")
 
