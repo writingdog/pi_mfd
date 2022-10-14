@@ -17,10 +17,10 @@ import websockets
 import pathlib
 from evdev import ecodes, list_devices, AbsInfo, InputDevice, events
 
-remote_ip = "127.0.0.1"
+remote_ip = ""
 
 try:
-    with open("~/mfd.txt") as f:
+    with open("../mfd.txt") as f:
         data = f.readlines()
         for d in data:
             remote_ip = d.strip()
