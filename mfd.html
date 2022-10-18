@@ -11,14 +11,28 @@
     			box-sizing: border-box;
     			font-family: monospace;
     			font-weight: bold;
-			font-size: 12pt;
-    		}
+				font-size: 12pt;
+    		}				
     		div {
     			box-sizing: border-box;
     		}
     		span {
     			box-sizing: border-box;
     		}
+			.main_container {
+				border: 0em;
+				padding: 0em;
+				position: absolute;
+				left: 0em;
+				right: 0em;
+				top: 0em;
+				bottom: 0em;
+				width: 100%;
+				height: 100%;
+				background-color: #c3d;
+				display: block;
+				overflow:hidden;
+			}
     		.osb_on,.osb_off,.osb_sel,.osb_corner_off,.osb_corner_on,.osb_corner_sel {
     			color: #33cc33;
     			text-align: center;
@@ -75,6 +89,8 @@
     			top: 0em;
     			width: 800px;
     			height: 800px;
+				transform: scale(0.7);
+				transform-origin: 0% 0%;
     		}
 			.mfd_right {
 				position: absolute;
@@ -82,6 +98,8 @@
 				top: 0em;
 				width: 800px;
 				height: 800px;
+				transform: scale(0.7);
+				transform-origin: 100% 0%;
 			}
     		.mfd_table {
     			border: 0em;
@@ -118,6 +136,7 @@
     			top: 110px;
     			height: 580px;
     			width: 580px;
+				overflow: hidden;
     		}
 			.mfd_center_text {
 				color: #33cc33;
@@ -137,6 +156,8 @@
     		
     	</style>
     	<script type="text/javascript">
+			var mfd_count = 0;
+			/*
     	    var mode = 0; // 0 = normal, 1 = profile select
     		var ws = new WebSocket("ws://192.168.2.25:5678/");
 			var mfd_side = "left";
@@ -178,73 +199,233 @@
 				}
 				//ws.send("message OK");
             };
+			*/
             
-			function update_osb_text(idx,t) {
-				var osb_label = $("#osb_text_"+idx);
-				$(osb_label).empty()
-				$(osb_label).html(t)
-			}
-
-			function update_central_display(txt,a,err) {
-				if(a==undefined) {
-					a = false;
+			class mfd {
+				constructor(ip,side) {
+					this.ip = ip;
+					this.side = side;
+					this.mfd_id = parseInt(mfd_count);
+					this.main_id = "mfd_"+this.mfd_id+"_main_container";
+					this.osb_prefix = "#osb_"+this.mfd_id+"_";
+					this.osb_text_prefix = "#osb_"+this.mfd_id+"_text_";
+					this.text_id = "#mfd_"+this.mfd_id+"_center_text";
+					this.mode = 0; // 0 is normal, 1 is profile select
+					this.ws;
+					mfd_count++;
 				}
-				if(err==undefined) {
-					err = false;
-				}
-				if (a==true) {
-					$("#mfd_center_text").append("<br />");
-					$("#mfd_center_text").append(txt)
-				}
-				else {
-					$("#mfd_center_text").empty();
-					if(err==true) {
-						var msg = $("<span />",{"class":"error_message","text":txt});
-						$("#mfd_center_text").append(msg)
+				add_mfd_object() {
+					var mfd_container = $("<div />",{"id":this.main_id});
+					if(this.side=="right") {
+						$(mfd_container).addClass("mfd_right");
 					}
 					else {
-						$("#mfd_center_text").html(txt);
+						$(mfd_container).addClass("mfd_left");
+					}
+					var prefix = "osb_"+this.mfd_id+"_";
+					var mfd_table = $("<div />",{"class":"mfd_table"});
+
+					// Create the top row
+
+					var mfd_row_u = $("<div />",{"class":"mfd_row_u"});
+					$(mfd_row_u).append($("<div />",{"class":"osb_corner_off","id":prefix+"a"}));
+					for(var i=1;i<=5;i++) {
+						var osb_container = $("<div />",{"class":"osb_off","id":prefix+""+i});
+						$(osb_container).append($("<span />",{"class":"osb_top","id":prefix+"text_"+i,"text":i}));
+						$(mfd_row_u).append(osb_container);
+					}
+					$(mfd_row_u).append($("<div />",{"class":"osb_corner_off","id":prefix+"b"}));
+					$(mfd_table).append(mfd_row_u);
+
+					// Now append the first middle row that also includes the center display...
+
+					var mfd_row_t = $("<div />",{"class":"mfd_row_n"});
+					var mfd_id_20 = $("<div />",{"class":"osb_off","id":prefix+"20"});
+					$(mfd_id_20).append($("<span />",{"class":"osb_left","id":prefix+"text_20","text":"20"}));
+					var mfd_center = $("<div />",{"class":"mfd_center_display","id":prefix+"display"});
+					var mfd_center_text = $("<div />",{"class":"mfd_center_text","id":"mfd_"+this.mfd_id+"_center_text","html":"Startup...<br />"});
+					$(mfd_center).append(mfd_center_text);
+					var mfd_id_6 = $("<div />",{"class":"osb_off","id":prefix+"6"});
+					$(mfd_id_6).append($("<span />",{"class":"osb_right","id":prefix+"text_6","text":"6"}));
+					$(mfd_row_t).append(mfd_id_20);
+					$(mfd_row_t).append(mfd_center);
+					$(mfd_row_t).append($("<div />",{"class":"mfd_center"}));
+					$(mfd_row_t).append(mfd_id_6);
+
+					$(mfd_table).append(mfd_row_t);
+
+					// Now the rest of the left / right buttons
+
+					for(var i=1;i<=4;i++) {
+						var mfd_row = $("<div />",{"class":"mfd_row_n"});
+						var osb_l_container = $("<div />",{"class":"osb_off","id":prefix+""+(20-i)});
+						$(osb_l_container).append($("<span />",{"class":"osb_left","id":prefix+"text_"+(20-i),"text":(20-i)}));
+						var osb_r_container = $("<div />",{"class":"osb_off","id":prefix+""+(6+i)});
+						$(osb_r_container).append($("<span />",{"class":"osb_right","id":prefix+"text_"+(6+i),"text":(6+i)}));
+						$(mfd_row).append(osb_l_container);
+						$(mfd_row).append($("<div />",{"class":"mfd_center"}));
+						$(mfd_row).append(osb_r_container);
+						$(mfd_table).append(mfd_row);
+					}
+
+					// Now the bottom row
+
+					var mfd_row_l = $("<div />",{"class":"mfd_row_l"});
+					$(mfd_row_l).append($("<div />",{"class":"osb_corner_off","id":prefix+"d"}));
+					for(var i=1;i<=5;i++) {
+						var osb_container = $("<div />",{"class":"osb_off","id":prefix+""+(16-i)});
+						$(osb_container).append($("<span />",{"class":"osb_top","id":prefix+"text_"+(16-i),"text":(16-i)}));
+						$(mfd_row_l).append(osb_container);
+					}
+					$(mfd_row_l).append($("<div />",{"class":"osb_corner_off","id":prefix+"c"}));
+					$(mfd_table).append(mfd_row_l);
+
+					// Now add to the MFD container and the main page.
+
+					$(mfd_container).append(mfd_table);
+					$("#main_container").append(mfd_container);
+				}
+
+				change_mfd_side(side) {
+					this.side = side;
+					$(this.main_id).removeClass();
+					if(side=="right") {
+						$(this.main_id).addClass("mfd_right");
+					}
+					else {
+						$(this.main_id).addClass("mfd_left");
 					}
 				}
+
+				change_mfd_size(scale) {
+					$("#"+this.main_id).css({"transform":"scale("+scale+")"});
+				}
+
+				link() {
+					this.ws = new WebSocket("ws://"+this.ip);
+					var mfd = this;
+					this.ws.onopen = function() {
+						mfd.ws.send("open ok");
+						mfd.update_center_text("Connection established.<br />",true);
+					}
+					this.ws.onmessage = function(event) {
+						var estr = event.data;
+						var ep = estr.split(",");
+						if(ep[0]=="osb") {
+							mfd.update_osb_display(ep[1],parseInt(ep[2]));
+						}
+						else if(ep[0]=="txt") {
+							mfd.update_osb_text(ep[1],ep[3])
+							mfd.update_osb_display(ep[1],parseInt(ep[2]));
+						}
+						else if(ep[0]=="ctxt") {
+							mfd.update_center_text(ep[3])
+						}
+						else if(ep[0]=="ctxt_a") {
+							mfd.update_center_text(ep[3],true)
+						}
+						else if(ep[0]=="ctxt_e") {
+							mfd.update_center_text(ep[3],true,true) // Specify it should be displayed as an error.
+						}
+						else if(ep[0]=="side") {
+							mfd.change_mfd_side(ep[1]);
+						}
+						else {
+							console.log(ep)
+						}
+					}
+				}
+
+				update_center_text(txt,a,err) {
+					// "a" means "append"
+					if(a==undefined) {
+						a=false;
+					}
+					if(err==undefined) {
+						err=false;
+					}
+					if(a==true) {
+						$(this.text_id).append("<br />");
+						$(this.text_id).append(txt);
+					}
+					else {
+						$(this.text_id).empty();
+						if(err==true) {
+							var msg = $("<span />",{"class":"error_message","text":txt});
+							$(this.text_id).append(msg);
+						}
+						else {
+							$(this.text_id).html(txt);
+						}
+					}
+				};
+
+				update_osb_display(idx,v) {
+					// Turn the OSB on, turn it off, or highlight it
+
+					var osb_id = this.osb_prefix + "" + idx;
+					$(osb_id).removeClass();
+					if(v==1) {
+						// This means the OSB should be shown as highlighted permanently
+						if(parseInt(idx)==idx) {
+							// So it's one of the OSB buttons
+							$(osb_id).addClass("osb_sel");
+						}
+						else {
+							// So it's a corner button
+							$(osb_id).addClass("osb_corner_sel")
+						}
+					}
+					else if(v==0) {
+						// This means the OSB should be outlined but not highlighted
+						if(parseInt(idx)==idx) {
+							// One of the OSB buttons
+	            		    $(osb_id).addClass("osb_on")
+						}
+						else {
+							// Corner button
+							$(osb_id).addClass("osb_corner_on")
+						}
+					}
+					else {
+						// Switch OSB highlighting etc. off
+						if(parseInt(idx)==idx) {
+							$(osb_id).addClass("osb_off")
+						}
+						else {
+							$(osb_id).addClass("osb_corner_off")
+						}		
+					}
+				}
+
+				update_osb_text(idx,t) {
+					var osb_id = this.osb_text_prefix + "" + idx;
+					$(osb_id).empty();
+					$(osb_id).html(t);
+				}
+
+
 			}
 
-            function update_osb_display(idx,v) {
-            	var osb = $("#osb_"+idx);
-            	$(osb).removeClass();
-            	if(v==1) {
-            		if(parseInt(idx)==idx) {
-            		    $(osb).addClass("osb_sel")
-            		}
-            		else {
-            		    $(osb).addClass("osb_corner_sel")
-            		}
-            	}
-            	if(v==0) {
-            		if(parseInt(idx)==idx) {
-            		    $(osb).addClass("osb_on")
-            		}
-            		else {
-            		    $(osb).addClass("osb_corner_on")
-            		}
-            	}
-            	else {
-            		if(parseInt(idx)==idx) {
-            		    $(osb).addClass("osb_off")
-            		}
-            		else {
-            		    $(osb).addClass("osb_corner_off")
-            		}
-            	}
-            }
-
 			function setup() {
-				$("#mfd_main_container").removeClass();
-				$("#mfd_main_container").addClass("mfd_"+mfd_side)
-				update_central_display("Setup scripts finished...<br />",true)
+				//$("#mfd_main_container").removeClass();
+				//$("#mfd_main_container").addClass("mfd_"+mfd_side);
+				//update_central_display("Setup scripts finished...<br />",true);
+				mfd_main = new mfd("192.168.2.24:5678","left");
+				mfd_main.add_mfd_object();
+				mfd_main.link();
+
+				//mfd_right = new mfd("192.168.2.25:5678","right");
+				//mfd_right.add_mfd_object();
+				//mfd_right.link();
 			}
     	</script>
     </head>
     <body onload="setup()">
+		<div id="main_container" class="main_container">
+
+		</div>
+		<!--
     	<div id="mfd_main_container" class="mfd_left">
     		<div class="mfd_table">
     			<div class="mfd_row_u">
@@ -298,5 +479,6 @@
     		</div>
     	
     	</div>
+	-->
     
 </body></html>
