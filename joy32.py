@@ -74,6 +74,8 @@ def check_latch(b_idx,l_max,set_unset,special_trigger=False):
                         osb_label() # 712 when triggered redraws all labels
                     elif b_idx == 304:
                         reload_server() # 304 when triggered reloads the webserver
+                    elif b_idx == 305:
+                        reload_server_nonhost() # 305 when triggered reloads the webserver in the non-host mode (both MFDs)
                     elif b_idx == 306:
                         reload_all() # 306 (OSB3) when triggered kills everything and restarts it
                 else:
@@ -902,6 +904,27 @@ def reload_server():
     for f in file_loc:
         if pathlib.Path("/home/{}/pi_mfd/mfd.html".format(f)).is_file() == True:
             fpath = "/home/{}/pi_mfd/mfd.html".format(f)
+            f_user = f
+
+    for b in button_map:
+        if b!=711:
+            button_map[b]["s"] = 0 # Set all buttons but the reset switch to 0 value
+    subprocess.run(["killall","chromium-browse"])
+    subprocess.Popen(["sudo","-u","{}".format(f_user),"/usr/bin/chromium-browser","--kiosk",fpath])
+    print("Reloading webserver...")
+    latch_count = 0
+    button_latch = ""
+
+def reload_server_nonhost():
+    global button_map
+    global latch_count
+    global button_latch
+
+    file_loc = ["pi","mfd_l","mfd_r"] # Possible usernames
+
+    for f in file_loc:
+        if pathlib.Path("/home/{}/mfd.html".format(f)).is_file() == True:
+            fpath = "/home/{}/mfd.html".format(f)
             f_user = f
 
     for b in button_map:
