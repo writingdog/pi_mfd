@@ -205,9 +205,13 @@ def manage_event(e):
                             special_handling = True
                             check_latch(712,2,e.value,True)
                         elif e.code == 304:
-                            # 304 is OSB1
+                            # 304 is OSB1, used to trigger webserver restart
                             special_handling = True
                             check_latch(304,2,e.value,True)
+                        elif e.code == 305:
+                            # 305 is OSB2, used to trigger webserver restart
+                            special_handling = True
+                            check_latch(305,2,e.value,True)
                         elif e.code == 306:
                             # 306 is OSB3, used to trigger restart
                             special_handling = True
