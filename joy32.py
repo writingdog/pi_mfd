@@ -756,7 +756,10 @@ def sum_buttons():
     zero_i = int.from_bytes(zero,"big")
     for b in button_map:
         zero_i = zero_i + (button_map[b]["i"]*button_map[b]["s"])
-    zero_b = zero_i.to_bytes(7,byteorder="big")
+    if button_count == "b32":
+        zero_b = zero_i.to_bytes(7,byteorder="big")
+    elif button_count == "b64":
+        zero_b = zero_i.to_bytes(11,byteorder="big") # Correction for 64-button controller, hopefully.
     write_report(zero_b)
 
 def reload_maps():
