@@ -30,7 +30,16 @@ try:
                 # e.g., in this case, if it contains a period it is an IP address
                 remote_ip = d.strip()
             elif "b" in d:
-                button_count = d.strip()
+                if d.strip() == "b64x":
+                    button_count = "b64"
+                    print_report = True
+                elif d.strip() == "b32x":
+                    button_count = "b32"
+                    print_report = True
+                elif d.strip() == "b64":
+                    button_count = "b64":
+                else:
+                    button_count = "b32"
 except:
     remote_ip = "127.0.0.1"
 
@@ -41,6 +50,9 @@ def write_report(report):
     try:
         with open('/dev/hidg0', 'rb+') as fd:
             fd.write(report)
+            if print_report == True:
+                print(report)
+
     except:
         print("Not able to write event.")
         loop.call_soon_threadsafe(q.put_nowait,"ctxt_a,0,0,{}".format("Error: couldn't send last message to the virtual device."))
