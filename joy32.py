@@ -1101,7 +1101,7 @@ button_invmap = {}
 button_status = {} # Just stores whether the physical button is pressed or released.
 
 for b in button_map:
-    button_invmap[int(button_map[b][o])] = int(b)
+    button_invmap[int(button_map[b]["o"])] = int(b)
     button_map[b]["i"] = int.from_bytes(button_map[b]["b"],"big")
 
 #print(button_map)
