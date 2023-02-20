@@ -19,6 +19,7 @@ from evdev import ecodes, list_devices, AbsInfo, InputDevice, events
 
 remote_ip = ""
 button_count = "b32"
+print_report = False
 
 try:
     with open("../mfd.txt") as f:
@@ -46,7 +47,10 @@ def write_report(report):
         #fd.write(report.encode())
         
 def clean_up():
-    write_report(b'\x00\x00\x00\x00\x00\x00')
+    if(button_count=="b64"):
+        write_report(b'\x00\x00\x00\x00\x00\x00')
+    else:
+        write_report(b'\x00\x00\x00\x00\x00\x00\x00')
 
 def check_latch(b_idx,l_max,set_unset,special_trigger=False):
     global button_map
@@ -751,7 +755,10 @@ def osb_label(read_state=False):
 def sum_buttons():
     global button_map
     global hat
-    zero_s = "00 00 {}{} 00 00 00 00".format(hat[0],hat[1])
+    if button_count == "b32":
+        zero_s = "00 00 {}{} 00 00 00 00".format(hat[0],hat[1])
+    elif button_count == "b64":
+        zero_s = "00 00 {}{} 00 00 00 00 00 00 00 00".format(hat[0],hat[1])
     zero = bytearray.fromhex(zero_s)
     zero_i = int.from_bytes(zero,"big")
     for b in button_map:
