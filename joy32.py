@@ -37,7 +37,7 @@ try:
                     button_count = "b32"
                     print_report = True
                 elif d.strip() == "b64":
-                    button_count = "b64":
+                    button_count = "b64"
                 else:
                     button_count = "b32"
 except:
