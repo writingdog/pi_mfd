@@ -263,7 +263,7 @@ def event_reload(e):
     global hat
     global mfd_side
     
-    button_specials = {318:"pos,x,-1",317:"pos,x,1",316:"pos,r",315:"pos,y,-1",314:"pos,y,1"}
+    button_specials = {318:"pos,x,-1",317:"pos,x,1",316:"pos,r",315:"pos,y,-1",314:"pos,y,1",309:"size,x,-.01",310:"size,x,.01",311:"size,r",312:"size,y,-.01",313:"size,y,.01"}
     if (mfd_side=="left"):
         button_specials[705] = "side,left"
     else:
@@ -680,7 +680,7 @@ def osb_load():
     button_latch = "" # Unset button latch
     latch_count = 0 # Reset latch count
 
-    button_specials = {319:"COMMIT",707:"UP",706:"DN",318:"POSX-",317:"POSX+",316:"POS RST",315:"POSY-",314:"POSY+",705:"SWAP",704:"EXIT"}
+    button_specials = {319:"COMMIT",707:"UP",706:"DN",318:"POSX-",317:"POSX+",316:"POS RST",315:"POSY-",314:"POSY+",705:"SWAP",704:"EXIT",309:"SZ X-",310:"SZ X+",311:"SZ RST",312:"SZ Y-",313:"SZ Y+"}
 
     if reload_mode == False:
         reload_mode = True
