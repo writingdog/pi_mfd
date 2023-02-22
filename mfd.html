@@ -202,7 +202,7 @@
 			*/
             
 			class mfd {
-				constructor(ip,side) {
+				constructor(ip,side,pos_x,pos_y,scale_x,scale_y) {
 					this.ip = ip;
 					this.side = side;
 					this.mfd_id = parseInt(mfd_count);
@@ -212,24 +212,27 @@
 					this.text_id = "#mfd_"+this.mfd_id+"_center_text";
 					this.mode = 0; // 0 is normal, 1 is profile select
 					this.ws;
-					this.scale_x = 1.0;
-					this.scale_y = 1.0;
-					this.scale_x_original = 1.0;
-					this.scale_y_original = 1.0;
-					this.pos_x = 0;
-					this.pos_y = 0;
-					this.pos_x_original = 0;
-					this.pos_y_original = 0;
+					this.scale_x = scale_x;
+					this.scale_y = scale_y;
+					this.scale_x_original = scale_x;
+					this.scale_y_original = scale_y;
+					this.pos_x = pos_x;
+					this.pos_y = pos_y;
+					this.pos_x_original = pos_x;
+					this.pos_y_original = pos_y;
 					mfd_count++;
 				}
 				add_mfd_object() {
 					var mfd_container = $("<div />",{"id":this.main_id});
 					if(this.side=="right") {
 						$(mfd_container).addClass("mfd_right");
+						$(mfd_container).css({"right":this.pos_x_original});
 					}
 					else {
 						$(mfd_container).addClass("mfd_left");
+						$(mfd_container).css({"left":this.pos_x_original});
 					}
+					$(mfd_container).css({"top":this.pos_y_original,"transform":"scale("+this.scale_x+","+this.scale_y+")"})
 					var prefix = "osb_"+this.mfd_id+"_";
 					var mfd_table = $("<div />",{"class":"mfd_table"});
 
