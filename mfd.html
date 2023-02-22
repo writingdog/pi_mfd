@@ -85,8 +85,8 @@
     		}
     		.mfd_left {
     			position: absolute;
-    			left: 0em;
-    			top: 0em;
+    			left: 0px;
+    			top: 0px;
     			width: 800px;
     			height: 800px;
 				transform: scale(0.7);
@@ -94,8 +94,8 @@
     		}
 			.mfd_right {
 				position: absolute;
-				right: 0em;
-				top: 0em;
+				right: 0px;
+				top: 0px;
 				width: 800px;
 				height: 800px;
 				transform: scale(0.7);
@@ -212,6 +212,14 @@
 					this.text_id = "#mfd_"+this.mfd_id+"_center_text";
 					this.mode = 0; // 0 is normal, 1 is profile select
 					this.ws;
+					this.scale_x = 1.0;
+					this.scale_y = 1.0;
+					this.scale_x_original = 1.0;
+					this.scale_y_original = 1.0;
+					this.pos_x = 0;
+					this.pos_y = 0;
+					this.pos_x_original = 0;
+					this.pos_y_original = 0;
 					mfd_count++;
 				}
 				add_mfd_object() {
@@ -297,8 +305,56 @@
 					}
 				}
 
-				change_mfd_size(scale) {
-					$("#"+this.main_id).css({"transform":"scale("+scale+")"});
+				reset_mfd_size() {
+					this.scale_x = parseFloat(this.scale_x_original);
+					this.scale_y = parseFloat(this.scale_y_original);
+					$("#"+this.main_id).css({"transform":"scale("+this.scale_x+","+this.scale_y+")"});
+				}
+
+				set_mfd_size(scale_x, scale_y) {
+					this.scale_x = scale_x;
+					if(scale_y!=undefined) {
+						// In this case, we will not scale the X and Y of the MFD by different amounts.
+						this.scale_y = scale_y;
+					}
+					$("#"+this.main_id).css({"transform":"scale("+this.scale_x+","+this.scale_y+")"});
+				}
+
+				change_mfd_size(dir, val) {
+					// Increments or decrements the MFD scaling.
+					if(dir=="x") {
+						this.scale_x = this.scale_x + parseFloat(val);
+					}
+					else if(dir=="y") {
+						this.scale_y = this.scale_y + parseFloat(val);
+					}
+					$("#"+this.main_id).css({"transform":"scale("+this.scale_x+","+this.scale_y+")"});
+				}
+
+				reset_mfd_pos() {
+					this.pos_x = parseFloat(this.pos_x_original);
+					this.pos_y = parseFloat(this.pos_y_original);
+					if(this.side=="right") {
+						$("#"+this.main_id).css({"top":this.pos_y,"right":this.pos_x});
+					}
+					else {
+						$("#"+this.main_id).css({"top":this.pos_y,"left":this.pos_x});
+					}
+				}
+
+				change_mfd_pos(dir,val) {
+					if(dir=="x") {
+						this.pos_x = this.pos_x + parseFloat(val);
+					}
+					else if(dir=="y") {
+						this.pos_y = this.pos_y + parseFloat(val);
+					}
+					if(this.side=="right") {
+						$("#"+this.main_id).css({"top":this.pos_y,"right":this.pos_x});
+					}
+					else {
+						$("#"+this.main_id).css({"top":this.pos_y,"left":this.pos_x});
+					}
 				}
 
 				link() {
@@ -329,6 +385,26 @@
 						}
 						else if(ep[0]=="side") {
 							mfd.change_mfd_side(ep[1]);
+						}
+						else if(ep[0]=="size") {
+							if(ep[1]=="r") {
+								// Size reset command received
+								mfd.reset_mfd_size();
+							}
+							else {
+								// Adjust the scaling in direction x/y by the value in ep[2]
+								mfd.change_mfd_size(ep[1],ep[2]);
+							}
+						}
+						else if(ep[0]=="pos") {
+							if(ep[1]=="r") {
+								// Position reset command received
+								mfd.reset_mfd_pos();
+							}
+							else {
+								// Adjust the position in direction x/y by the value in ep[2]
+								mfd.change_mfd_pos(ep[1],ep[2]);
+							}
 						}
 						else {
 							console.log(ep)

@@ -21,6 +21,10 @@ remote_ip = ""
 button_count = "b32"
 print_report = False
 
+# For more easily building the button maps rather than doing everything manually.
+bitmap = {0:"00 00 00 00",1:"01 00 00 00",2:"02 00 00 00",3:"04 00 00 00",4:"08 00 00 00",5:"10 00 00 00",6:"20 00 00 00",7:"40 00 00 00",8:"80 00 00 00",9:"00 01 00 00",10:"00 02 00 00",11:"00 04 00 00",12:"00 08 00 00",13:"00 10 00 00",14:"00 20 00 00",15:"00 40 00 00",16:"00 80 00 00",17:"00 00 01 00",18:"00 00 02 00",19:"00 00 04 00",20:"00 00 08 00",21:"00 00 10 00",22:"00 00 20 00",23:"00 00 40 00",24:"00 00 80 00",25:"00 00 00 01",26:"00 00 00 02",27:"00 00 00 04",28:"00 00 00 08",29:"00 00 00 10",30:"00 00 00 20",31:"00 00 00 40",32:"00 00 00 80"}
+osb_physicals = {0:0,1:304,2:305,3:306,4:307,5:308,6:309,7:310,8:311,9:312,10:313,11:314,12:315,13:316,14:317,15:318,16:319,17:704,18:705,19:706,20:707,21:714,22:715,23:708,24:709,25:710,26:711,27:712,28:713,29:716,30:717,31:718,32:719,101:800,102:801,103:802,104:803,105:804,106:805,107:806,108:807,109:850,110:851,111:852,112:853,113:854,114:855,115:856,116:857}
+
 try:
     with open("../mfd.txt") as f:
         data = f.readlines()
@@ -57,12 +61,6 @@ def write_report(report):
         print("Not able to write event.")
         loop.call_soon_threadsafe(q.put_nowait,"ctxt_a,0,0,{}".format("Error: couldn't send last message to the virtual device."))
         #fd.write(report.encode())
-        
-def clean_up():
-    if(button_count=="b64"):
-        write_report(b'\x00\x00\x00\x00\x00\x00')
-    else:
-        write_report(b'\x00\x00\x00\x00\x00\x00\x00')
 
 def check_latch(b_idx,l_max,set_unset,special_trigger=False):
     global button_map
@@ -264,6 +262,12 @@ def event_reload(e):
     global load_idx 
     global hat
     global mfd_side
+    
+    button_specials = {318:"pos,x,-1",317:"pos,x,1",316:"pos,r",315:"pos,y,-1",314:"pos,y,1"}
+    if (mfd_side=="left"):
+        button_specials[705] = "side,left"
+    else:
+        button_specials[705] = "side,right"
 
     submap = osbmap[template][subpage]
     if e.code in button_map:
@@ -277,18 +281,23 @@ def event_reload(e):
             # So trigger on button release
             for r in osbmap:
                 osb_supers.append(r)
+            if e.code in button_specials:
+                # So this is a code that should also send a special command to the MFD display logic
+                loop.call_soon_threadsafe(q.put_nowait,"{}".format(button_specials[e.code]))
             if e.code == 707:
+                # UP button in LOAD mode
                 load_idx = load_idx - 1
                 if load_idx < 0:
                     load_idx = len(osb_supers)-1
                 osb_load()
             elif e.code == 706:
+                # DOWN button in LOAD mode
                 load_idx = load_idx + 1
                 if load_idx >= len(osb_supers):
                     load_idx = 0
                 osb_load()
             elif e.code == 705:
-                loop.call_soon_threadsafe(q.put_nowait,"{},{}".format("side",mfd_side))
+                # This switches the side of the display the MFD believes it is on.
                 if mfd_side == "left":
                     mfd_side = "right"
                 else:
@@ -298,6 +307,7 @@ def event_reload(e):
                 reload_mode = False
                 osb_label()
             elif e.code == 319:
+                # Commit button in LOAD mode
                 for b in button_map:
                     button_map[b]["s"] = 0
                 subpage = "conf0"
@@ -670,23 +680,14 @@ def osb_load():
     button_latch = "" # Unset button latch
     latch_count = 0 # Reset latch count
 
+    button_specials = {319:"COMMIT",707:"UP",706:"DN",318:"POSX-",317:"POSX+",316:"POS RST",315:"POSY-",314:"POSY+",705:"SWAP",704:"EXIT"}
+
     if reload_mode == False:
         reload_mode = True
         reload_maps()
         for b in button_map:
-            if b == 319:
-                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"COMMIT"))
-            elif b == 707:
-                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"UP"))
-            elif b == 706:
-                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"DN"))
-            elif b == 705:
-                if mfd_side == "left":
-                    loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"RIGHT"))
-                else:
-                    loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"LEFT"))
-            elif b == 704:
-                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,"EXIT"))
+            if b in button_specials:
+                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,button_specials[b]))
             else:
                 loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,""))
     else:
@@ -971,145 +972,25 @@ def reload_server_nonhost():
 INITIALIZATION CODE HERE
 '''
 
+button_map = {}
+
 if button_count == "b32":
-    button_map = {
-        0:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":0},
-        304:{"b":b"\x00\x00\x00\x01\x00\x00\x00","i":0,"s":0,"o":1},
-        305:{"b":b"\x00\x00\x00\x02\x00\x00\x00","i":0,"s":0,"o":2},
-        306:{"b":b"\x00\x00\x00\x04\x00\x00\x00","i":0,"s":0,"o":3},
-        307:{"b":b"\x00\x00\x00\x08\x00\x00\x00","i":0,"s":0,"o":4},
-        308:{"b":b"\x00\x00\x00\x10\x00\x00\x00","i":0,"s":0,"o":5},
-        309:{"b":b"\x00\x00\x00\x20\x00\x00\x00","i":0,"s":0,"o":6},
-        310:{"b":b"\x00\x00\x00\x40\x00\x00\x00","i":0,"s":0,"o":7},
-        311:{"b":b"\x00\x00\x00\x80\x00\x00\x00","i":0,"s":0,"o":8},
-        312:{"b":b"\x00\x00\x00\x00\x01\x00\x00","i":0,"s":0,"o":9},
-        313:{"b":b"\x00\x00\x00\x00\x02\x00\x00","i":0,"s":0,"o":10},
-        314:{"b":b"\x00\x00\x00\x00\x04\x00\x00","i":0,"s":0,"o":11},
-        315:{"b":b"\x00\x00\x00\x00\x08\x00\x00","i":0,"s":0,"o":12},
-        316:{"b":b"\x00\x00\x00\x00\x10\x00\x00","i":0,"s":0,"o":13},
-        317:{"b":b"\x00\x00\x00\x00\x20\x00\x00","i":0,"s":0,"o":14},
-        318:{"b":b"\x00\x00\x00\x00\x40\x00\x00","i":0,"s":0,"o":15},
-        319:{"b":b"\x00\x00\x00\x00\x80\x00\x00","i":0,"s":0,"o":16},
-        704:{"b":b"\x00\x00\x00\x00\x00\x01\x00","i":0,"s":0,"o":17},
-        705:{"b":b"\x00\x00\x00\x00\x00\x02\x00","i":0,"s":0,"o":18},
-        706:{"b":b"\x00\x00\x00\x00\x00\x04\x00","i":0,"s":0,"o":19},
-        707:{"b":b"\x00\x00\x00\x00\x00\x08\x00","i":0,"s":0,"o":20},
-        714:{"b":b"\x00\x00\x00\x00\x00\x10\x00","i":0,"s":0,"o":21},
-        715:{"b":b"\x00\x00\x00\x00\x00\x20\x00","i":0,"s":0,"o":22},
-        708:{"b":b"\x00\x00\x00\x00\x00\x40\x00","i":0,"s":0,"o":23},
-        709:{"b":b"\x00\x00\x00\x00\x00\x80\x00","i":0,"s":0,"o":24},
-        710:{"b":b"\x00\x00\x00\x00\x00\x00\x01","i":0,"s":0,"o":25},
-        711:{"b":b"\x00\x00\x00\x00\x00\x00\x02","i":0,"s":0,"o":26},
-        712:{"b":b"\x00\x00\x00\x00\x00\x00\x04","i":0,"s":0,"o":27},
-        713:{"b":b"\x00\x00\x00\x00\x00\x00\x08","i":0,"s":0,"o":28},
-        716:{"b":b"\x00\x00\x00\x00\x00\x00\x10","i":0,"s":0,"o":29},
-        717:{"b":b"\x00\x00\x00\x00\x00\x00\x20","i":0,"s":0,"o":30},
-        718:{"b":b"\x00\x00\x00\x00\x00\x00\x40","i":0,"s":0,"o":31},
-        719:{"b":b"\x00\x00\x00\x00\x00\x00\x80","i":0,"s":0,"o":32},
-        800:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":800},
-        801:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":801},
-        802:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":802},
-        803:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":803},
-        804:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":804},
-        805:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":805},
-        806:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":806},
-        807:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":807},
-        850:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":850},
-        851:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":851},
-        852:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":852},
-        853:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":853},
-        854:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":854},
-        855:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":855},
-        856:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":856},
-        857:{"b":b"\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":857},
-    }
+    for i in range(0,33):
+        b_val = bytes.fromhex("00 00 00 {}".format(bitmap[i]))
+        button_map[osb_physicals[i]] = {"b":b_val,"i":0,"s":0,"o":i}
+    for i in range(101,117):
+        b_val = bytes.fromhex("00 00 00 00 00 00 00")
+        button_map[osb_physicals[i]] = {"b":b_val,"i":0,"s":0,"o":osb_physicals[i]}
 elif button_count == "b64":
-    button_map = {
-        0:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":0},
-        304:{"b":b"\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":1},
-        305:{"b":b"\x00\x00\x00\x02\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":2},
-        306:{"b":b"\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":3},
-        307:{"b":b"\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":4},
-        308:{"b":b"\x00\x00\x00\x10\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":5},
-        309:{"b":b"\x00\x00\x00\x20\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":6},
-        310:{"b":b"\x00\x00\x00\x40\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":7},
-        311:{"b":b"\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":8},
-        312:{"b":b"\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":9},
-        313:{"b":b"\x00\x00\x00\x00\x02\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":10},
-        314:{"b":b"\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":11},
-        315:{"b":b"\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":12},
-        316:{"b":b"\x00\x00\x00\x00\x10\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":13},
-        317:{"b":b"\x00\x00\x00\x00\x20\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":14},
-        318:{"b":b"\x00\x00\x00\x00\x40\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":15},
-        319:{"b":b"\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":16},
-        704:{"b":b"\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00","i":0,"s":0,"o":17},
-        705:{"b":b"\x00\x00\x00\x00\x00\x02\x00\x00\x00\x00\x00","i":0,"s":0,"o":18},
-        706:{"b":b"\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00","i":0,"s":0,"o":19},
-        707:{"b":b"\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00\x00","i":0,"s":0,"o":20},
-        714:{"b":b"\x00\x00\x00\x00\x00\x10\x00\x00\x00\x00\x00","i":0,"s":0,"o":21},
-        715:{"b":b"\x00\x00\x00\x00\x00\x20\x00\x00\x00\x00\x00","i":0,"s":0,"o":22},
-        708:{"b":b"\x00\x00\x00\x00\x00\x40\x00\x00\x00\x00\x00","i":0,"s":0,"o":23},
-        709:{"b":b"\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00\x00","i":0,"s":0,"o":24},
-        710:{"b":b"\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00","i":0,"s":0,"o":25},
-        711:{"b":b"\x00\x00\x00\x00\x00\x00\x02\x00\x00\x00\x00","i":0,"s":0,"o":26},
-        712:{"b":b"\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00","i":0,"s":0,"o":27},
-        713:{"b":b"\x00\x00\x00\x00\x00\x00\x08\x00\x00\x00\x00","i":0,"s":0,"o":28},
-        716:{"b":b"\x00\x00\x00\x00\x00\x00\x10\x00\x00\x00\x00","i":0,"s":0,"o":29},
-        717:{"b":b"\x00\x00\x00\x00\x00\x00\x20\x00\x00\x00\x00","i":0,"s":0,"o":30},
-        718:{"b":b"\x00\x00\x00\x00\x00\x00\x40\x00\x00\x00\x00","i":0,"s":0,"o":31},
-        719:{"b":b"\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x00","i":0,"s":0,"o":32},
-        404:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00","i":0,"s":0,"o":33},
-        405:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x02\x00\x00\x00","i":0,"s":0,"o":34},
-        406:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00","i":0,"s":0,"o":35},
-        407:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x08\x00\x00\x00","i":0,"s":0,"o":36},
-        408:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x10\x00\x00\x00","i":0,"s":0,"o":37},
-        409:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x20\x00\x00\x00","i":0,"s":0,"o":38},
-        410:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x40\x00\x00\x00","i":0,"s":0,"o":39},
-        411:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00","i":0,"s":0,"o":40},
-        412:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00","i":0,"s":0,"o":41},
-        413:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x00","i":0,"s":0,"o":42},
-        414:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00","i":0,"s":0,"o":43},
-        415:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x08\x00\x00","i":0,"s":0,"o":44},
-        416:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x00","i":0,"s":0,"o":45},
-        417:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x20\x00\x00","i":0,"s":0,"o":46},
-        418:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x40\x00\x00","i":0,"s":0,"o":47},
-        419:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00","i":0,"s":0,"o":48},
-        420:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00","i":0,"s":0,"o":49},
-        421:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00","i":0,"s":0,"o":50},
-        422:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x04\x00","i":0,"s":0,"o":51},
-        423:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x08\x00","i":0,"s":0,"o":52},
-        424:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00","i":0,"s":0,"o":53},
-        425:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x20\x00","i":0,"s":0,"o":54},
-        426:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x40\x00","i":0,"s":0,"o":55},
-        427:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x80\x00","i":0,"s":0,"o":56},
-        428:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01","i":0,"s":0,"o":57},
-        429:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02","i":0,"s":0,"o":58},
-        430:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x04","i":0,"s":0,"o":59},
-        431:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x08","i":0,"s":0,"o":60},
-        432:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10","i":0,"s":0,"o":61},
-        433:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x20","i":0,"s":0,"o":62},
-        434:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x40","i":0,"s":0,"o":63},
-        435:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x80","i":0,"s":0,"o":64},
-        800:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":800},
-        801:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":801},
-        802:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":802},
-        803:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":803},
-        804:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":804},
-        805:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":805},
-        806:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":806},
-        807:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":807},
-        850:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":850},
-        851:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":851},
-        852:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":852},
-        853:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":853},
-        854:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":854},
-        855:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":855},
-        856:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":856},
-        857:{"b":b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00","i":0,"s":0,"o":857},
-    }
-
-    #     703:{"b":b"\x00\x00\x00\x00\x80\x00\x00","i":0,"s":0,"o":16},
-
+    for i in range(0,33):
+        b_val = bytes.fromhex("00 00 00 {} 00 00 00 00".format(bitmap[i]))
+        button_map[osb_physicals[i]] = {"b":b_val,"i":0,"s":0,"o":i}
+    for i in range(1,33):
+        b_val = bytes.fromhex("00 00 00 00 00 00 00 {}".format(bitmap[i]))
+        button_map[403+i] = {"b":b_val,"i":0,"s":0,"o":32+i}
+    for i in range(101,117):
+        b_val = bytes.fromhex("00 00 00 00 00 00 00 00 00 00 00")
+        button_map[osb_physicals[i]] = {"b":b_val,"i":0,"s":0,"o":osb_physicals[i]}
 
 # 1-20: OSB 1-20
 # 21/22 GAIN UP/DOWN 
