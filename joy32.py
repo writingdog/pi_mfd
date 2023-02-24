@@ -1039,7 +1039,7 @@ elif button_count == "b96":
         b_val = bytes.fromhex("00 00 00 00 00 00 00 {} 00 00 00 00".format(bitmap[i]))
         button_map[403+i] = {"b":b_val,"i":0,"s":0,"o":32+i}
     for i in range(1,33):
-        b_val = bytes.fromhex("00 00 00 00 00 00 00 {} 00 00 00 00".format(bitmap[i]))
+        b_val = bytes.fromhex("00 00 00 00 00 00 00 00 00 00 00 {}".format(bitmap[i]))
         button_map[503+i] = {"b":b_val,"i":0,"s":0,"o":64+i}
     for i in range(101,117):
         b_val = bytes.fromhex("00 00 00 00 00 00 00 00 00 00 00 00 00 00 00")
