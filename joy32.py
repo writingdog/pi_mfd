@@ -930,7 +930,7 @@ def reload_maps():
                             else:
                                 long_hold = d_v[1]
                                 long_is_page = True
-                    if int(d_vals[0]) <= 32 or button_count != "32":
+                    if int(d_vals[0]) <= 32 or button_count != "b32":
                         # (Don't add extended buttons if the device doesn't support them)
                         osbmap[mainpage][subpage][int(d_vals[0])] = {
                             "text":d_vals[1],
