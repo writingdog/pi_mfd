@@ -1003,7 +1003,7 @@ def reload_server_nonhost():
         if b!=711:
             button_map[b]["s"] = 0 # Set all buttons but the reset switch to 0 value
     subprocess.run(["killall","chromium-browse"])
-    subprocess.Popen(["sudo","-u","{}".format(f_user),"/usr/bin/chromium-browser","--kiosk",fpath])
+    subprocess.Popen(["sudo","-u","{}".format(f_user),"/usr/bin/chromium-browser","--kiosk",fpath,"--touch-event=enabled"])
     print("Reloading webserver...")
     latch_count = 0
     button_latch = ""
