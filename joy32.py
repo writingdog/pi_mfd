@@ -40,7 +40,7 @@ try:
                 elif d.strip() == "b96":
                     button_count = "b96"
                     print_report = False
-                if d.strip() == "b64x":
+                elif d.strip() == "b64x":
                     button_count = "b64"
                     print_report = True
                 elif d.strip() == "b32x":
@@ -53,7 +53,7 @@ try:
 except:
     remote_ip = "127.0.0.1"
 
-print(remote_ip)
+print(remote_ip,button_count)
 
 def write_report(report):
     # This writes the raw data to the virtual USB device
