@@ -83,6 +83,13 @@
     			line-height: 1.5em;
     			margin-top: 37%;
     		}
+			.osb_virtual {
+				border: .1em solid #33cc33;
+				display: inline-block;
+				height: 100%;
+				width: 100%;
+				line-height: 100%;
+			}
     		.mfd_left {
     			position: absolute;
     			left: 0px;
@@ -157,49 +164,9 @@
     	</style>
     	<script type="text/javascript">
 			var mfd_count = 0;
-			/*
-    	    var mode = 0; // 0 = normal, 1 = profile select
-    		var ws = new WebSocket("ws://192.168.2.25:5678/");
-			var mfd_side = "left";
-			ws.onopen = function() {
-				ws.send("open_ok");
-				update_central_display("Connection established.<br />",true);
-			}
-            ws.onmessage = function (event) {
-				var estr = event.data;
-				var ep = estr.split(",")
-				if(ep[0]=="osb") {
-					update_osb_display(ep[1],parseInt(ep[2]));
-				}
-				else if(ep[0]=="txt") {
-					update_osb_text(ep[1],ep[3])
-					update_osb_display(ep[1],parseInt(ep[2]));
-				}
-				else if(ep[0]=="ctxt") {
-					update_central_display(ep[3])
-				}
-				else if(ep[0]=="ctxt_a") {
-					update_central_display(ep[3],true)
-				}
-				else if(ep[0]=="ctxt_e") {
-					update_central_display(ep[3],true,true) // Specify it should be displayed as an error.
-				}
-				else if(ep[0]=="side") {
-					if(ep[1]=="right") {
-						mfd_side = "right";
-					}
-					else {
-						mfd_side = "left";
-					}
-					$("#mfd_main_container").removeClass();
-					$("#mfd_main_container").addClass("mfd_"+mfd_side)
-				}
-				else {
-					console.log(ep)
-				}
-				//ws.send("message OK");
-            };
-			*/
+			var grid_size = 50; // This defines the OSB width and height for virtual buttons.
+			var grid_margin_x = 10; // Space between grids on the horizontal axis
+			var grid_margin_y = 10; // Space between grids on the vertical axis
             
 			class mfd {
 				constructor(ip,side,pos_x,pos_y,scale_x,scale_y) {
@@ -220,6 +187,9 @@
 					this.pos_y = pos_y;
 					this.pos_x_original = pos_x;
 					this.pos_y_original = pos_y;
+					this.has_extra = false; // Should extra buttons be declared (i.e. does this HTML sit on the main touchscreen?)
+					this.extra_buttons = {};
+					this.extra_button_state = {};
 					mfd_count++;
 				}
 				add_mfd_object() {
@@ -294,7 +264,76 @@
 					// Now add to the MFD container and the main page.
 
 					$(mfd_container).append(mfd_table);
+
+					if(this.has_extra==true) {
+						// Create 20 extra virtual buttons.
+						var mfd_parent = this;
+						for(var i=33;i<=64;i++) {
+							this.extra_buttons[i] = -1;
+							this.extra_button_state[i] = false;
+							var virtual_osb = $("<div />",{"class":"osb_off","id":prefix+i});
+							$(virtual_osb).css({"position":"absolute"});
+							if("ontouchstart" in document.documentElement===true) {
+								$(virtual_osb).on("touchstart",{arg1:i,arg2:mfd_parent},function(e) { e.preventDefault(); e.stopPropagation(); e.data.arg2.extra_button_trigger(e.data.arg1,true)});
+								$(virtual_osb).on("touchend",{arg1:i,arg2:mfd_parent},function(e) { e.preventDefault(); e.stopPropagation(); e.data.arg2.extra_button_trigger(e.data.arg1,false)});
+							}
+							else {
+								$(virtual_osb).on("mousedown mousemove",{arg1:i,arg2:mfd_parent},function(e) { e.preventDefault(); e.stopPropagation(); e.data.arg2.extra_button_trigger(e.data.arg1,true)});
+								$(virtual_osb).on("mouseup mouseleave",{arg1:i,arg2:mfd_parent},function(e) { e.preventDefault(); e.stopPropagation(); e.data.arg2.extra_button_trigger(e.data.arg1,false)});
+							}
+							$(virtual_osb).append($("<span />",{"class":"osb_virtual","id":prefix+"text_"+i,"text":""}));
+							$(mfd_container).append(virtual_osb);
+						}
+					}
+
 					$("#main_container").append(mfd_container);
+
+				}
+
+				config_extra_button(idx,vbtn_idx,vbtn_x,vbtn_y,vbtn_w,vbtn_h,vbtn_txt) {
+					// This is an extra button container
+					var osb_id = this.osb_prefix + "" + idx;
+					var osb_text_id = this.osb_text_prefix + "" + idx;
+					if(vbtn_idx == -1) {
+						// This has no virtual button defined, so we can just ignore it.
+						this.extra_buttons[idx] = -1; // Unset the virtual button's mapping in the mapping text.
+						this.extra_button_state[idx] = false; // Set the button to be unclicked.
+						$(osb_text_id).empty(); // Delete whatever previous text it might've had
+						$(osb_text_id).css({"border":"none"});
+						$(osb_id).hide(); // Hide the button.
+					}
+					else {
+						// So we consider this button "live" for our intents and purpose.
+						var vx = (parseInt(vbtn_x)) * (grid_margin_x + grid_size); // How var left from the display it should be.
+						var vy = (parseInt(vbtn_y)) * (grid_margin_y + grid_size); // How far from the top it is.
+						var vw = parseInt(vbtn_w) * grid_size;
+						var vh = parseInt(vbtn_h) * grid_size;
+						this.extra_buttons[idx] = vbtn_idx; // This is which button needs to be triggered or untriggered on this event.
+						$(osb_text_id).empty();
+						$(osb_id).show();
+						$(osb_id).css({"left":vx,"top":vy,"width":vw,"height":vh});
+						$(osb_text_id).css({"line-height":vh+"px","border":".1em solid #33cc33"});
+						$(osb_text_id).html(vbtn_txt);
+					}
+				}
+
+				extra_button_trigger(idx,state) {
+					var vbtn_idx = this.extra_buttons[idx]; // Need to get the virtual button that this is supposed to trigger, not the logical button ID -- EDIT I THINK NOT
+					if(vbtn_idx!==undefined) {
+						if(state==false) {
+							if(this.extra_button_state[idx]==true) {
+								this.extra_button_state[idx] = false;
+								this.ws.send(idx+",0");
+							}
+						}
+						else {
+							if(this.extra_button_state[idx]==false) {
+								this.extra_button_state[idx] = true;
+								this.ws.send(idx+",1");
+							}
+						}
+					}
+
 				}
 
 				change_mfd_side(side) {
@@ -312,6 +351,7 @@
 					this.scale_x = parseFloat(this.scale_x_original);
 					this.scale_y = parseFloat(this.scale_y_original);
 					$("#"+this.main_id).css({"transform":"scale("+this.scale_x+","+this.scale_y+")"});
+					this.update_center_text("scale_x: "+this.scale_x+"; scale_y: "+this.scale_y,true);
 				}
 
 				set_mfd_size(scale_x, scale_y) {
@@ -321,6 +361,7 @@
 						this.scale_y = scale_y;
 					}
 					$("#"+this.main_id).css({"transform":"scale("+this.scale_x+","+this.scale_y+")"});
+					this.update_center_text("scale_x: "+this.scale_x+"; scale_y: "+this.scale_y,true);
 				}
 
 				change_mfd_size(dir, val) {
@@ -332,6 +373,7 @@
 						this.scale_y = this.scale_y + parseFloat(val);
 					}
 					$("#"+this.main_id).css({"transform":"scale("+this.scale_x+","+this.scale_y+")"});
+					this.update_center_text("scale_x: "+this.scale_x+"; scale_y: "+this.scale_y,true);
 				}
 
 				reset_mfd_pos() {
@@ -339,9 +381,11 @@
 					this.pos_y = parseFloat(this.pos_y_original);
 					if(this.side=="right") {
 						$("#"+this.main_id).css({"top":this.pos_y,"right":this.pos_x});
+						this.update_center_text("right: "+this.pos_x+"; top: "+this.pos_y,true);
 					}
 					else {
 						$("#"+this.main_id).css({"top":this.pos_y,"left":this.pos_x});
+						this.update_center_text("left: "+this.pos_x+"; top: "+this.pos_y,true);
 					}
 				}
 
@@ -354,9 +398,11 @@
 					}
 					if(this.side=="right") {
 						$("#"+this.main_id).css({"top":this.pos_y,"right":this.pos_x});
+						this.update_center_text("right: "+this.pos_x+"; top: "+this.pos_y,true);
 					}
 					else {
 						$("#"+this.main_id).css({"top":this.pos_y,"left":this.pos_x});
+						this.update_center_text("left: "+this.pos_x+"; top: "+this.pos_y,true);
 					}
 				}
 
@@ -375,6 +421,17 @@
 						}
 						else if(ep[0]=="txt") {
 							mfd.update_osb_text(ep[1],ep[3])
+							mfd.update_osb_display(ep[1],parseInt(ep[2]));
+						}
+						else if(ep[0]=="vcfg") {
+							// Params:
+							// 1: Button ID
+							// 2: Keypress value
+							// 3: Virtual key to link to this button
+							// 4, 5: x, y
+							// 6, 7: w, h
+							// 8: Button text
+							mfd.config_extra_button(ep[1],ep[3],ep[4],ep[5],ep[6],ep[7],ep[8]);
 							mfd.update_osb_display(ep[1],parseInt(ep[2]));
 						}
 						else if(ep[0]=="ctxt") {
@@ -490,13 +547,19 @@
 				//$("#mfd_main_container").removeClass();
 				//$("#mfd_main_container").addClass("mfd_"+mfd_side);
 				//update_central_display("Setup scripts finished...<br />",true);
-				mfd_main = new mfd("192.168.2.24:5678","left");
-				mfd_main.add_mfd_object();
-				mfd_main.link();
+				//mfd_main = new mfd("192.168.2.24:5678","left");
+				//mfd_main.add_mfd_object();
+				//mfd_main.link();
 
-				//mfd_right = new mfd("192.168.2.25:5678","right");
-				//mfd_right.add_mfd_object();
-				//mfd_right.link();
+				mfd_left = new mfd("192.168.2.24:5678","left",-8,2,.57,.57);
+				mfd_left.has_extra = true;
+				mfd_left.add_mfd_object();
+				mfd_left.link();
+
+
+				mfd_right = new mfd("192.168.2.25:5678","right");
+				mfd_right.add_mfd_object();
+				mfd_right.link();
 			}
     	</script>
     </head>
@@ -504,60 +567,5 @@
 		<div id="main_container" class="main_container">
 
 		</div>
-		<!--
-    	<div id="mfd_main_container" class="mfd_left">
-    		<div class="mfd_table">
-    			<div class="mfd_row_u">
-    				<div class="osb_corner_off" id="osb_a"></div>
-    				<div class="osb_off" id="osb_1"><span class="osb_top" id="osb_text_1">1</span></div>
-    				<div class="osb_off" id="osb_2"><span class="osb_top" id="osb_text_2">2</span></div>
-    				<div class="osb_off" id="osb_3"><span class="osb_top" id="osb_text_3">3<br>3B</span></div>
-    				<div class="osb_off" id="osb_4"><span class="osb_top" id="osb_text_4">4</span></div>
-    				<div class="osb_off" id="osb_5"><span class="osb_top" id="osb_text_5">5</span></div>
-    				<div class="osb_corner_off" id="osb_b"></div>
-    			</div>
-    			<div class="mfd_row_n">
-    				<div class="osb_off" id="osb_20"><span class="osb_left" id="osb_text_20">20</span></div>
-    				<div class="mfd_center_display" id="mfd_display">
-						<div class="mfd_center_text" id="mfd_center_text">
-							Startup...<br />
-						</div>
-					</div>
-    				<div class="mfd_center"></div>
-    				<div class="osb_off" id="osb_6"><span class="osb_right" id="osb_text_6">6</span></div>
-    			</div>
-    			<div class="mfd_row_n">
-    				<div class="osb_off" id="osb_19"><span class="osb_left" id="osb_text_19">19</span></div>
-    				<div class="mfd_center"></div>
-    				<div class="osb_off" id="osb_7"><span class="osb_right" id="osb_text_7">7</span></div>
-    			</div>
-    			<div class="mfd_row_n">
-    				<div class="osb_off" id="osb_18"><span class="osb_left" id="osb_text_18">18</span></div>
-    				<div class="mfd_center"></div>
-    				<div class="osb_off" id="osb_8"><span class="osb_right" id="osb_text_8">8</span></div>
-    			</div>
-    			<div class="mfd_row_n">
-    				<div class="osb_off" id="osb_17"><span class="osb_left" id="osb_text_17">17</span></div>
-    				<div class="mfd_center"></div>
-    				<div class="osb_off" id="osb_9"><span class="osb_right" id="osb_text_9">9</span></div>
-    			</div>
-    			<div class="mfd_row_n">
-    				<div class="osb_off" id="osb_16"><span class="osb_left" id="osb_text_16">16</span></div>
-    				<div class="mfd_center"></div>
-    				<div class="osb_off" id="osb_10"><span class="osb_right" id="osb_text_10">10</span></div>
-    			</div>
-    			<div class="mfd_row_l">
-    				<div class="osb_corner_off" id="osb_d"></div>
-    				<div class="osb_off" id="osb_15"><span class="osb_bottom" id="osb_text_15">15</span></div>
-    				<div class="osb_off" id="osb_14"><span class="osb_bottom" id="osb_text_14">14</span></div>
-    				<div class="osb_off" id="osb_13"><span class="osb_bottom" id="osb_text_13">13<br>13B</span></div>
-    				<div class="osb_off" id="osb_12"><span class="osb_bottom" id="osb_text_12">12</span></div>
-    				<div class="osb_off" id="osb_11"><span class="osb_bottom" id="osb_text_11">11</span></div>
-    				<div class="osb_corner_off" id="osb_c"></div>
-    			</div>
-    		</div>
-    	
-    	</div>
-	-->
     
 </body></html>

@@ -34,6 +34,12 @@ try:
                 # e.g., in this case, if it contains a period it is an IP address
                 remote_ip = d.strip()
             elif "b" in d:
+                if d.strip() == "b96x":
+                    button_count = "b96"
+                    print_report = True
+                elif d.strip() == "b96":
+                    button_count = "b96"
+                    print_report = False
                 if d.strip() == "b64x":
                     button_count = "b64"
                     print_report = True
@@ -662,6 +668,11 @@ async def ws_listener(websocket,path):
                 dbg_vars = message.split(" ")
                 v_evt = events.InputEvent(1625821883,277264,1,button_invmap[int(dbg_vars[1])],int(dbg_vars[2]))
                 manage_event(v_evt)
+            else:
+                msg_decompose = message.split(",")
+                if len(msg_decompose) == 2:
+                    virtual_event = events.InputEvent(1625821883,277264,1,button_invmap[int(msg_decompose[0])],int(msg_decompose[1]))
+                    manage_event(virtual_event)
 
 async def evhelper(dev):
     async for ev in dev.async_read_loop():
@@ -759,10 +770,17 @@ def osb_label(read_state=False):
                         # (For example, the toggle for jettisoning fuel or something)
                         # We don't need to do anything else
                         pass
-            loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",physical_btn,d_v,virtual_btn["text"]))
+            if physical_btn < 33:
+                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",physical_btn,d_v,virtual_btn["text"]))
+            else:
+                # Experiment with a set of additional 32 buttons displayed on the touchscreen
+                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{},{},{},{},{},{}".format("vcfg",physical_btn,d_v,virtual_btn["vk"],virtual_btn["x"],virtual_btn["y"],virtual_btn["w"],virtual_btn["h"],virtual_btn["text"]))
         else:
             if physical_btn >= 1 and physical_btn <= 20:
                 loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",physical_btn,-1," "))
+            elif physical_btn >= 33 and physical_btn <= 64:
+                # Experiment with a set of additional 32 buttons displayed on the touchscreen
+                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{},{},{},{},{},{}".format("vcfg",physical_btn,-1,-1,-1,-1,-1,-1," "))
     loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("ctxt",-1,-1,osbtxt[template][subpage]))
        
 def sum_buttons():
@@ -772,6 +790,8 @@ def sum_buttons():
         zero_s = "00 00 {}{} 00 00 00 00".format(hat[0],hat[1])
     elif button_count == "b64":
         zero_s = "00 00 {}{} 00 00 00 00 00 00 00 00".format(hat[0],hat[1])
+    elif button_count == "b96":
+        zero_s = "00 00 {}{} 00 00 00 00 00 00 00 00 00 00 00 00".format(hat[0],hat[1])
     zero = bytearray.fromhex(zero_s)
     zero_i = int.from_bytes(zero,"big")
     for b in button_map:
@@ -780,6 +800,8 @@ def sum_buttons():
         zero_b = zero_i.to_bytes(7,byteorder="big")
     elif button_count == "b64":
         zero_b = zero_i.to_bytes(11,byteorder="big") # Correction for 64-button controller, hopefully.
+    elif button_count == "b96":
+        zero_b = zero_i.to_bytes(15,byteorder="big") # Correction for 64-button controller, hopefully.
     write_report(zero_b)
 
 def reload_maps():
@@ -854,6 +876,10 @@ def reload_maps():
                     toggle = False # If an integer, button will toggle between two held ON states
                     start_on = False # If a held button should start as ON
                     delay = False
+                    vbtn_x = -1 # If a virtual button, what is its relative x position?
+                    vbtn_y = -1 # If a virtual button, what is its relative y position?
+                    vbtn_w = -1 # If a virtual button, how many units wide is it?
+                    vbtn_h = -1 # If a virtual button, how many units tall is it?
 
                     if d_vals[2].isdigit() == True:
                         vk_val = int(d_vals[2])
@@ -890,30 +916,44 @@ def reload_maps():
                             toggle = int(d_v[1])
                         elif d_v[0] == "delay":
                             delay = int(d_v[1])
+                        elif d_v[0] == "vx":
+                            vbtn_x = int(d_v[1])
+                        elif d_v[0] == "vy":
+                            vbtn_y = int(d_v[1])
+                        elif d_v[0] == "vh":
+                            vbtn_h = int(d_v[1])
+                        elif d_v[0] == "vw":
+                            vbtn_w = int(d_v[1])
                         elif d_v[0] == "long":
                             if d_v[1].isdigit() == True:
                                 long_hold = int(d_v[1])
                             else:
                                 long_hold = d_v[1]
                                 long_is_page = True
-                    osbmap[mainpage][subpage][int(d_vals[0])] = {
-                        "text":d_vals[1],
-                        "page":is_page,
-                        "vk":vk_val,
-                        "latch":is_latch,
-                        "held":is_held,
-                        "start_on":start_on,
-                        "sequence":seq,
-                        "direction":seq_dir,
-                        "coset":coset,
-                        "counset":counset,
-                        "toggle":toggle,
-                        "delay":delay,
-                        "long":long_hold,
-                        "long_page":long_is_page
-                    }
+                    if int(d_vals[0]) <= 32 or button_count != "32":
+                        # (Don't add extended buttons if the device doesn't support them)
+                        osbmap[mainpage][subpage][int(d_vals[0])] = {
+                            "text":d_vals[1],
+                            "page":is_page,
+                            "vk":vk_val,
+                            "latch":is_latch,
+                            "held":is_held,
+                            "start_on":start_on,
+                            "sequence":seq,
+                            "direction":seq_dir,
+                            "coset":coset,
+                            "counset":counset,
+                            "toggle":toggle,
+                            "delay":delay,
+                            "long":long_hold,
+                            "long_page":long_is_page,
+                            "x":vbtn_x,
+                            "y":vbtn_y,
+                            "w":vbtn_w,
+                            "h":vbtn_h
+                        }
                     # [d_vals[1],vk_val,is_latch,is_held]
-    #print(osbmap["DCS_F5E_L"])
+    #print(osbmap["BLANK64"])
 
 def reload_all():
     global loop
@@ -990,6 +1030,19 @@ elif button_count == "b64":
         button_map[403+i] = {"b":b_val,"i":0,"s":0,"o":32+i}
     for i in range(101,117):
         b_val = bytes.fromhex("00 00 00 00 00 00 00 00 00 00 00")
+        button_map[osb_physicals[i]] = {"b":b_val,"i":0,"s":0,"o":osb_physicals[i]}
+elif button_count == "b96":
+    for i in range(0,33):
+        b_val = bytes.fromhex("00 00 00 {} 00 00 00 00 00 00 00 00".format(bitmap[i]))
+        button_map[osb_physicals[i]] = {"b":b_val,"i":0,"s":0,"o":i}
+    for i in range(1,33):
+        b_val = bytes.fromhex("00 00 00 00 00 00 00 {} 00 00 00 00".format(bitmap[i]))
+        button_map[403+i] = {"b":b_val,"i":0,"s":0,"o":32+i}
+    for i in range(1,33):
+        b_val = bytes.fromhex("00 00 00 00 00 00 00 {} 00 00 00 00".format(bitmap[i]))
+        button_map[503+i] = {"b":b_val,"i":0,"s":0,"o":64+i}
+    for i in range(101,117):
+        b_val = bytes.fromhex("00 00 00 00 00 00 00 00 00 00 00 00 00 00 00")
         button_map[osb_physicals[i]] = {"b":b_val,"i":0,"s":0,"o":osb_physicals[i]}
 
 # 1-20: OSB 1-20
