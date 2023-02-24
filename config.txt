@@ -280,6 +280,16 @@
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
 34,*,34,vx=40,vy=1,vw=1,vh=2
+35,▲<br />IDM,35,vx=19,vy=2,vw=1,vh=2
+36,▼<br />IDM,36,vx=19,vy=4,vw=1,vh=2
+37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
+38,▼<br />WCA,38,vx=20,vy=3,vw=1,vh=2
+54,▲<br />IDM,54,vx=20,vy=3,vw=1,vh=2
+55,▼<br />IDM,55,vx=20,vy=5,vw=1,vh=2
+56,P,56,vx=23,vy=5,vw=2,vh=1
+57,ENT,57,vx=25,vy=5,vw=2,vh=1
+58,STOPWATCH,58,vx=23,vy=6,vw=2,vh=1
+59,SWAP,59,vx=25,vy=6,vw=2,vh=1
 40,FCR,40,vx=1,vy=16,vw=2,vh=1
 41,WPN,41,vx=1,vy=17,vw=2,vh=1
 42,TSD,42,vx=3,vy=18,vw=2,vh=1
@@ -324,6 +334,16 @@
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
 34,*,34,vx=40,vy=1,vw=1,vh=2
+35,▲<br />IDM,35,vx=19,vy=2,vw=1,vh=2
+36,▼<br />IDM,36,vx=19,vy=4,vw=1,vh=2
+37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
+38,▼<br />WCA,38,vx=20,vy=3,vw=1,vh=2
+54,▲<br />IDM,54,vx=20,vy=3,vw=1,vh=2
+55,▼<br />IDM,55,vx=20,vy=5,vw=1,vh=2
+56,P,56,vx=23,vy=5,vw=2,vh=1
+57,ENT,57,vx=25,vy=5,vw=2,vh=1
+58,STOPWATCH,58,vx=23,vy=6,vw=2,vh=1
+59,SWAP,59,vx=25,vy=6,vw=2,vh=1
 40,FCR,40,vx=1,vy=16,vw=2,vh=1
 41,WPN,41,vx=1,vy=17,vw=2,vh=1
 42,TSD,42,vx=3,vy=18,vw=2,vh=1
@@ -368,6 +388,16 @@
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
 34,*,34,vx=40,vy=1,vw=1,vh=2
+35,▲<br />IDM,35,vx=19,vy=2,vw=1,vh=2
+36,▼<br />IDM,36,vx=19,vy=4,vw=1,vh=2
+37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
+38,▼<br />WCA,38,vx=20,vy=3,vw=1,vh=2
+54,▲<br />IDM,54,vx=20,vy=3,vw=1,vh=2
+55,▼<br />IDM,55,vx=20,vy=5,vw=1,vh=2
+56,P,56,vx=23,vy=5,vw=2,vh=1
+57,ENT,57,vx=25,vy=5,vw=2,vh=1
+58,STOPWATCH,58,vx=23,vy=6,vw=2,vh=1
+59,SWAP,59,vx=25,vy=6,vw=2,vh=1
 40,FCR,40,vx=1,vy=16,vw=2,vh=1
 41,WPN,41,vx=1,vy=17,vw=2,vh=1
 42,TSD,42,vx=3,vy=18,vw=2,vh=1
@@ -412,6 +442,16 @@
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
 34,*,34,vx=40,vy=1,vw=1,vh=2
+35,▲<br />IDM,35,vx=19,vy=2,vw=1,vh=2
+36,▼<br />IDM,36,vx=19,vy=4,vw=1,vh=2
+37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
+38,▼<br />WCA,38,vx=20,vy=3,vw=1,vh=2
+54,▲<br />IDM,54,vx=20,vy=3,vw=1,vh=2
+55,▼<br />IDM,55,vx=20,vy=5,vw=1,vh=2
+56,P,56,vx=23,vy=5,vw=2,vh=1
+57,ENT,57,vx=25,vy=5,vw=2,vh=1
+58,STOPWATCH,58,vx=23,vy=6,vw=2,vh=1
+59,SWAP,59,vx=25,vy=6,vw=2,vh=1
 40,FCR,40,vx=1,vy=16,vw=2,vh=1
 41,WPN,41,vx=1,vy=17,vw=2,vh=1
 42,TSD,42,vx=3,vy=18,vw=2,vh=1
@@ -456,6 +496,16 @@
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
 34,*,34,vx=40,vy=1,vw=1,vh=2
+35,▲<br />IDM,35,vx=19,vy=2,vw=1,vh=2
+36,▼<br />IDM,36,vx=19,vy=4,vw=1,vh=2
+37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
+38,▼<br />WCA,38,vx=20,vy=3,vw=1,vh=2
+54,▲<br />IDM,54,vx=20,vy=3,vw=1,vh=2
+55,▼<br />IDM,55,vx=20,vy=5,vw=1,vh=2
+56,P,56,vx=23,vy=5,vw=2,vh=1
+57,ENT,57,vx=25,vy=5,vw=2,vh=1
+58,STOPWATCH,58,vx=23,vy=6,vw=2,vh=1
+59,SWAP,59,vx=25,vy=6,vw=2,vh=1
 40,FCR,40,vx=1,vy=16,vw=2,vh=1
 41,WPN,41,vx=1,vy=17,vw=2,vh=1
 42,TSD,42,vx=3,vy=18,vw=2,vh=1
@@ -500,6 +550,16 @@
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
 34,*,34,vx=40,vy=1,vw=1,vh=2
+35,▲<br />IDM,35,vx=19,vy=2,vw=1,vh=2
+36,▼<br />IDM,36,vx=19,vy=4,vw=1,vh=2
+37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
+38,▼<br />WCA,38,vx=20,vy=3,vw=1,vh=2
+54,▲<br />IDM,54,vx=20,vy=3,vw=1,vh=2
+55,▼<br />IDM,55,vx=20,vy=5,vw=1,vh=2
+56,P,56,vx=23,vy=5,vw=2,vh=1
+57,ENT,57,vx=25,vy=5,vw=2,vh=1
+58,STOPWATCH,58,vx=23,vy=6,vw=2,vh=1
+59,SWAP,59,vx=25,vy=6,vw=2,vh=1
 40,FCR,40,vx=1,vy=16,vw=2,vh=1
 41,WPN,41,vx=1,vy=17,vw=2,vh=1
 42,TSD,42,vx=3,vy=18,vw=2,vh=1
@@ -544,6 +604,16 @@
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
 34,*,34,vx=40,vy=1,vw=1,vh=2
+35,▲<br />IDM,35,vx=19,vy=2,vw=1,vh=2
+36,▼<br />IDM,36,vx=19,vy=4,vw=1,vh=2
+37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
+38,▼<br />WCA,38,vx=20,vy=3,vw=1,vh=2
+54,▲<br />IDM,54,vx=20,vy=3,vw=1,vh=2
+55,▼<br />IDM,55,vx=20,vy=5,vw=1,vh=2
+56,P,56,vx=23,vy=5,vw=2,vh=1
+57,ENT,57,vx=25,vy=5,vw=2,vh=1
+58,STOPWATCH,58,vx=23,vy=6,vw=2,vh=1
+59,SWAP,59,vx=25,vy=6,vw=2,vh=1
 40,FCR,40,vx=1,vy=16,vw=2,vh=1
 41,WPN,41,vx=1,vy=17,vw=2,vh=1
 42,TSD,42,vx=3,vy=18,vw=2,vh=1
@@ -588,6 +658,16 @@
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
 34,*,34,vx=40,vy=1,vw=1,vh=2
+35,▲<br />IDM,35,vx=19,vy=2,vw=1,vh=2
+36,▼<br />IDM,36,vx=19,vy=4,vw=1,vh=2
+37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
+38,▼<br />WCA,38,vx=20,vy=3,vw=1,vh=2
+54,▲<br />IDM,54,vx=20,vy=3,vw=1,vh=2
+55,▼<br />IDM,55,vx=20,vy=5,vw=1,vh=2
+56,P,56,vx=23,vy=5,vw=2,vh=1
+57,ENT,57,vx=25,vy=5,vw=2,vh=1
+58,STOPWATCH,58,vx=23,vy=6,vw=2,vh=1
+59,SWAP,59,vx=25,vy=6,vw=2,vh=1
 40,FCR,40,vx=1,vy=16,vw=2,vh=1
 41,WPN,41,vx=1,vy=17,vw=2,vh=1
 42,TSD,42,vx=3,vy=18,vw=2,vh=1
