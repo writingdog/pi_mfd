@@ -312,7 +312,13 @@
 						$(osb_text_id).empty();
 						$(osb_id).show();
 						$(osb_id).css({"left":vx,"top":vy,"width":vw,"height":vh});
-						$(osb_text_id).css({"line-height":vh+"px","border":".1em solid #33cc33"});
+						if(vbtn_txt.search("<br")==-1) {
+							// this means it doesn't need a special correction for multiline buttons.
+							$(osb_text_id).css({"line-height":vh+"px","border":".1em solid #33cc33"});
+						}
+						else {
+							$(osb_text_id).css({"line-height":"auto","padding-top":"50%","border":".1em solid #33cc33"});
+						}
 						$(osb_text_id).html(vbtn_txt);
 					}
 				}
