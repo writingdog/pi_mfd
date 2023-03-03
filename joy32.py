@@ -696,11 +696,12 @@ def osb_load():
     if reload_mode == False:
         reload_mode = True
         reload_maps()
+        loop.call_soon_threadsafe(q.put_nowait,"rst") # Reset all buttons for the display (rather than looping a bunch of stuff to the websockets)
         for b in button_map:
             if b in button_specials:
                 loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,button_specials[b]))
-            else:
-                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,""))
+#            else:
+#                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[b]["o"],-1,""))
     else:
         if mfd_side == "left":
             loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[705]["o"],-1,"RIGHT"))
@@ -737,6 +738,10 @@ def osb_label(read_state=False):
     button_latch = ""
     latch_count = 0
     submap = osbmap[template][subpage]
+
+    # Reset all screen text.
+
+    loop.call_soon_threadsafe(q.put_nowait,"{}".format("rst"))
 
     for b in button_map:
         #if b!=713:
@@ -775,12 +780,17 @@ def osb_label(read_state=False):
             else:
                 # Experiment with a set of additional 32 buttons displayed on the touchscreen
                 loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{},{},{},{},{},{}".format("vcfg",physical_btn,d_v,virtual_btn["vk"],virtual_btn["x"],virtual_btn["y"],virtual_btn["w"],virtual_btn["h"],virtual_btn["text"]))
+    '''
+
+        I believe this can be removed because do this all with reset. Hopefully.
+
         else:
             if physical_btn >= 1 and physical_btn <= 20:
                 loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",physical_btn,-1," "))
             elif physical_btn >= 33 and physical_btn <= 64:
                 # Experiment with a set of additional 32 buttons displayed on the touchscreen
                 loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{},{},{},{},{},{}".format("vcfg",physical_btn,-1,-1,-1,-1,-1,-1," "))
+    '''
     loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("ctxt",-1,-1,osbtxt[template][subpage]))
        
 def sum_buttons():
@@ -995,8 +1005,8 @@ def reload_server_nonhost():
     file_loc = ["pi","mfd_l","mfd_r"] # Possible usernames
 
     for f in file_loc:
-        if pathlib.Path("/home/{}/mfd.html".format(f)).is_file() == True:
-            fpath = "/home/{}/mfd.html".format(f)
+        if pathlib.Path("//home/{}/mfd.html".format(f)).is_file() == True:
+            fpath = "file:///home/{}/mfd.html?main=true".format(f) # Adding the "main" switch so that it loads both servers.
             f_user = f
 
     for b in button_map:

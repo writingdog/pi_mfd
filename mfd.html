@@ -11,6 +11,7 @@
 				overscroll-behavior: contain;    
 			}
     		body {
+				cursor: none !important;
     			border: 0em;
     			padding: 0em;
     			background-color: #000000;
@@ -173,7 +174,24 @@
 			var grid_size = 50; // This defines the OSB width and height for virtual buttons.
 			var grid_margin_x = 10; // Space between grids on the horizontal axis
 			var grid_margin_y = 10; // Space between grids on the vertical axis
-            
+			var debug_mode = true;
+            function get_query_variable(variable) {
+				/*
+				
+				Given a query variable, returns that variable's value.
+
+				If the variable is undefined, returns undefined
+
+				*/
+				var query = window.location.search.substring(1);
+				var vars = query.split("&");
+				for (var i=0;i<vars.length;i++) {
+					var pair = vars[i].split("=");
+					if(pair[0] == variable){return pair[1];}
+				}
+				return(undefined); // If the queryvariable didn't exist.
+			}
+
 			class mfd {
 				constructor(ip,side,pos_x,pos_y,scale_x,scale_y) {
 					this.ip = ip;
@@ -426,6 +444,10 @@
 						mfd.update_center_text("Connection established.<br />",true);
 					}
 					this.ws.onmessage = function(event) {
+						if(debug_mode==true) {
+							$("#debug_container").append(event.data);
+							$("#debug_container").append($("<br />"));
+						}
 						var estr = event.data;
 						var ep = estr.split(",");
 						if(ep[0]=="osb") {
@@ -434,6 +456,17 @@
 						else if(ep[0]=="txt") {
 							mfd.update_osb_text(ep[1],ep[3])
 							mfd.update_osb_display(ep[1],parseInt(ep[2]));
+						}
+						else if(ep[0]=="rst") {
+							// Reset and blank all OSBs.
+							for(var i=1;i<=20;i++) {
+								mfd.update_osb_text(i," ");
+								mfd.update_osb_display(i,-1);
+							}
+							for(var i=33;i<=64;i++) {
+								mfd.config_extra_button(i,-1,-1,-1,-1,-1,-1);
+								mfd.update_osb_display(i,-1);
+							}
 						}
 						else if(ep[0]=="vcfg") {
 							// Params:
@@ -563,15 +596,48 @@
 				//mfd_main.add_mfd_object();
 				//mfd_main.link();
 
-				mfd_left = new mfd("192.168.2.24:5678","left",-8,2,.57,.57);
-				mfd_left.has_extra = true;
-				mfd_left.add_mfd_object();
-				mfd_left.link();
+				if(debug_mode==true) {
+					var debug_container = $("<div />",{"id":"debug_container"});
+					$(debug_container).css({"display":"block","position":"absolute","z-index":100,"left":"2em","top":"40em","width":"70em","height":"20em","overflow":"scroll","color":"#33cc33"});
+					$(debug_container).append("Debug messages: ");
+					$(debug_container).append($("<hr />"));
+					$("#main_container").append(debug_container);
+				}
+
+				if(get_query_variable("main")!==undefined) {
+					/*
+					
+					This means that the MFD is declared as type "main" supporting more than one connected USB device.
+					
+					*/
+					mfd_left = new mfd("192.168.2.24:5678","left",-8,2,.57,.57);
+					mfd_left.has_extra = true;
+					mfd_left.add_mfd_object();
+					mfd_left.link();
 
 
-				mfd_right = new mfd("192.168.2.25:5678","right");
-				mfd_right.add_mfd_object();
-				mfd_right.link();
+					mfd_right = new mfd("192.168.2.25:5678","right",-8,2,.57,.57);
+					mfd_right.has_extra = true;
+					mfd_right.add_mfd_object();
+					mfd_right.link();
+				}
+
+				else {
+					var mfd_init_ip = "192.168.2.24:5678";
+					var mfd_init_side = "left";
+					if(get_query_variable("side")!==undefined) {
+						mfd_init_side = get_query_variable("side");
+					}
+					if(get_query_variable("ip")!==undefined) {
+						mfd_init_ip = get_query_variable("ip");
+					}
+
+					mfd_main = new mfd(mfd_init_ip,mfd_init_side);
+					mfd_main.add_mfd_object();
+					mfd_main.link();
+				}
+
+
 			}
     	</script>
     </head>

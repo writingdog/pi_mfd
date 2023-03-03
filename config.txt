@@ -241,6 +241,7 @@
 19,RNG 20,19
 20,RNG 40,20
 
+
 # conf0: All normal
 # conf1: TN, LN, RS
 # conf2: TN, LS, RN
@@ -249,7 +250,7 @@
 # conf5: TS, LN, RS
 # conf6: TS, LS, RN
 # conf7: TS, LS, RS
--AH64
+-AH64_LEFT
 --conf0 AH64 Profile<br /><br />Top buttons: NORMAL<br /><br />Left buttons: NORMAL<br /><br />Right buttons: NORMAL
 1,[T1],1
 2,[T2],2
@@ -279,7 +280,6 @@
 27,27,27
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
-34,*,34,vx=40,vy=1,vw=1,vh=2
 35,▲<br />IDM,35,vx=19,vy=3,vw=1,vh=2
 36,IDM<br />▼,36,vx=19,vy=5,vw=1,vh=2
 37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
@@ -297,13 +297,6 @@
 44,A/C,44,vx=11,vy=19,vw=2,vh=1
 45,COM,45,vx=13,vy=18,vw=2,vh=1
 46,VID,46,vx=13,vy=17,vw=2,vh=1
-47,FCR,47,vx=42,vy=17,vw=2,vh=1
-48,WPN,48,vx=42,vy=18,vw=2,vh=1
-49,TSD,49,vx=44,vy=19,vw=2,vh=1
-50,M,50,vx=46,vy=19,vw=1,vh=1
-51,A/C,51,vx=52,vy=19,vw=2,vh=1
-52,COM,52,vx=54,vy=18,vw=2,vh=1
-53,VID,53,vx=54,vy=17,vw=2,vh=1
 --conf1 AH64 Profile<br /><br />Top buttons: NORMAL<br /><br />Left buttons: NORMAL<br /><br />Right buttons: SHIFTED
 1,[T1],1
 2,[T2],2
@@ -333,7 +326,6 @@
 27,27,27
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
-34,*,34,vx=40,vy=1,vw=1,vh=2
 35,▲<br />IDM,35,vx=19,vy=3,vw=1,vh=2
 36,IDM<br />▼,36,vx=19,vy=5,vw=1,vh=2
 37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
@@ -351,13 +343,6 @@
 44,A/C,44,vx=11,vy=19,vw=2,vh=1
 45,COM,45,vx=13,vy=18,vw=2,vh=1
 46,VID,46,vx=13,vy=17,vw=2,vh=1
-47,FCR,47,vx=42,vy=17,vw=2,vh=1
-48,WPN,48,vx=42,vy=18,vw=2,vh=1
-49,TSD,49,vx=44,vy=19,vw=2,vh=1
-50,M,50,vx=46,vy=19,vw=1,vh=1
-51,A/C,51,vx=52,vy=19,vw=2,vh=1
-52,COM,52,vx=54,vy=18,vw=2,vh=1
-53,VID,53,vx=54,vy=17,vw=2,vh=1
 --conf2 AH64 Profile<br /><br />Top buttons: NORMAL<br /><br />Left buttons: SHIFTED<br /><br />Right buttons: NORMAL
 1,[T1],1
 2,[T2],2
@@ -387,7 +372,6 @@
 27,27,27
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
-34,*,34,vx=40,vy=1,vw=1,vh=2
 35,▲<br />IDM,35,vx=19,vy=3,vw=1,vh=2
 36,IDM<br />▼,36,vx=19,vy=5,vw=1,vh=2
 37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
@@ -405,13 +389,6 @@
 44,A/C,44,vx=11,vy=19,vw=2,vh=1
 45,COM,45,vx=13,vy=18,vw=2,vh=1
 46,VID,46,vx=13,vy=17,vw=2,vh=1
-47,FCR,47,vx=42,vy=17,vw=2,vh=1
-48,WPN,48,vx=42,vy=18,vw=2,vh=1
-49,TSD,49,vx=44,vy=19,vw=2,vh=1
-50,M,50,vx=46,vy=19,vw=1,vh=1
-51,A/C,51,vx=52,vy=19,vw=2,vh=1
-52,COM,52,vx=54,vy=18,vw=2,vh=1
-53,VID,53,vx=54,vy=17,vw=2,vh=1
 --conf3 AH64 Profile<br /><br />Top buttons: NORMAL<br /><br />Left buttons: SHIFTED<br /><br />Right buttons: SHIFTED
 1,[T1],1
 2,[T2],2
@@ -441,7 +418,6 @@
 27,27,27
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
-34,*,34,vx=40,vy=1,vw=1,vh=2
 35,▲<br />IDM,35,vx=19,vy=3,vw=1,vh=2
 36,IDM<br />▼,36,vx=19,vy=5,vw=1,vh=2
 37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
@@ -459,13 +435,6 @@
 44,A/C,44,vx=11,vy=19,vw=2,vh=1
 45,COM,45,vx=13,vy=18,vw=2,vh=1
 46,VID,46,vx=13,vy=17,vw=2,vh=1
-47,FCR,47,vx=42,vy=17,vw=2,vh=1
-48,WPN,48,vx=42,vy=18,vw=2,vh=1
-49,TSD,49,vx=44,vy=19,vw=2,vh=1
-50,M,50,vx=46,vy=19,vw=1,vh=1
-51,A/C,51,vx=52,vy=19,vw=2,vh=1
-52,COM,52,vx=54,vy=18,vw=2,vh=1
-53,VID,53,vx=54,vy=17,vw=2,vh=1
 --conf4 AH64 Profile<br /><br />Top buttons: SHIFTED<br /><br />Left buttons: NORMAL<br /><br />Right buttons: NORMAL
 1,[T2]<br />◄,conf0,delay=500,long=2
 2,[T3],3
@@ -495,7 +464,6 @@
 27,27,27
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
-34,*,34,vx=40,vy=1,vw=1,vh=2
 35,▲<br />IDM,35,vx=19,vy=3,vw=1,vh=2
 36,IDM<br />▼,36,vx=19,vy=5,vw=1,vh=2
 37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
@@ -513,13 +481,6 @@
 44,A/C,44,vx=11,vy=19,vw=2,vh=1
 45,COM,45,vx=13,vy=18,vw=2,vh=1
 46,VID,46,vx=13,vy=17,vw=2,vh=1
-47,FCR,47,vx=42,vy=17,vw=2,vh=1
-48,WPN,48,vx=42,vy=18,vw=2,vh=1
-49,TSD,49,vx=44,vy=19,vw=2,vh=1
-50,M,50,vx=46,vy=19,vw=1,vh=1
-51,A/C,51,vx=52,vy=19,vw=2,vh=1
-52,COM,52,vx=54,vy=18,vw=2,vh=1
-53,VID,53,vx=54,vy=17,vw=2,vh=1
 --conf5 AH64 Profile<br /><br />Top buttons: SHIFTED<br /><br />Left buttons: NORMAL<br /><br />Right buttons: SHIFTED
 1,[T2]<br />◄,conf1,delay=500,long=2
 2,[T3],3
@@ -549,7 +510,6 @@
 27,27,27
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
-34,*,34,vx=40,vy=1,vw=1,vh=2
 35,▲<br />IDM,35,vx=19,vy=3,vw=1,vh=2
 36,IDM<br />▼,36,vx=19,vy=5,vw=1,vh=2
 37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
@@ -567,13 +527,6 @@
 44,A/C,44,vx=11,vy=19,vw=2,vh=1
 45,COM,45,vx=13,vy=18,vw=2,vh=1
 46,VID,46,vx=13,vy=17,vw=2,vh=1
-47,FCR,47,vx=42,vy=17,vw=2,vh=1
-48,WPN,48,vx=42,vy=18,vw=2,vh=1
-49,TSD,49,vx=44,vy=19,vw=2,vh=1
-50,M,50,vx=46,vy=19,vw=1,vh=1
-51,A/C,51,vx=52,vy=19,vw=2,vh=1
-52,COM,52,vx=54,vy=18,vw=2,vh=1
-53,VID,53,vx=54,vy=17,vw=2,vh=1
 --conf6 AH64 Profile<br /><br />Top buttons: SHIFTED<br /><br />Left buttons: SHIFTED<br /><br />Right buttons: NORMAL
 1,[T2]<br />◄,conf2,delay=500,long=2
 2,[T3],3
@@ -603,7 +556,6 @@
 27,27,27
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
-34,*,34,vx=40,vy=1,vw=1,vh=2
 35,▲<br />IDM,35,vx=19,vy=3,vw=1,vh=2
 36,IDM<br />▼,36,vx=19,vy=5,vw=1,vh=2
 37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
@@ -621,13 +573,6 @@
 44,A/C,44,vx=11,vy=19,vw=2,vh=1
 45,COM,45,vx=13,vy=18,vw=2,vh=1
 46,VID,46,vx=13,vy=17,vw=2,vh=1
-47,FCR,47,vx=42,vy=17,vw=2,vh=1
-48,WPN,48,vx=42,vy=18,vw=2,vh=1
-49,TSD,49,vx=44,vy=19,vw=2,vh=1
-50,M,50,vx=46,vy=19,vw=1,vh=1
-51,A/C,51,vx=52,vy=19,vw=2,vh=1
-52,COM,52,vx=54,vy=18,vw=2,vh=1
-53,VID,53,vx=54,vy=17,vw=2,vh=1
 --conf7 AH64 Profile<br /><br />Top buttons: SHIFTED<br /><br />Left buttons: SHIFTED<br /><br />Right buttons: SHIFTED
 1,[T2]<br />◄,conf3,delay=500,long=2
 2,[T3],3
@@ -657,7 +602,6 @@
 27,27,27
 28,28,28
 33,*,33,vx=16,vy=1,vw=1,vh=2
-34,*,34,vx=40,vy=1,vw=1,vh=2
 35,▲<br />IDM,35,vx=19,vy=3,vw=1,vh=2
 36,IDM<br />▼,36,vx=19,vy=5,vw=1,vh=2
 37,▲<br />WCA,37,vx=20,vy=1,vw=1,vh=2
@@ -675,13 +619,304 @@
 44,A/C,44,vx=11,vy=19,vw=2,vh=1
 45,COM,45,vx=13,vy=18,vw=2,vh=1
 46,VID,46,vx=13,vy=17,vw=2,vh=1
-47,FCR,47,vx=42,vy=17,vw=2,vh=1
-48,WPN,48,vx=42,vy=18,vw=2,vh=1
-49,TSD,49,vx=44,vy=19,vw=2,vh=1
-50,M,50,vx=46,vy=19,vw=1,vh=1
-51,A/C,51,vx=52,vy=19,vw=2,vh=1
-52,COM,52,vx=54,vy=18,vw=2,vh=1
-53,VID,53,vx=54,vy=17,vw=2,vh=1
+
+# conf0: All normal
+# conf1: TN, LN, RS
+# conf2: TN, LS, RN
+# conf3: TN, LS, RS 
+# conf4: TS, LN, RN
+# conf5: TS, LN, RS
+# conf6: TS, LS, RN
+# conf7: TS, LS, RS
+-AH64_RIGHT
+--conf0 AH64 Profile<br /><br />Top buttons: NORMAL<br /><br />Left buttons: NORMAL<br /><br />Right buttons: NORMAL
+1,[T1],1
+2,[T2],2
+3,[T3],3
+4,[T4],4
+5,[T5]<br />►,conf4,delay=500,long=5
+6,[R1],6
+7,[R2],7
+8,[R3],8
+9,[R4],9
+10,▼[R5],conf1,delay=500,long=10
+11,[B5],11
+12,[B4],12
+13,[B3],13
+14,[B2],14
+15,[B1],15
+16,[L5]▼,conf2,delay=500,long=16
+17,[L4],17
+18,[L3],18
+19,[L2],19
+20,[L1],20
+22,22,22
+23,23,23
+24,24,24
+25,25,25
+26,26,26
+27,27,27
+28,28,28
+33,*,33,vx=-3,vy=1,vw=1,vh=2
+40,FCR,40,vx=-1,vy=17,vw=2,vh=1
+41,WPN,41,vx=-1,vy=18,vw=2,vh=1
+42,TSD,42,vx=1,vy=19,vw=2,vh=1
+43,M,43,vx=3,vy=19,vw=1,vh=1
+44,A/C,44,vx=9,vy=19,vw=2,vh=1
+45,COM,45,vx=11,vy=18,vw=2,vh=1
+46,VID,46,vx=11,vy=17,vw=2,vh=1
+--conf1 AH64 Profile<br /><br />Top buttons: NORMAL<br /><br />Left buttons: NORMAL<br /><br />Right buttons: SHIFTED
+1,[T1],1
+2,[T2],2
+3,[T3],3
+4,[T4],4
+5,[T5]<br />►,conf5,delay=500,long=5
+6,▲[R2],conf0,delay=500,long=7
+7,[R3],8
+8,[R4],9
+9,[R5],10
+10,[R6],31
+11,[B5],11
+12,[B4],12
+13,[B3],13
+14,[B2],14
+15,[B1],15
+16,[L5]▼,conf3,delay=500,long=16
+17,[L4],17
+18,[L3],18
+19,[L2],19
+20,[L1],20
+22,22,22
+23,23,23
+24,24,24
+25,25,25
+26,26,26
+27,27,27
+28,28,28
+33,*,33,vx=-3,vy=1,vw=1,vh=2
+40,FCR,40,vx=-1,vy=17,vw=2,vh=1
+41,WPN,41,vx=-1,vy=18,vw=2,vh=1
+42,TSD,42,vx=1,vy=19,vw=2,vh=1
+43,M,43,vx=3,vy=19,vw=1,vh=1
+44,A/C,44,vx=9,vy=19,vw=2,vh=1
+45,COM,45,vx=11,vy=18,vw=2,vh=1
+46,VID,46,vx=11,vy=17,vw=2,vh=1
+--conf2 AH64 Profile<br /><br />Top buttons: NORMAL<br /><br />Left buttons: SHIFTED<br /><br />Right buttons: NORMAL
+1,[T1],1
+2,[T2],2
+3,[T3],3
+4,[T4],4
+5,[T5]<br />►,conf6,delay=500,long=5
+6,[R1],6
+7,[R2],7
+8,[R3],8
+9,[R4],9
+10,▼[R5],conf3,delay=500,long=10
+11,[B5],11
+12,[B4],12
+13,[B3],13
+14,[B2],14
+15,[B1],15
+16,[L6],30
+17,[L5],16
+18,[L4],17
+19,[L3],18
+20,[L2]▲,conf0,delay=500,long=19
+22,22,22
+23,23,23
+24,24,24
+25,25,25
+26,26,26
+27,27,27
+28,28,28
+33,*,33,vx=-3,vy=1,vw=1,vh=2
+40,FCR,40,vx=-1,vy=17,vw=2,vh=1
+41,WPN,41,vx=-1,vy=18,vw=2,vh=1
+42,TSD,42,vx=1,vy=19,vw=2,vh=1
+43,M,43,vx=3,vy=19,vw=1,vh=1
+44,A/C,44,vx=9,vy=19,vw=2,vh=1
+45,COM,45,vx=11,vy=18,vw=2,vh=1
+46,VID,46,vx=11,vy=17,vw=2,vh=1
+--conf3 AH64 Profile<br /><br />Top buttons: NORMAL<br /><br />Left buttons: SHIFTED<br /><br />Right buttons: SHIFTED
+1,[T1],1
+2,[T2],2
+3,[T3],3
+4,[T4],4
+5,[T5]<br />►,conf7,delay=500,long=5
+6,▲[R2],conf2,delay=500,long=7
+7,[R3],8
+8,[R4],9
+9,[R5],10
+10,[R6],31
+11,[B5],11
+12,[B4],12
+13,[B3],13
+14,[B2],14
+15,[B1],15
+16,[L6],30
+17,[L5],16
+18,[L4],17
+19,[L3],18
+20,[L2]▲,conf1,delay=500,long=19
+22,22,22
+23,23,23
+24,24,24
+25,25,25
+26,26,26
+27,27,27
+28,28,28
+33,*,33,vx=-3,vy=1,vw=1,vh=2
+40,FCR,40,vx=-1,vy=17,vw=2,vh=1
+41,WPN,41,vx=-1,vy=18,vw=2,vh=1
+42,TSD,42,vx=1,vy=19,vw=2,vh=1
+43,M,43,vx=3,vy=19,vw=1,vh=1
+44,A/C,44,vx=9,vy=19,vw=2,vh=1
+45,COM,45,vx=11,vy=18,vw=2,vh=1
+46,VID,46,vx=11,vy=17,vw=2,vh=1
+--conf4 AH64 Profile<br /><br />Top buttons: SHIFTED<br /><br />Left buttons: NORMAL<br /><br />Right buttons: NORMAL
+1,[T2]<br />◄,conf0,delay=500,long=2
+2,[T3],3
+3,[T4],4
+4,[T5],5
+5,[T6],29
+6,[R1],6
+7,[R2],7
+8,[R3],8
+9,[R4],9
+10,▼[R5],conf5,delay=500,long=10
+11,[B5],11
+12,[B4],12
+13,[B3],13
+14,[B2],14
+15,[B1],15
+16,[L5]▼,conf6,delay=500,long=16
+17,[L4],17
+18,[L3],18
+19,[L2],19
+20,[L1],20
+22,22,22
+23,23,23
+24,24,24
+25,25,25
+26,26,26
+27,27,27
+28,28,28
+33,*,33,vx=-3,vy=1,vw=1,vh=2
+40,FCR,40,vx=-1,vy=17,vw=2,vh=1
+41,WPN,41,vx=-1,vy=18,vw=2,vh=1
+42,TSD,42,vx=1,vy=19,vw=2,vh=1
+43,M,43,vx=3,vy=19,vw=1,vh=1
+44,A/C,44,vx=9,vy=19,vw=2,vh=1
+45,COM,45,vx=11,vy=18,vw=2,vh=1
+46,VID,46,vx=11,vy=17,vw=2,vh=1
+--conf5 AH64 Profile<br /><br />Top buttons: SHIFTED<br /><br />Left buttons: NORMAL<br /><br />Right buttons: SHIFTED
+1,[T2]<br />◄,conf1,delay=500,long=2
+2,[T3],3
+3,[T4],4
+4,[T5],5
+5,[T6],29
+6,▲[R2],conf4,delay=500,long=7
+7,[R3],8
+8,[R4],9
+9,[R5],10
+10,[R6],31
+11,[B5],11
+12,[B4],12
+13,[B3],13
+14,[B2],14
+15,[B1],15
+16,[L5]▼,conf7,delay=500,long=16
+17,[L4],17
+18,[L3],18
+19,[L2],19
+20,[L1],20
+22,22,22
+23,23,23
+24,24,24
+25,25,25
+26,26,26
+27,27,27
+28,28,28
+33,*,33,vx=-3,vy=1,vw=1,vh=2
+40,FCR,40,vx=-1,vy=17,vw=2,vh=1
+41,WPN,41,vx=-1,vy=18,vw=2,vh=1
+42,TSD,42,vx=1,vy=19,vw=2,vh=1
+43,M,43,vx=3,vy=19,vw=1,vh=1
+44,A/C,44,vx=9,vy=19,vw=2,vh=1
+45,COM,45,vx=11,vy=18,vw=2,vh=1
+46,VID,46,vx=11,vy=17,vw=2,vh=1
+--conf6 AH64 Profile<br /><br />Top buttons: SHIFTED<br /><br />Left buttons: SHIFTED<br /><br />Right buttons: NORMAL
+1,[T2]<br />◄,conf2,delay=500,long=2
+2,[T3],3
+3,[T4],4
+4,[T5],5
+5,[T6],29
+6,[R1],6
+7,[R2],7
+8,[R3],8
+9,[R4],9
+10,▼[R5],conf7,delay=500,long=10
+11,[B5],11
+12,[B4],12
+13,[B3],13
+14,[B2],14
+15,[B1],15
+16,[L6],30
+17,[L5],16
+18,[L4],17
+19,[L3],18
+20,[L2]▲,conf4,delay=500,long=19
+22,22,22
+23,23,23
+24,24,24
+25,25,25
+26,26,26
+27,27,27
+28,28,28
+33,*,33,vx=-3,vy=1,vw=1,vh=2
+40,FCR,40,vx=-1,vy=17,vw=2,vh=1
+41,WPN,41,vx=-1,vy=18,vw=2,vh=1
+42,TSD,42,vx=1,vy=19,vw=2,vh=1
+43,M,43,vx=3,vy=19,vw=1,vh=1
+44,A/C,44,vx=9,vy=19,vw=2,vh=1
+45,COM,45,vx=11,vy=18,vw=2,vh=1
+46,VID,46,vx=11,vy=17,vw=2,vh=1
+--conf7 AH64 Profile<br /><br />Top buttons: SHIFTED<br /><br />Left buttons: SHIFTED<br /><br />Right buttons: SHIFTED
+1,[T2]<br />◄,conf3,delay=500,long=2
+2,[T3],3
+3,[T4],4
+4,[T5],5
+5,[T6],29
+6,▲[R2],conf6,delay=500,long=7
+7,[R3],8
+8,[R4],9
+9,[R5],10
+10,[R6],31
+11,[B5],11
+12,[B4],12
+13,[B3],13
+14,[B2],14
+15,[B1],15
+16,[L6],30
+17,[L5],16
+18,[L4],17
+19,[L3],18
+20,[L2]▲,conf5,delay=500,long=19
+22,22,22
+23,23,23
+24,24,24
+25,25,25
+26,26,26
+27,27,27
+28,28,28
+33,*,33,vx=-3,vy=1,vw=1,vh=2
+40,FCR,40,vx=-1,vy=17,vw=2,vh=1
+41,WPN,41,vx=-1,vy=18,vw=2,vh=1
+42,TSD,42,vx=1,vy=19,vw=2,vh=1
+43,M,43,vx=3,vy=19,vw=1,vh=1
+44,A/C,44,vx=9,vy=19,vw=2,vh=1
+45,COM,45,vx=11,vy=18,vw=2,vh=1
+46,VID,46,vx=11,vy=17,vw=2,vh=1
 
 -DCS_F1CE_Right
 ---seq0 800,801,802 unset=20
