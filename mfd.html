@@ -91,11 +91,25 @@
     			margin-top: 37%;
     		}
 			.osb_virtual {
+				display: inline-block;
+				height: fit-content;
+				width: 100%;
+				top: 50%;
+				line-height: 100%;
+				background: none;
+				z-index: 100;
+				border: none;
+				position: relative;
+			}
+			.osb_virtual_frame {
 				border: .1em solid #33cc33;
 				display: inline-block;
 				height: 100%;
 				width: 100%;
 				line-height: 100%;
+				position: absolute;
+				left: 0px;
+				top: 0px;
 			}
     		.mfd_left {
     			position: absolute;
@@ -174,7 +188,7 @@
 			var grid_size = 50; // This defines the OSB width and height for virtual buttons.
 			var grid_margin_x = 10; // Space between grids on the horizontal axis
 			var grid_margin_y = 10; // Space between grids on the vertical axis
-			var debug_mode = true;
+			var debug_mode = false;
             function get_query_variable(variable) {
 				/*
 				
@@ -200,6 +214,7 @@
 					this.main_id = "mfd_"+this.mfd_id+"_main_container";
 					this.osb_prefix = "#osb_"+this.mfd_id+"_";
 					this.osb_text_prefix = "#osb_"+this.mfd_id+"_text_";
+					this.osb_text_background_prefix = "#osb_"+this.mfd_id+"_text_background_";
 					this.text_id = "#mfd_"+this.mfd_id+"_center_text";
 					this.mode = 0; // 0 is normal, 1 is profile select
 					this.ws;
@@ -296,7 +311,7 @@
 							this.extra_buttons[i] = -1;
 							this.extra_button_state[i] = false;
 							var virtual_osb = $("<div />",{"class":"osb_off","id":prefix+i});
-							$(virtual_osb).css({"position":"absolute"});
+							$(virtual_osb).css({"position":"absolute","display":"block"});
 							if("ontouchstart" in document.documentElement===true) {
 								$(virtual_osb).on("touchstart",{arg1:i,arg2:mfd_parent},function(e) { e.preventDefault(); e.stopPropagation(); e.data.arg2.extra_button_trigger(e.data.arg1,true)});
 								$(virtual_osb).on("touchend",{arg1:i,arg2:mfd_parent},function(e) { e.preventDefault(); e.stopPropagation(); e.data.arg2.extra_button_trigger(e.data.arg1,false)});
@@ -305,7 +320,8 @@
 								$(virtual_osb).on("mousedown mousemove",{arg1:i,arg2:mfd_parent},function(e) { e.preventDefault(); e.stopPropagation(); e.data.arg2.extra_button_trigger(e.data.arg1,true)});
 								$(virtual_osb).on("mouseup mouseleave",{arg1:i,arg2:mfd_parent},function(e) { e.preventDefault(); e.stopPropagation(); e.data.arg2.extra_button_trigger(e.data.arg1,false)});
 							}
-							$(virtual_osb).append($("<span />",{"class":"osb_virtual","id":prefix+"text_"+i,"text":""}));
+							$(virtual_osb).append($("<span />",{"class":"osb_virtual_frame","id":prefix+"text_"+i,"text":""}));
+							$(virtual_osb).append($("<span />",{"class":"osb_virtual","id":prefix+"text_background_"+i,"text":"","css":{"border":"none","background":"none"}}));
 							$(mfd_container).append(virtual_osb);
 						}
 					}
@@ -317,12 +333,14 @@
 				config_extra_button(idx,vbtn_idx,vbtn_x,vbtn_y,vbtn_w,vbtn_h,vbtn_txt) {
 					// This is an extra button container
 					var osb_id = this.osb_prefix + "" + idx;
-					var osb_text_id = this.osb_text_prefix + "" + idx;
+					var osb_text_id = this.osb_text_prefix + "" + idx; // This is the border, not the actual text
+					var osb_background_id = this.osb_text_background_prefix + "" + idx; // This is the actual text.
 					if(vbtn_idx == -1) {
 						// This has no virtual button defined, so we can just ignore it.
 						this.extra_buttons[idx] = -1; // Unset the virtual button's mapping in the mapping text.
 						this.extra_button_state[idx] = false; // Set the button to be unclicked.
 						$(osb_text_id).empty(); // Delete whatever previous text it might've had
+						$(osb_background_id).empty();
 						$(osb_text_id).css({"border":"none"});
 						$(osb_id).hide(); // Hide the button.
 					}
@@ -334,16 +352,19 @@
 						var vh = parseInt(vbtn_h) * grid_size;
 						this.extra_buttons[idx] = vbtn_idx; // This is which button needs to be triggered or untriggered on this event.
 						$(osb_text_id).empty();
+						$(osb_background_id).empty();
 						$(osb_id).show();
 						$(osb_id).css({"left":vx,"top":vy,"width":vw,"height":vh});
 						if(vbtn_txt.search("<br")==-1) {
 							// this means it doesn't need a special correction for multiline buttons.
 							$(osb_text_id).css({"line-height":vh+"px","border":".1em solid #33cc33"});
+							$(osb_background_id).css({"line-height":"auto","top":"calc(50% - 1vh)"});
 						}
 						else {
-							$(osb_text_id).css({"line-height":"auto","padding-top":"50%","border":".1em solid #33cc33"});
+							$(osb_text_id).css({"line-height":"auto","border":".1em solid #33cc33"});
+							$(osb_background_id).css({"line-height":"auto","top":"calc(50% - 2vh)"});
 						}
-						$(osb_text_id).html(vbtn_txt);
+						$(osb_background_id).html(vbtn_txt);
 					}
 				}
 

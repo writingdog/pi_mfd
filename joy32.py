@@ -965,6 +965,15 @@ def reload_maps():
                     # [d_vals[1],vk_val,is_latch,is_held]
     #print(osbmap["BLANK64"])
 
+    # Next task: if the page has a "share" subpage defined, all of the other pages need those buttons too.
+    for m in osbmap:
+        if "share" in osbmap[m]:
+            # So now let's add the share buttons to every other subpage.
+            for sub in osbmap[m]:
+                if sub!= "share":
+                    for share_btn in osbmap[m]["share"]:
+                        osbmap[m][sub][share_btn] = osbmap[m]["share"][share_btn]
+
 def reload_all():
     global loop
     file_loc = ["pi","mfd_l","mfd_r"] # Possible usernames
