@@ -668,6 +668,12 @@
 50,C,50,vx=27,vy=11,vw=2,vh=2
 51,LC,51,vx=25,vy=11,vw=2,vh=2
 52,L,52,vx=23,vy=11,vw=2,vh=2
+53,TF RDR<br />ON,53,vx=2,vy=17,vw=2,vh=2,hold=0,toggle=29,set=-54
+54,TF RDR<br />OFF,54,vx=2,vy=19,vw=2,vh=2,hold=0,toggle=29,set=-53
+55,RALT<br />OVRD,55,vx=5,vy=17,vw=2,vh=2,hold=0,toggle=30,set=-56
+56,RALT<br />OFF,56,vx=5,vy=19,vw=2,vh=2,hold=0,toggle=30,set=-55
+57,RDR ON/STBY,57,vx=11,vy=16,vw=3,vh=2,hold=0,toggle=31,set=-58
+58,RDR OFF/STBY,58,vx=11,vy=18,vw=3,vh=2,hold=0,toggle=31,set=-57
 
 -DCS_F15E_RIGHT
 --conf0 Labeled profile with additional buttons.
