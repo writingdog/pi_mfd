@@ -482,7 +482,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                             do_hats(c,submit_value)
                         else:
                             button_map[button_invmap[c]]["s"] = 1
-                        if c <=20:
+                        if c <= 20 or c>=32:
                             # That is, if C is a value low enough to have an attached OSB
                             if e.value == 1:
                                 loop.call_soon_threadsafe(q.put_nowait,"{},{},1".format("osb",c,1)) # Highlight the OSB
@@ -498,7 +498,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                             do_hats(c,submit_value)
                         else:
                             button_map[button_invmap[c]]["s"] = 0
-                        if c <= 20:
+                        if c <= 20 or c>=32:
                             # That is, if C is a value low enough to have an attached OSB
                             loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",c,-1)) # Highlight the OSB
             else:
@@ -571,7 +571,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                                 do_hats(c,submit_value)
                             else:
                                 button_map[button_invmap[c]]["s"] = 1 # New behavior. Always set this to OFF
-                            if c <= 20:
+                            if c <= 20 or c>=32:
                                 # That is, if C is a value low enough to have an attached OSB
                                 if e.value == 1:
                                     loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",c,1)) # Highlight the OSB
@@ -585,7 +585,7 @@ def event_normal(e,submap,physical_btn,force_trigger=False):
                                 do_hats(c,submit_value)
                             else:
                                 button_map[button_invmap[c]]["s"] = 0 # New behavior. Always set this to OFF
-                            if c <= 20:
+                            if c <= 20 or c>=32:
                                 # That is, if C is a value low enough to have an attached OSB
                                 loop.call_soon_threadsafe(q.put_nowait,"{},{},{}".format("osb",c,-1)) # Blank the OSB
                     if force_delay != False:
