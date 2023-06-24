@@ -3,6 +3,7 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
         <title>WebSocket demo</title>
         <script src="./scripts/jquery-3.2.1.min.js"></script>
+		<script src="./scripts/demo.js"></script>
     	<style type="text/css">
 			html, body {
 				width: 100%;
@@ -181,6 +182,12 @@
 				padding-left: .5em;
 				padding-right: .5em;
 			}
+			.demo_dropdown {
+				width: 120px;
+				position: absolute;
+				left: 40%;
+				top: 40%;
+			}
     		
     	</style>
     	<script type="text/javascript">
@@ -326,8 +333,55 @@
 						}
 					}
 
+					if(get_query_variable("test")!==undefined) {
+						/*
+						In test mode, so add dropdown menu.
+						*/
+						var available_demos = Object.keys(demo_buttons);
+						var dropdown = $("<select />",{"id":this.mfd_id+"_dropdown","class":"demo_dropdown"});
+						for(var i=0;i<available_demos.length;i++){
+							$(dropdown).append($("<option />",{"value":available_demos[i],"text":available_demos[i]}));
+						}
+						$(dropdown).on("change",{arg1:mfd_parent},function(e) { e.data.arg1.load_demo()});
+						$(mfd_container).append(dropdown);
+					}
+
+
 					$("#main_container").append(mfd_container);
 
+				}
+
+				load_demo() {
+					/*
+					This takes a given set of demo buttons and updates the mfd display.
+					*/
+					for(var i=1;i<=20;i++) {
+						this.update_osb_text(i," ");
+						this.update_osb_display(i,-1);
+					}
+					for(var i=33;i<=64;i++) {
+						this.config_extra_button(i,-1,-1,-1,-1,-1,-1);
+						this.update_osb_display(i,-1);
+					}
+					var demo_id = $("#"+this.mfd_id+"_dropdown").val()
+					this.set_demo_buttons(demo_id);
+				}
+
+				set_demo_buttons(demo_id) {
+					var d_buttons = demo_buttons[demo_id];
+
+					var b_map = Object.keys(demo_buttons[demo_id]);
+					for(var i=0;i<b_map.length;i++) {
+						var d_sub = demo_buttons[demo_id][b_map[i]]; // This is the demo button sub container
+						if(d_sub["vx"]!=false) {
+							// This means that the button has some of the extra vcfg parameters.
+							this.config_extra_button(b_map[i],d_sub["trigger"],d_sub["vx"],d_sub["vy"],d_sub["vw"],d_sub["vh"],d_sub["text"]);
+						}
+						else {
+							// So use the normal update_osb_text value
+							this.update_osb_text(b_map[i],d_sub["text"]);
+						}
+					}
 				}
 
 				config_extra_button(idx,vbtn_idx,vbtn_x,vbtn_y,vbtn_w,vbtn_h,vbtn_txt) {
@@ -644,18 +698,48 @@
 				}
 
 				else {
-					var mfd_init_ip = "192.168.2.24:5678";
-					var mfd_init_side = "left";
-					if(get_query_variable("side")!==undefined) {
-						mfd_init_side = get_query_variable("side");
+					if(get_query_variable("test")!==undefined) {
+						/*
+						
+						Special case for testing layouts without needing to push everything to github and back.
+
+						*/
+						console.log("test was true");
+						$("#main_container").css({"cursor":"auto"});
+						$("body").height(1080);
+						$("body").width(1920);
+						mfd_left = new mfd("localhost:5678","left",-8,2,.57,.57);
+						mfd_left.has_extra = true;
+						mfd_left.add_mfd_object();
+
+						mfd_right = new mfd("localhost:5678","right",-8,2,.57,.57);
+						mfd_right.has_extra = true;
+						mfd_right.add_mfd_object();
+
+						if(get_query_variable("demo_left")!==undefined) {
+							mfd_left.set_demo_buttons(get_query_variable("demo_left"));
+						}
+						if(get_query_variable("demo_right")!==undefined) {
+							mfd_right.set_demo_buttons(get_query_variable("demo_right"));
+						}
+						//mfd_left.link();
+					
 					}
-					if(get_query_variable("ip")!==undefined) {
-						mfd_init_ip = get_query_variable("ip");
+					else {
+						var mfd_init_ip = "192.168.2.24:5678";
+						var mfd_init_side = "left";
+						if(get_query_variable("side")!==undefined) {
+							mfd_init_side = get_query_variable("side");
+						}
+						if(get_query_variable("ip")!==undefined) {
+							mfd_init_ip = get_query_variable("ip");
+						}
+
+						mfd_main = new mfd(mfd_init_ip,mfd_init_side);
+						mfd_main.add_mfd_object();
+						mfd_main.link();
 					}
 
-					mfd_main = new mfd(mfd_init_ip,mfd_init_side);
-					mfd_main.add_mfd_object();
-					mfd_main.link();
 				}
 
 
