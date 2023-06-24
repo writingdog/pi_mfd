@@ -663,11 +663,11 @@
 45,13,45,vx=33,vy=17,vw=2,vh=2
 46,14,46,vx=33,vy=15,vw=2,vh=2
 47,15,47,vx=33,vy=13,vw=2,vh=2
-48,16,48,vx=31,vy=11,vw=2,vh=2
-49,17,49,vx=29,vy=11,vw=2,vh=2
-50,18,50,vx=27,vy=11,vw=2,vh=2
-51,19,51,vx=25,vy=11,vw=2,vh=2
-52,20,52,vx=23,vy=11,vw=2,vh=2
+48,R,48,vx=31,vy=11,vw=2,vh=2
+49,RC,49,vx=29,vy=11,vw=2,vh=2
+50,C,50,vx=27,vy=11,vw=2,vh=2
+51,LC,51,vx=25,vy=11,vw=2,vh=2
+52,L,52,vx=23,vy=11,vw=2,vh=2
 
 -DCS_F15E_RIGHT
 --conf0 Labeled profile with additional buttons.
