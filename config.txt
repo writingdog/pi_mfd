@@ -722,13 +722,11 @@
 
 -F86F_L
 --conf0
-1,OFF,1
-2,GUNS,2
-3,MSL,3
-15,OFF,15
-14,LWR,14
-13,MID,13
-11,ALL,11
+1,GUNS,1,hold=0,toggle=37,set=-2
+2,MSL,2,hold=0,toggle=37,set=-1
+15,LWR,15,hold=0,toggle=36,set=-14,set=-13
+14,MID,14,hold=0,toggle=36,set=-15,set=-13
+13,ALL,13,hold=0,toggle=36,set=-14,set=-15
 6,LABS<br />ON,6,hold=1,toggle=33
 7,LABS<br />A-4,7,hold=0,toggle=34
 8,CAGE<br />UNCAGE,8,hold=0,toggle=35
