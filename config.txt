@@ -729,9 +729,9 @@
 14,LWR,14
 13,MID,13
 11,ALL,11
-6,LABS<br />ON,6,toggle=33
-7,LABS<br />A-4,7,toggle=34
-8,CAGE<br />UNCAGE,8,toggle=35
+6,LABS<br />ON,6,hold=1,toggle=33
+7,LABS<br />A-4,7,hold=0,toggle=34
+8,CAGE<br />UNCAGE,8,hold=0,toggle=35
 21, ,21
 22, ,22
 23, ,23
