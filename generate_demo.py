@@ -48,13 +48,13 @@ for l in data:
                     b_extra = button_data[i].split("=")
                     if(len(b_extra)==2):
                         if b_extra[0] == "vx":
-                            b_vx = int(b_extra[1])
+                            b_vx = float(b_extra[1])
                         elif b_extra[0] == "vy":
-                            b_vy = int(b_extra[1])
+                            b_vy = float(b_extra[1])
                         elif b_extra[0] == "vw":
-                            b_vw = int(b_extra[1])
+                            b_vw = float(b_extra[1])
                         elif b_extra[0] == "vh":
-                            b_vh = int(b_extra[1])
+                            b_vh = float(b_extra[1])
             cfg_raw[current_main][current_sub].append([b_osb,b_txt,b_trigger,b_vx,b_vy,b_vw,b_vh])
 
 js_out = open("./scripts/demo.js","w")

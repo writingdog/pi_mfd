@@ -314,7 +314,7 @@
 					if(this.has_extra==true) {
 						// Create 20 extra virtual buttons.
 						var mfd_parent = this;
-						for(var i=33;i<=64;i++) {
+						for(var i=33;i<=96;i++) {
 							this.extra_buttons[i] = -1;
 							this.extra_button_state[i] = false;
 							var virtual_osb = $("<div />",{"class":"osb_off","id":prefix+i});
@@ -359,7 +359,7 @@
 						this.update_osb_text(i," ");
 						this.update_osb_display(i,-1);
 					}
-					for(var i=33;i<=64;i++) {
+					for(var i=33;i<=96;i++) {
 						this.config_extra_button(i,-1,-1,-1,-1,-1,-1);
 						this.update_osb_display(i,-1);
 					}
@@ -400,10 +400,17 @@
 					}
 					else {
 						// So we consider this button "live" for our intents and purpose.
+						/*
 						var vx = (parseInt(vbtn_x)) * (grid_margin_x + grid_size); // How var left from the display it should be.
 						var vy = (parseInt(vbtn_y)) * (grid_margin_y + grid_size); // How far from the top it is.
 						var vw = parseInt(vbtn_w) * grid_size;
 						var vh = parseInt(vbtn_h) * grid_size;
+						*/
+
+						var vx = (parseFloat(vbtn_x)) * (grid_margin_x + grid_size); // How var left from the display it should be.
+						var vy = (parseFloat(vbtn_y)) * (grid_margin_y + grid_size); // How far from the top it is.
+						var vw = parseFloat(vbtn_w) * grid_size;
+						var vh = parseFloat(vbtn_h) * grid_size;
 						this.extra_buttons[idx] = vbtn_idx; // This is which button needs to be triggered or untriggered on this event.
 						$(osb_text_id).empty();
 						$(osb_background_id).empty();
@@ -412,7 +419,7 @@
 						if(vbtn_txt.search("<br")==-1) {
 							// this means it doesn't need a special correction for multiline buttons.
 							$(osb_text_id).css({"line-height":vh+"px","border":".1em solid #33cc33"});
-							$(osb_background_id).css({"line-height":"auto","top":"calc(50% - 1vh)"});
+							$(osb_background_id).css({"line-height":"auto","top":"calc(50% - .5vh)"});
 						}
 						else {
 							$(osb_text_id).css({"line-height":"auto","border":".1em solid #33cc33"});
@@ -538,7 +545,7 @@
 								mfd.update_osb_text(i," ");
 								mfd.update_osb_display(i,-1);
 							}
-							for(var i=33;i<=64;i++) {
+							for(var i=33;i<=96;i++) {
 								mfd.config_extra_button(i,-1,-1,-1,-1,-1,-1);
 								mfd.update_osb_display(i,-1);
 							}
