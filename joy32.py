@@ -927,13 +927,13 @@ def reload_maps():
                         elif d_v[0] == "delay":
                             delay = int(d_v[1])
                         elif d_v[0] == "vx":
-                            vbtn_x = int(d_v[1])
+                            vbtn_x = float(d_v[1])
                         elif d_v[0] == "vy":
-                            vbtn_y = int(d_v[1])
+                            vbtn_y = float(d_v[1])
                         elif d_v[0] == "vh":
-                            vbtn_h = int(d_v[1])
+                            vbtn_h = float(d_v[1])
                         elif d_v[0] == "vw":
-                            vbtn_w = int(d_v[1])
+                            vbtn_w = float(d_v[1])
                         elif d_v[0] == "long":
                             if d_v[1].isdigit() == True:
                                 long_hold = int(d_v[1])
