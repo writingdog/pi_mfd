@@ -808,11 +808,22 @@
 26,26,26
 27,27,27
 28,28,28
-33,ARM<br />ON,33,vx=13,vy=16,vw=2,vh=2,hold=0,toggle=34,set=-43,set=-33
-43,ARM<br />SIM,43,vx=13,vy=18,vw=2,vh=2,hold=0,toggle=34,set=-33,set=-43
-35,LSR<br />ON,35,vx=15,vy=16.6,vw=2,vh=3,hold=0,toggle=35,set=-36
-37,JMR,37,vx=6,vy=18,vw=2,vh=2
-38,SRCH,38,vx=6,vy=20,vw=2,vh=2
-39,ACT<br />PWR,39,vx=8,vy=20,vw=2,vh=2
-40,ALT,40,vx=6,vy=22,vw=2,vh=2
-41,PWR<br />PWR,41,vx=8,vy=22,vw=2,vh=2,hold=0,toggle=42,set=-41
+33,ARM<br />ON,33,vx=16,vy=9,vw=2,vh=2,hold=0,toggle=34,set=-43,set=-33
+43,ARM<br />SIM,43,vx=16,vy=11,vw=2,vh=2,hold=0,toggle=34,set=-33,set=-43
+35,LSR<br />ON,35,vx=15,vy=5.6,vw=1.5,vh=3,hold=0,toggle=36,set=-35
+38,SRCH,38,vx=12,vy=18,vw=2,vh=2
+39,ACT<br />PWR,39,vx=14,vy=18,vw=2,vh=2
+40,ALT,40,vx=12,vy=20,vw=2,vh=2
+41,SYS<br />PWR,41,vx=14,vy=20,vw=2,vh=2,hold=0,toggle=42,set=-41
+44,RWR<br />PWR,44,vx=16,vy=15,vw=2,vh=2,hold=0,toggle=45,set=-45
+46,JMR<br />PWR,46,vx=16,vy=17,vw=2,vh=2,hold=0,toggle=47,set=-47
+48,◄H,48,vx=24,vy=12,vw=1,vh=2
+49,H►,49,vx=25,vy=12,vw=1,vh=2
+50,M,50,vx=29,vy=12,vw=1,vh=1
+51,◄C,51,vx=33,vy=12,vw=1,vh=2
+52,C►,52,vx=34,vy=12,vw=1,vh=2
+53,HDPT<br />LFT,53,vx=48,vy=17,vw=2,vh=4,hold=0,toggle=54,set=-54
+55,HDPT<br />LFT,55,vx=50,vy=17,vw=2,vh=4,hold=0,toggle=56,set=-56
+57,FCR<br />ON,57,vx=54,vy=17,vw=1.5,vh=4,hold=0,toggle=58,set=-58
+59,RALT<br />ON,59,vx=55.5,vy=17,vw=1.5,vh=1.8,hold=0,toggle=60,set=-60,set=-61
+61,RALT<br />STBY,61,vx=55.5,vy=18.8,vw=1.5,vh=1.8,hold=0,toggle=60,set=-60,set=-59
