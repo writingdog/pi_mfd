@@ -818,10 +818,12 @@
 44,RWR<br />PWR,44,vx=16,vy=15,vw=2,vh=2,hold=0,toggle=45,set=-45
 46,JMR<br />PWR,46,vx=16,vy=17,vw=2,vh=2,hold=0,toggle=47,set=-47
 48,◄H,48,vx=24,vy=12,vw=1,vh=2
+62,HDG,62,vx=24.1,vy=14,vw=2,vh=1
 49,H►,49,vx=25,vy=12,vw=1,vh=2
 50,M,50,vx=29,vy=12,vw=1,vh=1
 51,◄C,51,vx=33,vy=12,vw=1,vh=2
 52,C►,52,vx=34,vy=12,vw=1,vh=2
+63,CRS,63,vx=33.1,vy=14,vw=2,vh=1
 53,HDPT<br />LFT,53,vx=46,vy=17,vw=1.5,vh=4,hold=0,toggle=54,set=-54
 55,HDPT<br />RGT,55,vx=47.5,vy=17,vw=1.5,vh=4,hold=0,toggle=56,set=-56
 57,FCR<br />ON,57,vx=51,vy=17,vw=1.5,vh=4,hold=0,toggle=58,set=-58
