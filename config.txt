@@ -822,8 +822,8 @@
 50,M,50,vx=29,vy=12,vw=1,vh=1
 51,◄C,51,vx=33,vy=12,vw=1,vh=2
 52,C►,52,vx=34,vy=12,vw=1,vh=2
-53,HDPT<br />LFT,53,vx=48,vy=17,vw=2,vh=4,hold=0,toggle=54,set=-54
-55,HDPT<br />LFT,55,vx=50,vy=17,vw=2,vh=4,hold=0,toggle=56,set=-56
-57,FCR<br />ON,57,vx=54,vy=17,vw=1.5,vh=4,hold=0,toggle=58,set=-58
-59,RALT<br />ON,59,vx=55.5,vy=17,vw=1.5,vh=1.8,hold=0,toggle=60,set=-60,set=-61
-61,RALT<br />STBY,61,vx=55.5,vy=18.8,vw=1.5,vh=1.8,hold=0,toggle=60,set=-60,set=-59
+53,HDPT<br />LFT,53,vx=48,vy=17,vw=1.5,vh=4,hold=0,toggle=54,set=-54
+55,HDPT<br />LFT,55,vx=49.5,vy=17,vw=1.5,vh=4,hold=0,toggle=56,set=-56
+57,FCR<br />ON,57,vx=53,vy=17,vw=1.5,vh=4,hold=0,toggle=58,set=-58
+59,RALT<br />ON,59,vx=54.5,vy=17,vw=1.5,vh=1.8,hold=0,toggle=60,set=-60,set=-61
+61,RALT<br />STBY,61,vx=54.5,vy=18.8,vw=1.5,vh=1.8,hold=0,toggle=60,set=-60,set=-59
