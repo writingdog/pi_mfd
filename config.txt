@@ -808,8 +808,9 @@
 26,26,26
 27,27,27
 28,28,28
-33,ARM<br />ON,33,vx=12,vy=16,vw=2,vh=3,hold=0,toggle=33,set=-34
-35,LSR<br />ON,35,vx=15,vy=16,vw=2,vh=3,hold=0,toggle=35,set=-36
+33,ARM<br />ON,33,vx=13,vy=16,vw=2,vh=2,hold=0,toggle=34,set=-43,set=-33
+43,ARM<br />SIM,43,vx=13,vy=18,vw=2,vh=2,hold=0,toggle=34,set=-33,set=-43
+35,LSR<br />ON,35,vx=15,vy=16.6,vw=2,vh=3,hold=0,toggle=35,set=-36
 37,JMR,37,vx=6,vy=18,vw=2,vh=2
 38,SRCH,38,vx=6,vy=20,vw=2,vh=2
 39,ACT<br />PWR,39,vx=8,vy=20,vw=2,vh=2
