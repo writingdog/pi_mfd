@@ -424,7 +424,13 @@
 						}
 						else {
 							$(osb_text_id).css({"line-height":"auto","border":".1em solid #33cc33"});
-							$(osb_background_id).css({"line-height":"auto","top":"calc(50% - 1vh)"});
+							if(vbtn_h<=1.0) {
+								$(osb_background_id).css({"line-height":"auto","top":"calc(50% - 1.5vh)"});
+							}
+							else {
+								$(osb_background_id).css({"line-height":"auto","top":"calc(50% - 1vh)"});
+							}
+							
 						}
 						$(osb_background_id).html(vbtn_txt);
 					}

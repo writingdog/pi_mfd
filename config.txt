@@ -860,11 +860,31 @@
 26,26,26
 27,27,27
 28,28,28
-33,STA<br />1,33,vx=28,vy=9,vw=2,vh=1,hold=0
-34,STA<br />2,34,vx=30,vy=9,vw=2,vh=1,hold=0
-35,STA<br />3,35,vx=32,vy=9,vw=2,vh=1,hold=0
-36,STA<br />4,36,vx=34,vy=9,vw=2,vh=1,hold=0
-37,STA<br />5,37,vx=36,vy=9,vw=2,vh=1,hold=0
-38,NOSE/TAIL,38,vx=24,vy=8.5,vw=2,vh=1,hold=0,toggle=39,set=-40
-40,TAIL,40,vx=24,vy=9.5,vw=2,vh=1,hold=0,toggle=39,set=-38
-41,GUNS<br />SAFE,41,vx=20,vy=9,vw=2,vh=1,hold=0,toggle=39,set=-38,active=GUNS<br />RDY
+33,STA<br />1,33,vx=28,vy=11,vw=2,vh=1,hold=0
+34,STA<br />2,34,vx=30,vy=11,vw=2,vh=1,hold=0
+35,STA<br />3,35,vx=32,vy=11,vw=2,vh=1,hold=0
+36,STA<br />4,36,vx=34,vy=11,vw=2,vh=1,hold=0
+37,STA<br />5,37,vx=36,vy=11,vw=2,vh=1,hold=0
+38,NOSE/TAIL,38,vx=24,vy=10.5,vw=2,vh=1,hold=0,toggle=39,set=-40
+40,TAIL,40,vx=24,vy=11.5,vw=2,vh=1,hold=0,toggle=39,set=-38
+41,GUNS<br />SAFE,41,vx=20,vy=11,vw=2,vh=1,hold=0,toggle=39,set=-38,active=GUNS<br />RDY
+42,SINGL,42,vx=32,vy=15,vw=1.5,vh=1
+43,PAIRS,43,vx=33,vy=16,vw=1.5,vh=1
+44,SALVO,44,vx=33,vy=17,vw=1.5,vh=1
+45,SINGL,45,vx=30,vy=15,vw=1.5,vh=1
+46,PAIRS,46,vx=29,vy=16,vw=1.5,vh=1
+47,SALVO,47,vx=29,vy=17,vw=1.5,vh=1
+48,LABS,48,vx=18,vy=15,vw=1.5,vh=1
+49,BOMBS &<br />GM ARM,49,vx=19,vy=16,vw=1.5,vh=1
+50,CMPTR,50,vx=19,vy=17,vw=1.5,vh=1
+51,ROCKETS,51,vx=16,vy=15,vw=1.5,vh=1
+52,SPRAY<br />TANK,52,vx=15,vy=16,vw=1.5,vh=1
+53,GM<br />UNARM,53,vx=15,vy=17,vw=1.5,vh=1
+54,OFF,54,vx=16.75,vy=18.3,vw=2,vh=1
+55,MASTER<br />SAFE,55,vx=24,vy=14.5,vw=2,vh=3,hold=0,active=MASTER<br />ARM
+56,GPOD<br />LFT,56,vx=3,vy=16,vw=2,vh=1,hold=0
+57,GPOD<br />CTR,57,vx=5,vy=16,vw=2,vh=1,hold=0
+58,GPOD<br />RGT,58,vx=7,vy=16,vw=2,vh=1,hold=0
+59,CHARGE,59,vx=10,vy=15.5,vw=2,vh=1,hold=0,toggle=60,set=-61
+60,OFF,60,vx=9.5,vy=16.5,vw=2.2,vh=1,hold=0,set=-59,set=-61
+61,CLEAR,61,vx=10,vy=17.5,vw=2,vh=1,hold=0,toggle=60,set=-59
