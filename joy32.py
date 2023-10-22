@@ -776,10 +776,10 @@ def osb_label(read_state=False):
                         # We don't need to do anything else
                         pass
             if physical_btn < 33:
-                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{},{}".format("txt",physical_btn,d_v,virtual_btn["text"],virtual_btn["active"]))
+                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{},{}".format("txt",physical_btn,d_v,virtual_btn["text"],virtual_btn["active_text"]))
             else:
                 # Experiment with a set of additional 32 buttons displayed on the touchscreen
-                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{},{},{},{},{},{},{}".format("vcfg",physical_btn,d_v,virtual_btn["vk"],virtual_btn["x"],virtual_btn["y"],virtual_btn["w"],virtual_btn["h"],virtual_btn["text"],virtual_btn["active"]))
+                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{},{},{},{},{},{},{}".format("vcfg",physical_btn,d_v,virtual_btn["vk"],virtual_btn["x"],virtual_btn["y"],virtual_btn["w"],virtual_btn["h"],virtual_btn["text"],virtual_btn["active_text"]))
     '''
 
         I believe this can be removed because do this all with reset. Hopefully.
