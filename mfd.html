@@ -548,7 +548,7 @@
 						else if(ep[0]=="txt") {
 							mfd.update_osb_text(ep[1],ep[3])
 							mfd.update_osb_display(ep[1],parseInt(ep[2]));
-							if(ep[4]==false) {
+							if(ep[4]=="False") {
 								btn_txt[ep[1]] = {"active":ep[3],"inactive":ep[3]};
 							}
 							else {
@@ -575,7 +575,7 @@
 							// 4, 5: x, y
 							// 6, 7: w, h
 							// 8: Button text
-							if(ep[9]==false) {
+							if(ep[9]=="False") {
 								btn_txt[ep[1]] = {"active":ep[8],"inactive":ep[8]};
 							}
 							else {
@@ -685,9 +685,18 @@
 				}
 
 				update_osb_text(idx,t) {
-					var osb_id = this.osb_text_prefix + "" + idx;
-					$(osb_id).empty();
-					$(osb_id).html(t);
+					if(idx>=32) {
+						// special handling for virtual buttons.
+						var osb_id = this.osb_text_prefix + "" + idx;
+						$(osb_id).empty();
+						$(osb_id).html(t);
+					}
+					else {
+						var osb_id = this.osb_text_background_prefix + "" + idx; // This is the actual text.
+						$(osb_id).empty();
+						$(osb_id).html(t);
+					}
+
 				}
 
 
