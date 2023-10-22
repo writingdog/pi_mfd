@@ -877,9 +877,9 @@
 48,LABS,48,vx=18,vy=15,vw=1.5,vh=1
 49,BOMBS &<br />GM ARM,49,vx=19,vy=16,vw=1.5,vh=1
 50,CMPTR,50,vx=19,vy=17,vw=1.5,vh=1
-51,ROCKETS,51,vx=16,vy=15,vw=1.5,vh=1
-52,SPRAY<br />TANK,52,vx=15,vy=16,vw=1.5,vh=1
-53,GM<br />UNARM,53,vx=15,vy=17,vw=1.5,vh=1
+51,SPRAY<br />TANK,51,vx=16,vy=15,vw=1.5,vh=1
+52,GM<br />UNARM,52,vx=15,vy=16,vw=1.5,vh=1
+53,ROCKETS,53,vx=15,vy=17,vw=1.5,vh=1
 54,OFF,54,vx=16.75,vy=18.3,vw=2,vh=1
 55,MASTER<br />SAFE,55,vx=24,vy=14.5,vw=2,vh=3,hold=0,active=MASTER<br />ARM
 56,GPOD<br />LFT,56,vx=3,vy=16,vw=2,vh=1,hold=0
