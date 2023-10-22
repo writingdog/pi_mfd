@@ -1457,5 +1457,6 @@ var demo_buttons = {
 		37:{"text":"STA<br />5","trigger":"37","vx":36.0,"vy":9.0,"vw":2.0,"vh":1.0},
 		38:{"text":"NOSE/TAIL","trigger":"38","vx":24.0,"vy":8.5,"vw":2.0,"vh":1.0},
 		40:{"text":"TAIL","trigger":"40","vx":24.0,"vy":9.5,"vw":2.0,"vh":1.0},
+		41:{"text":"GUNS<br />SAFE","trigger":"41","vx":20.0,"vy":9.0,"vw":2.0,"vh":1.0},
 	},
 };

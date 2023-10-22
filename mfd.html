@@ -687,12 +687,12 @@
 				update_osb_text(idx,t) {
 					if(idx>=32) {
 						// special handling for virtual buttons.
-						var osb_id = this.osb_text_prefix + "" + idx;
+						var osb_id = this.osb_text_background_prefix + "" + idx; // This is the actual text.
 						$(osb_id).empty();
 						$(osb_id).html(t);
 					}
 					else {
-						var osb_id = this.osb_text_background_prefix + "" + idx; // This is the actual text.
+						var osb_id = this.osb_text_prefix + "" + idx;
 						$(osb_id).empty();
 						$(osb_id).html(t);
 					}
