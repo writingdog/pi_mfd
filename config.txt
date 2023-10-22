@@ -885,6 +885,6 @@
 56,GPOD<br />LFT,56,vx=3,vy=16,vw=2,vh=1,hold=0
 57,GPOD<br />CTR,57,vx=5,vy=16,vw=2,vh=1,hold=0
 58,GPOD<br />RGT,58,vx=7,vy=16,vw=2,vh=1,hold=0
-59,CHARGE,59,vx=10,vy=15.5,vw=2,vh=1,hold=0,toggle=60,set=-61
+59,CHARGE,59,vx=10,vy=15.5,vw=2,vh=1,hold=0,toggle=60,set=-61,set=-60
 60,OFF,60,vx=9.5,vy=16.5,vw=2.2,vh=1,hold=0,set=-59,set=-61
-61,CLEAR,61,vx=10,vy=17.5,vw=2,vh=1,hold=0,toggle=60,set=-59
+61,CLEAR,61,vx=10,vy=17.5,vw=2,vh=1,hold=0,toggle=60,set=-59,set=-60
