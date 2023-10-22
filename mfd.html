@@ -575,6 +575,12 @@
 							// 4, 5: x, y
 							// 6, 7: w, h
 							// 8: Button text
+							if(ep[9]==false) {
+								btn_txt[ep[1]] = {"active":ep[8],"inactive":ep[8]};
+							}
+							else {
+								btn_txt[ep[1]] = {"active":ep[9],"inactive":ep[8]};
+							}
 							mfd.config_extra_button(ep[1],ep[3],ep[4],ep[5],ep[6],ep[7],ep[8]);
 							mfd.update_osb_display(ep[1],parseInt(ep[2]));
 						}
