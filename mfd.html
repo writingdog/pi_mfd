@@ -196,6 +196,7 @@
 			var grid_margin_x = 10; // Space between grids on the horizontal axis
 			var grid_margin_y = 10; // Space between grids on the vertical axis
 			var debug_mode = false;
+			var btn_txt = {}; // For each button definition, has an ACTIVE and an INACTIVE state.
             function get_query_variable(variable) {
 				/*
 				
@@ -534,13 +535,29 @@
 						var ep = estr.split(",");
 						if(ep[0]=="osb") {
 							mfd.update_osb_display(ep[1],parseInt(ep[2]));
+							if(btn_txt.hasOwnProperty(ep[1])) {
+								if(parseInt(ep[2])==1) {
+									// Button is set as active, change button text to ACTIVE state
+									mfd.update_osb_text(ep[1],btn_txt[ep[1]].active);
+								}
+								else {
+									mfd.update_osb_text(ep[1],btn_txt[ep[1]].inactive);
+								}
+							}
 						}
 						else if(ep[0]=="txt") {
 							mfd.update_osb_text(ep[1],ep[3])
 							mfd.update_osb_display(ep[1],parseInt(ep[2]));
+							if(ep[4]==false) {
+								btn_txt[ep[1]] = {"active":ep[3],"inactive":ep[3]};
+							}
+							else {
+								btn_txt[ep[1]] = {"active":ep[4],"inactive":ep[3]};
+							}
 						}
 						else if(ep[0]=="rst") {
 							// Reset and blank all OSBs.
+							btn_txt = {}; // Reset the button text map.
 							for(var i=1;i<=20;i++) {
 								mfd.update_osb_text(i," ");
 								mfd.update_osb_display(i,-1);

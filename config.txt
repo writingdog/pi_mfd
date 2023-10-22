@@ -829,3 +829,42 @@
 57,FCR<br />ON,57,vx=51,vy=17,vw=1.5,vh=4,hold=0,toggle=58,set=-58
 59,RALT<br />ON,59,vx=52.5,vy=17,vw=1.5,vh=1.8,hold=0,toggle=60,set=-60,set=-61
 61,RALT<br />STBY,61,vx=52.5,vy=18.8,vw=1.5,vh=1.8,hold=0,toggle=60,set=-60,set=-59
+
+-DCS_A4E_L
+--conf0 Unmapped profile for<br />generic use<br /><br />All buttons 1:1 translated
+1,1,1
+2,2,2
+3,3,3
+4,4,4
+5,5,5
+6,6,6
+7,7,7
+8,8,8
+9,9,9
+10,10,10
+11,11,11
+12,12,12
+13,13,13
+14,14,14
+15,15,15
+16,16,16
+17,17,17
+18,18,18
+19,19,19
+20,20,20
+21,21,21
+22,22,22
+23,23,23
+24,24,24
+25,25,25
+26,26,26
+27,27,27
+28,28,28
+33,STA<br />1,33,vx=28,vy=9,vw=2,vh=1,hold=0
+34,STA<br />2,34,vx=30,vy=9,vw=2,vh=1,hold=0
+35,STA<br />3,35,vx=32,vy=9,vw=2,vh=1,hold=0
+36,STA<br />4,36,vx=34,vy=9,vw=2,vh=1,hold=0
+37,STA<br />5,37,vx=36,vy=9,vw=2,vh=1,hold=0
+38,NOSE/TAIL,38,vx=24,vy=8.5,vw=2,vh=1,hold=0,toggle=39,set=-40
+40,TAIL,40,vx=24,vy=9.5,vw=2,vh=1,hold=0,toggle=39,set=-38
+41,GUNS<br />SAFE,41,vx=20,vy=9,vw=2,vh=1,hold=0,toggle=39,set=-38,active=GUNS<br />RDY

@@ -776,10 +776,10 @@ def osb_label(read_state=False):
                         # We don't need to do anything else
                         pass
             if physical_btn < 33:
-                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",physical_btn,d_v,virtual_btn["text"]))
+                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{},{}".format("txt",physical_btn,d_v,virtual_btn["text"],virtual_btn["active"]))
             else:
                 # Experiment with a set of additional 32 buttons displayed on the touchscreen
-                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{},{},{},{},{},{}".format("vcfg",physical_btn,d_v,virtual_btn["vk"],virtual_btn["x"],virtual_btn["y"],virtual_btn["w"],virtual_btn["h"],virtual_btn["text"]))
+                loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{},{},{},{},{},{},{}".format("vcfg",physical_btn,d_v,virtual_btn["vk"],virtual_btn["x"],virtual_btn["y"],virtual_btn["w"],virtual_btn["h"],virtual_btn["text"],virtual_btn["active"]))
     '''
 
         I believe this can be removed because do this all with reset. Hopefully.
@@ -886,6 +886,7 @@ def reload_maps():
                     toggle = False # If an integer, button will toggle between two held ON states
                     start_on = False # If a held button should start as ON
                     delay = False
+                    active_text = False # OSB should be changed when button is active
                     vbtn_x = -1 # If a virtual button, what is its relative x position?
                     vbtn_y = -1 # If a virtual button, what is its relative y position?
                     vbtn_w = -1 # If a virtual button, how many units wide is it?
@@ -940,10 +941,13 @@ def reload_maps():
                             else:
                                 long_hold = d_v[1]
                                 long_is_page = True
+                        elif d_v[0] == "active":
+                            active_text = d_v[1]
                     if int(d_vals[0]) <= 32 or button_count != "b32":
                         # (Don't add extended buttons if the device doesn't support them)
                         osbmap[mainpage][subpage][int(d_vals[0])] = {
                             "text":d_vals[1],
+                            "active_text":active_text,
                             "page":is_page,
                             "vk":vk_val,
                             "latch":is_latch,
