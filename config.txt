@@ -866,12 +866,12 @@
 36,FCR<br />ON,36,vx=8,vy=17,vw=1.5,vh=4,hold=0,toggle=37,set=-37
 38,RALT<br />ON,38,vx=9.5,vy=17,vw=1.5,vh=1.8,hold=0,toggle=39,set=-39,set=-40
 40,RALT<br />STBY,40,vx=9.5,vy=18.8,vw=1.5,vh=1.8,hold=0,toggle=39,set=-39,set=-38
-41,HDG<br />SEL,41,vx=-42,vy=19,vw=1.5,vh=2,hold=0,set=-42,set=-43
+41,HDG<br />SEL,41,vx=-42,vy=19,vw=1.5,vh=2,toggle=42,hold=0,set=-42,set=-43
 42,ATT<br />HOLD,42,vx=-42,vy=21,vw=1.5,vh=1.5,hold=0,set=-41,set=-43
-43,STRG<br />SEL,43,vx=-42,vy=22.5,vw=1.5,vh=2,hold=0,set=-42,set=-41
-44,ALT<br />HOLD,44,vx=-40,vy=19,vw=1.5,vh=2,hold=0,set=-45,set=-46
+43,STRG<br />SEL,43,vx=-42,vy=22.5,vw=1.5,vh=2,toggle=42,hold=0,set=-42,set=-41
+44,ALT<br />HOLD,44,vx=-40,vy=19,vw=1.5,vh=2,hold=0,toggle=45,set=-45,set=-46
 45,AP<br />OFF,45,vx=-40,vy=21,vw=1.5,vh=1.5,hold=0,set=-44,set=-46
-46,ATT<br />HOLD,46,vx=-40,vy=22.5,vw=1.5,vh=2,hold=0,set=-45,set=-44
+46,ATT<br />HOLD,46,vx=-40,vy=22.5,vw=1.5,vh=2,hold=0,toggle=45,set=-45,set=-44
 
 -DCS_A4E_L
 --conf0 Unmapped profile for<br />generic use<br /><br />All buttons 1:1 translated
