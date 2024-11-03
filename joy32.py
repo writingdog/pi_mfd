@@ -1003,7 +1003,9 @@ def reload_maps():
     # Next task: if the page has a "share" subpage defined, all of the other pages need those buttons too.
     for m in osbmap:
         print(m)
-        print(osbmap[m])
+    for m in osbmap:
+        #print(m)
+        #print(osbmap[m])
         if "share" in osbmap[m]:
             # So now let's add the share buttons to every other subpage.
             for sub in osbmap[m]:
