@@ -270,6 +270,7 @@ def event_reload(e):
     global hat
     global mfd_side
     global in_extra_maps
+    global osbextra
     
     button_specials = {318:"pos,x,-1",317:"pos,x,1",316:"pos,r",315:"pos,y,-1",314:"pos,y,1",309:"size,x,-.01",310:"size,x,.01",311:"size,r",312:"size,y,-.01",313:"size,y,.01"}
     if (mfd_side=="left"):
@@ -290,7 +291,10 @@ def event_reload(e):
             if in_extra_maps == True:
                 osb_supers.append("Return")
             for r in osbmap:
-                if osbmap[r].extra == in_extra_maps:
+                is_extra = False
+                if r in osbextra:
+                    is_extra = True
+                if is_extra == in_extra_maps:
                     # If we're showing extra profiles, use that list.
                     # Which means the osbmap.extra will be set "true"
                     osb_supers.append(r)
@@ -836,6 +840,7 @@ def reload_maps():
     global osbmap
     global osbtxt
     global osbseq
+    global osbextra
     global mfd_side
 
     file_loc = ["pi","mfd_l","mfd_r"] # Possible usernames
@@ -893,13 +898,12 @@ def reload_maps():
                         # Then this is a new superpage
                         mainpage_subs = d[1:].split(" ")
                         mainpage = mainpage_subs[0]
-                        is_extra = False
                         if len(mainpage_subs) == 2:
                             # This means that the page might be defined as an "extra" map.
                             if mainpage_subs[1] == "extra":
-                                is_extra = True
+                                osbextra[mainpage] = True
                         
-                        osbmap[mainpage] = {"extra":is_extra}
+                        osbmap[mainpage] = {}
                         osbtxt[mainpage] = {}
                         osbseq[mainpage] = {}
             else:
@@ -1002,10 +1006,6 @@ def reload_maps():
 
     # Next task: if the page has a "share" subpage defined, all of the other pages need those buttons too.
     for m in osbmap:
-        print(m)
-    for m in osbmap:
-        #print(m)
-        #print(osbmap[m])
         if "share" in osbmap[m]:
             # So now let's add the share buttons to every other subpage.
             for sub in osbmap[m]:
@@ -1134,6 +1134,7 @@ special_active = False # This is button 26 / event 711
 osbmap = {} # Formerly stored in joy32_params.py
 osbtxt = {} # Formerly stored in joy32_params.py
 osbseq = {} # New, sequence definitions
+osbextra = {} # Lists extra maps
 
 reload_maps() # Populate the OSB map, text, and sequence
 
