@@ -709,6 +709,7 @@ def osb_load():
     global latch_count
     global reload_mode
     global load_idx
+    global in_extra_maps
 
     button_latch = "" # Unset button latch
     latch_count = 0 # Reset latch count
@@ -731,8 +732,12 @@ def osb_load():
             loop.call_soon_threadsafe(q.put_nowait,"{},{},{},{}".format("txt",button_map[705]["o"],-1,"LEFT"))
     post_str = ""
     osbmap_supers = []
+    if in_extra_maps == True:
+        osbmap_supers.append("Return")
     for r in osbmap:
         osbmap_supers.append(r)
+    if in_extra_maps == False:
+        osbmap_supers.append("More")
     for i in range(0,len(osbmap_supers)):
         print(load_idx,osbmap_supers[i])
         if i == load_idx:
