@@ -710,6 +710,7 @@ def osb_load():
     global reload_mode
     global load_idx
     global in_extra_maps
+    global osbextra
 
     button_latch = "" # Unset button latch
     latch_count = 0 # Reset latch count
@@ -735,7 +736,13 @@ def osb_load():
     if in_extra_maps == True:
         osbmap_supers.append("Return")
     for r in osbmap:
-        osbmap_supers.append(r)
+        is_extra = False
+        if r in osbextra:
+            is_extra = True
+        if is_extra == in_extra_maps:
+            # If we're showing extra profiles, use that list.
+            # Which means the osbmap.extra will be set "true"
+            osbmap_supers.append(r)
     if in_extra_maps == False:
         osbmap_supers.append("More")
     for i in range(0,len(osbmap_supers)):
