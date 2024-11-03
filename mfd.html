@@ -237,6 +237,7 @@
 					this.has_extra = false; // Should extra buttons be declared (i.e. does this HTML sit on the main touchscreen?)
 					this.extra_buttons = {};
 					this.extra_button_state = {};
+					this.btn_txt = {}; // Moving definition into the MFD themselves
 					mfd_count++;
 				}
 				add_mfd_object() {
@@ -541,13 +542,13 @@
 						var ep = estr.split(",");
 						if(ep[0]=="osb") {
 							mfd.update_osb_display(ep[1],parseInt(ep[2]));
-							if(btn_txt.hasOwnProperty(ep[1])) {
+							if(mfd.btn_txt.hasOwnProperty(ep[1])) {
 								if(parseInt(ep[2])==1) {
 									// Button is set as active, change button text to ACTIVE state
-									mfd.update_osb_text(ep[1],btn_txt[ep[1]].active);
+									mfd.update_osb_text(ep[1],mfd.btn_txt[ep[1]].active);
 								}
 								else {
-									mfd.update_osb_text(ep[1],btn_txt[ep[1]].inactive);
+									mfd.update_osb_text(ep[1],mfd.btn_txt[ep[1]].inactive);
 								}
 							}
 						}
@@ -555,15 +556,15 @@
 							mfd.update_osb_text(ep[1],ep[3])
 							mfd.update_osb_display(ep[1],parseInt(ep[2]));
 							if(ep[4]=="False") {
-								btn_txt[ep[1]] = {"active":ep[3],"inactive":ep[3]};
+								mfd.btn_txt[ep[1]] = {"active":ep[3],"inactive":ep[3]};
 							}
 							else {
-								btn_txt[ep[1]] = {"active":ep[4],"inactive":ep[3]};
+								mfd.btn_txt[ep[1]] = {"active":ep[4],"inactive":ep[3]};
 							}
 						}
 						else if(ep[0]=="rst") {
 							// Reset and blank all OSBs.
-							btn_txt = {}; // Reset the button text map.
+							mfd.btn_txt = {}; // Reset the button text map.
 							for(var i=1;i<=20;i++) {
 								mfd.update_osb_text(i," ");
 								mfd.update_osb_display(i,-1);
@@ -582,10 +583,10 @@
 							// 6, 7: w, h
 							// 8: Button text
 							if(ep[9]=="False") {
-								btn_txt[ep[1]] = {"active":ep[8],"inactive":ep[8]};
+								mfd.btn_txt[ep[1]] = {"active":ep[8],"inactive":ep[8]};
 							}
 							else {
-								btn_txt[ep[1]] = {"active":ep[9],"inactive":ep[8]};
+								mfd.btn_txt[ep[1]] = {"active":ep[9],"inactive":ep[8]};
 							}
 							mfd.config_extra_button(ep[1],ep[3],ep[4],ep[5],ep[6],ep[7],ep[8]);
 							mfd.update_osb_display(ep[1],parseInt(ep[2]));

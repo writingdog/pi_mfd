@@ -20,6 +20,7 @@ from evdev import ecodes, list_devices, AbsInfo, InputDevice, events
 remote_ip = ""
 button_count = "b32"
 print_report = False
+in_extra_maps = False # Hide certain unused maps.
 
 # For more easily building the button maps rather than doing everything manually.
 bitmap = {0:"00 00 00 00",1:"01 00 00 00",2:"02 00 00 00",3:"04 00 00 00",4:"08 00 00 00",5:"10 00 00 00",6:"20 00 00 00",7:"40 00 00 00",8:"80 00 00 00",9:"00 01 00 00",10:"00 02 00 00",11:"00 04 00 00",12:"00 08 00 00",13:"00 10 00 00",14:"00 20 00 00",15:"00 40 00 00",16:"00 80 00 00",17:"00 00 01 00",18:"00 00 02 00",19:"00 00 04 00",20:"00 00 08 00",21:"00 00 10 00",22:"00 00 20 00",23:"00 00 40 00",24:"00 00 80 00",25:"00 00 00 01",26:"00 00 00 02",27:"00 00 00 04",28:"00 00 00 08",29:"00 00 00 10",30:"00 00 00 20",31:"00 00 00 40",32:"00 00 00 80"}
@@ -268,6 +269,7 @@ def event_reload(e):
     global load_idx 
     global hat
     global mfd_side
+    global in_extra_maps
     
     button_specials = {318:"pos,x,-1",317:"pos,x,1",316:"pos,r",315:"pos,y,-1",314:"pos,y,1",309:"size,x,-.01",310:"size,x,.01",311:"size,r",312:"size,y,-.01",313:"size,y,.01"}
     if (mfd_side=="left"):
@@ -285,8 +287,15 @@ def event_reload(e):
             loop.call_soon_threadsafe(q.put_nowait,"{},{},-1".format("osb",physical_btn))
         if e.value == 0:
             # So trigger on button release
+            if in_extra_maps == True:
+                osb_supers.append("Return")
             for r in osbmap:
-                osb_supers.append(r)
+                if osbmap[r].extra == in_extra_maps:
+                    # If we're showing extra profiles, use that list.
+                    # Which means the osbmap.extra will be set "true"
+                    osb_supers.append(r)
+            if in_extra_maps == False:
+                osb_supers.append("More")
             if e.code in button_specials:
                 # So this is a code that should also send a special command to the MFD display logic
                 loop.call_soon_threadsafe(q.put_nowait,"{}".format(button_specials[e.code]))
@@ -314,11 +323,20 @@ def event_reload(e):
                 osb_label()
             elif e.code == 319:
                 # Commit button in LOAD mode
-                for b in button_map:
-                    button_map[b]["s"] = 0
-                subpage = "conf0"
-                template = osb_supers[load_idx]
-                osb_label(True) # call osb_label with a mode switch to read in DEFAULT button values
+                if osb_supers[load_idx] == "Return":
+                    in_extra_maps = False
+                    load_idx = 0
+                    osb_load()
+                elif osb_supers[load_idx] == "More":
+                    in_extra_maps = True
+                    load_idx = 0
+                    osb_load()
+                else:
+                    for b in button_map:
+                        button_map[b]["s"] = 0
+                    subpage = "conf0"
+                    template = osb_supers[load_idx]
+                    osb_label(True) # call osb_label with a mode switch to read in DEFAULT button values
 
 def event_normal(e,submap,physical_btn,force_trigger=False):
     # Normal event handler (i.e. button push/release when not in any special mode)
@@ -840,7 +858,13 @@ def reload_maps():
     for d in data:
         # Lines can begin either with -, --, or an integer
         d = d.strip()
+        process_line = False
         if len(d) > 0:
+            # Don't process empty lines.
+            if d[0:1] != "#":
+                # Don't process lines beginning with comment marker.
+                process_line = True
+        if process_line == True:
             if d[:1] == "-":
                 if d[:3] == "---":
                     # Then a sequence is being defined
@@ -867,8 +891,15 @@ def reload_maps():
                         osbmap[mainpage][subpage] = {}
                     else:
                         # Then this is a new superpage
-                        mainpage = d[1:]
-                        osbmap[mainpage] = {}
+                        mainpage_subs = d[1:].split(" ")
+                        mainpage = mainpage_subs[0]
+                        is_extra = False
+                        if len(mainpage_subs) == 2:
+                            # This means that the page might be defined as an "extra" map.
+                            if mainpage_subs[1] == "extra":
+                                is_extra = True
+                        
+                        osbmap[mainpage] = {"extra":is_extra}
                         osbtxt[mainpage] = {}
                         osbseq[mainpage] = {}
             else:
