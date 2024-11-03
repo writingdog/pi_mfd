@@ -209,7 +209,7 @@
 9,RWS MODE,802
 10,TWS MODE,803
 
--DCS_F5E_L
+-DCS_F5E_L extra
 ---seq0 800,801,802 unset=20
 ---seq1 850,851,852,853 unset=20
 --conf0
@@ -229,7 +229,7 @@
 27,BOMB_CCW,803
 28,BOMB-CW,804
 
--DCS_F5E_R
+-DCS_F5E_R extra
 --conf0
 6,AA1 GUNS,6
 7,AA2 GUNS,7
@@ -872,7 +872,7 @@
 45,AP<br />OFF,45,vx=-40,vy=21,vw=1.5,vh=1.5,hold=1,set=-44,set=-46
 46,ATT<br />HOLD,46,vx=-40,vy=22.5,vw=1.5,vh=2,hold=0,toggle=45,set=-45,set=-44
 
--DCS_A4E_L
+-DCS_A4E_L extra
 --conf0 Unmapped profile for<br />generic use<br /><br />All buttons 1:1 translated
 1,1,1
 2,2,2

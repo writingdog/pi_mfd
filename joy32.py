@@ -289,7 +289,7 @@ def event_reload(e):
         if e.value == 0:
             # So trigger on button release
             if in_extra_maps == True:
-                osb_supers.append("Return")
+                osb_supers.append("<< RETURN")
             for r in osbmap:
                 is_extra = False
                 if r in osbextra:
@@ -299,7 +299,7 @@ def event_reload(e):
                     # Which means the osbmap.extra will be set "true"
                     osb_supers.append(r)
             if in_extra_maps == False:
-                osb_supers.append("More")
+                osb_supers.append("MORE >>")
             if e.code in button_specials:
                 # So this is a code that should also send a special command to the MFD display logic
                 loop.call_soon_threadsafe(q.put_nowait,"{}".format(button_specials[e.code]))
@@ -327,11 +327,11 @@ def event_reload(e):
                 osb_label()
             elif e.code == 319:
                 # Commit button in LOAD mode
-                if osb_supers[load_idx] == "Return":
+                if osb_supers[load_idx] == "<< RETURN":
                     in_extra_maps = False
                     load_idx = 0
                     osb_load()
-                elif osb_supers[load_idx] == "More":
+                elif osb_supers[load_idx] == "MORE >>":
                     in_extra_maps = True
                     load_idx = 0
                     osb_load()
@@ -734,7 +734,7 @@ def osb_load():
     post_str = ""
     osbmap_supers = []
     if in_extra_maps == True:
-        osbmap_supers.append("Return")
+        osbmap_supers.append("<< RETURN")
     for r in osbmap:
         is_extra = False
         if r in osbextra:
@@ -744,7 +744,7 @@ def osb_load():
             # Which means the osbmap.extra will be set "true"
             osbmap_supers.append(r)
     if in_extra_maps == False:
-        osbmap_supers.append("More")
+        osbmap_supers.append("MORE >>")
     for i in range(0,len(osbmap_supers)):
         print(load_idx,osbmap_supers[i])
         if i == load_idx:
